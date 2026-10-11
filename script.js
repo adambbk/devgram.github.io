@@ -516,22 +516,39 @@ document.addEventListener('DOMContentLoaded', () => {
   animate();
 });
 
-function toggleMobileMenu() {
+function toggleMobileMenu(forceClose) {
   const menu = document.getElementById('mobile-menu');
   const icon = document.getElementById('menu-icon');
+  const btn = document.getElementById('mobile-menu-btn');
 
   if (!menu || !icon) return;
 
-  menu.classList.toggle('hidden');
+  if (forceClose === true) menu.classList.add('hidden');
+  else menu.classList.toggle('hidden');
 
-  if (menu.classList.contains('hidden')) {
-    icon.classList.remove('fa-xmark');
-    icon.classList.add('fa-bars');
-  } else {
-    icon.classList.remove('fa-bars');
-    icon.classList.add('fa-xmark');
+  const isOpen = !menu.classList.contains('hidden');
+  icon.classList.toggle('fa-xmark', isOpen);
+  icon.classList.toggle('fa-bars', !isOpen);
+  if (btn) {
+    btn.setAttribute('aria-expanded', String(isOpen));
+    btn.setAttribute('aria-label', isOpen ? 'Fermer le menu' : 'Ouvrir le menu');
   }
 }
+
+// Ferme le menu mobile : clic à l'extérieur, touche Échap, ou passage en grand écran
+document.addEventListener('click', (e) => {
+  const menu = document.getElementById('mobile-menu');
+  const btn = document.getElementById('mobile-menu-btn');
+  if (!menu || menu.classList.contains('hidden')) return;
+  if (menu.contains(e.target) || (btn && btn.contains(e.target))) return;
+  toggleMobileMenu(true);
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') toggleMobileMenu(true);
+});
+window.addEventListener('resize', () => {
+  if (window.innerWidth >= 1280) toggleMobileMenu(true);
+});
 
 // Canvas d'arrière-plan Cyber
 (function initCyberBackground() {
