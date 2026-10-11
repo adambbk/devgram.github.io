@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>DEVGRAM — Créez votre canal Telegram</title>
+  <meta name="description" content="Configurez, prévisualisez et commandez votre canal ou groupe Telegram. Droits d'administrateur immédiats.">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'] },
+          animation: {
+            'flame-flicker': 'flame 0.15s ease-in-out infinite alternate',
+            'cloud-float': 'cloudFloat 6s ease-in-out infinite alternate'
+          },
+          keyframes: {
+            flame: {
+              '0%': { transform: 'scaleX(0.85) scaleY(0.9)', opacity: '0.85' },
+              '100%': { transform: 'scaleX(1.15) scaleY(1.1)', opacity: '1' }
+            },
+            cloudFloat: {
+              '0%': { transform: 'translateY(0px)' },
+              '100%': { transform: 'translateY(4px)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --bg: #060913;
+      --card: rgba(12, 18, 32, .78);
+      --line: rgba(148, 163, 184, .18);
+      --text: #e6edf5;
+      --muted: #b8c4d0;      /* contraste suffisant sur fond sombre */
+      --accent: #34d399;     /* UNE seule couleur d'accent */
+      --accent-strong: #10b981;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: radial-gradient(circle at 50% 0%, #0f172a 0%, var(--bg) 55%, #02040a 100%);
+      background-attachment: fixed;
+      color: var(--text);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; backdrop-filter: blur(14px); }
+    .btn-primary {
+      background: var(--accent); color: #04130d; font-weight: 800; border-radius: 14px;
+      min-height: 52px; padding: 0 28px; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      transition: transform .2s, box-shadow .2s, background .2s;
+      box-shadow: 0 0 0 rgba(52, 211, 153, 0);
+    }
+    .btn-primary:hover { background: #6ee7b7; box-shadow: 0 8px 28px rgba(52, 211, 153, .3); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-ghost {
+      border: 1px solid var(--line); border-radius: 14px; min-height: 52px; padding: 0 24px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 700;
+      color: var(--text); transition: background .2s, border-color .2s;
+    }
+    .btn-ghost:hover { background: rgba(148, 163, 184, .1); border-color: rgba(148, 163, 184, .4); }
+
+    :focus-visible { outline: 3px solid #7dd3fc; outline-offset: 3px; border-radius: 10px; }
+
+    .field {
+      width: 100%; min-height: 52px; padding: 0 16px; font-size: 16px; /* 16px = pas de zoom iOS */
+      background: rgba(2, 6, 14, .6); border: 1px solid var(--line); border-radius: 14px; color: var(--text);
+    }
+    .field::placeholder { color: #7d8aa0; }
+    .field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(52, 211, 153, .2); }
+    .field[aria-invalid="true"] { border-color: #f87171; }
+
+    /* Cartes à choisir (radio / checkbox) */
+    .choice > div { border: 1px solid var(--line); border-radius: 16px; padding: 16px; transition: border-color .2s, background .2s; cursor: pointer; }
+    .choice:hover > div { border-color: rgba(52, 211, 153, .5); }
+    .choice input:checked + div { border-color: var(--accent); background: rgba(52, 211, 153, .08); }
+    .choice input:focus-visible + div { outline: 3px solid #7dd3fc; outline-offset: 2px; }
+
+    /* Fusée du logo : petit mouvement, jamais en collision avec un autre élément */
+    @keyframes hover-rocket { from { transform: translateY(1px) rotate(0deg); } to { transform: translateY(-3px) rotate(4deg); } }
+    .rocket { animation: hover-rocket 1.6s ease-in-out infinite alternate; }
+
+    /* Apparition du hero (une seule fois) */
+    @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+    .rise { animation: rise .7s cubic-bezier(.16, 1, .3, 1) both; }
+
+    /* Bulles du téléphone */
+    .bubble { background: #182436; border-radius: 16px 16px 16px 4px; padding: 10px 12px; font-size: 13px; line-height: 1.45; max-width: 92%; }
+
+    details > summary { list-style: none; cursor: pointer; }
+    details > summary::-webkit-details-marker { display: none; }
+    details[open] .chev { transform: rotate(180deg); }
+
+
+    /* Cartes d'étapes (style d'origine) */
+    .matrix-card {
+      background: rgba(9, 13, 22, 0.75); backdrop-filter: blur(20px);
+      border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 22px;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .matrix-card:hover { border-color: #10b981; transform: translateY(-5px); box-shadow: 0 12px 30px rgba(16, 185, 129, 0.2); }
+    .matrix-card-highlight {
+      background: rgba(9, 13, 22, 0.9); backdrop-filter: blur(20px);
+      border: 2px solid #10b981; border-radius: 22px; box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .matrix-card-highlight:hover { transform: translateY(-5px); box-shadow: 0 0 40px rgba(16, 185, 129, 0.45); }
+
+    /* Téléphone façon Telegram (thème sombre) */
+    .tg-phone { display: flex; flex-direction: column; border-radius: 40px; border: 6px solid #2a3647; background: #0e1621;
+      overflow: hidden; box-shadow: 0 30px 80px rgba(56, 189, 248, .16); color: #f5f5f5;
+      font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; }
+    .tg-status { display: flex; justify-content: space-between; padding: 8px 22px 4px; font-size: 12px; font-weight: 600; background: #17212b; }
+    .tg-sicons { display: flex; gap: 6px; font-size: 11px; }
+    .tg-head { display: flex; align-items: center; gap: 10px; padding: 8px 14px 10px; background: #17212b;
+      border-bottom: 1px solid rgba(0, 0, 0, .35); color: #aab8c5; }
+    .tg-avatar { width: 38px; height: 38px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(#ff885e, #ff516a); color: #fff; font-weight: 700; }
+    .tg-title { flex: 1; min-width: 0; line-height: 1.25; }
+    .tg-title p:first-child { color: #fff; font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tg-title p:last-child { font-size: 12px; color: #6d7f8f; }
+    .tg-chat { flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 12px 10px; background-color: #0e1621;
+      background-image: radial-gradient(rgba(255,255,255,.045) 1.3px, transparent 1.6px), radial-gradient(rgba(255,255,255,.028) 1px, transparent 1.3px);
+      background-size: 26px 26px; background-position: 0 0, 13px 13px; }
+    .tg-day { align-self: center; background: rgba(24, 37, 51, .85); color: #aab8c5; font-size: 12px; padding: 2px 10px; border-radius: 12px; margin-bottom: 2px; }
+    .tg-msg { max-width: 88%; padding: 6px 10px 5px; font-size: 14px; line-height: 1.35; border-radius: 14px; overflow-wrap: anywhere; }
+    .tg-msg.in { align-self: flex-start; background: #182533; border-bottom-left-radius: 4px; }
+    .tg-msg.out { align-self: flex-end; background: #2b5278; border-bottom-right-radius: 4px; }
+    .tg-time { float: right; margin: 8px 0 -3px 10px; font-size: 11px; color: #6d7f8f; }
+    .tg-msg.out .tg-time { color: #7da8d3; }
+    .tg-kb { align-self: flex-start; width: 88%; display: flex; flex-wrap: wrap; gap: 3px; }
+    .tg-btn { flex: 1 1 45%; min-height: 34px; padding: 6px 8px; display: flex; align-items: center; justify-content: center; gap: 6px;
+      border-radius: 8px; background: rgba(24, 37, 51, .85); color: #fff; font-size: 13px; font-weight: 500; text-align: center; }
+    .tg-btn i { color: #6ab3f3; font-size: 12px; }
+    .tg-btn.tg-web { flex-basis: 100%; }
+    .tg-service { align-self: center; max-width: 92%; text-align: center; background: rgba(24, 37, 51, .85); color: #aab8c5;
+      font-size: 12.5px; padding: 3px 12px; border-radius: 14px; margin-top: 6px; }
+    .tg-service b { color: #6ab3f3; font-weight: 600; }
+    .tg-input { display: flex; align-items: center; gap: 14px; padding: 8px 12px 14px; background: #17212b; color: #6d7f8f; }
+    .tg-menu { background: #3d84c6; color: #fff; font-size: 13px; font-weight: 600; padding: 6px 11px; border-radius: 14px; white-space: nowrap; }
+    .tg-field { flex: 1; font-size: 14px; }
+
+
+    /* ---- Formulaire en étapes ---- */
+    .pill { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; min-height: 44px; padding: 8px 4px;
+      border-radius: 14px; border: 1px solid var(--line); font-size: 12px; font-weight: 700; color: var(--muted); text-align: center;
+      background: rgba(12, 18, 32, .6); transition: border-color .2s, background .2s; }
+    .pill-n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: #1e293b; color: #cbd5e1; font-size: 13px; }
+    .pill.active { border-color: var(--accent); color: #fff; background: rgba(52, 211, 153, .09); }
+    .pill.active .pill-n { background: var(--accent); color: #04130d; }
+    .pill.done .pill-n { background: rgba(52, 211, 153, .25); color: #a7f3d0; }
+    .pill:disabled { opacity: .45; cursor: not-allowed; }
+
+    .opt { border: 1px solid var(--line); border-radius: 16px; transition: border-color .2s, background .2s; }
+    .opt.on { border-color: var(--accent); background: rgba(52, 211, 153, .06); }
+    .sw { width: 44px; height: 26px; border-radius: 99px; background: #334155; position: relative; flex: none; transition: background .2s; }
+    .sw::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform .2s; }
+    input:checked ~ .sw { background: var(--accent-strong); }
+    input:checked ~ .sw::after { transform: translateX(18px); }
+    input:focus-visible ~ .sw { outline: 3px solid #7dd3fc; outline-offset: 2px; }
+
+    .dropzone { display: flex; align-items: center; gap: 14px; border: 2px dashed rgba(148, 163, 184, .35); border-radius: 16px; padding: 14px; cursor: pointer; transition: border-color .2s, background .2s; }
+    .dropzone:hover, .dropzone.over { border-color: var(--accent); background: rgba(52, 211, 153, .06); }
+    .err { font-size: 14px; color: #fca5a5; margin-top: 8px; }
+    .b-del { min-width: 44px; min-height: 52px; border-radius: 14px; border: 1px solid var(--line); color: var(--muted); }
+    .b-del:hover { color: #fca5a5; border-color: #f87171; }
+    .linklike { color: var(--accent); font-weight: 700; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; min-height: 32px; }
+
+    /* ---- Éléments Telegram en plus ---- */
+    .tg-pin { display: flex; align-items: center; gap: 10px; padding: 6px 14px; background: #17212b; border-bottom: 1px solid rgba(0,0,0,.35); font-size: 12.5px; color: #6ab3f3; }
+    .tg-pin div { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+    .tg-pin b { font-weight: 600; }
+    .tg-pin span { color: #f5f5f5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tg-tag { display: block; font-size: 11.5px; color: #6ab3f3; font-weight: 600; margin-bottom: 2px; }
+    .tg-fwd { display: block; font-size: 12.5px; color: #6ab3f3; border-left: 2px solid #6ab3f3; padding-left: 8px; margin-bottom: 4px; }
+    .tg-sender { display: block; font-size: 13px; font-weight: 600; color: #ff885e; margin-bottom: 1px; }
+    .tg-topic { display: flex; align-items: center; gap: 10px; padding: 8px 6px; border-radius: 12px; }
+    .tg-topic .ti { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-size: 19px; background: #182533; flex: none; }
+    .tg-topic div { flex: 1; min-width: 0; line-height: 1.3; }
+    .tg-topic b { display: block; font-size: 14.5px; font-weight: 600; color: #fff; }
+    .tg-topic span { display: block; font-size: 13px; color: #6d7f8f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tg-topic small { font-size: 11px; color: #6d7f8f; align-self: flex-start; margin-top: 4px; }
+
+    @keyframes nudge { from { transform: translateY(-2px); } to { transform: translateY(3px); } }
+    .nudge { animation: nudge .9s ease-in-out infinite alternate; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+
+<body class="antialiased overflow-x-hidden">
+
+  <!-- ============ HEADER (bleu ciel animé) ============ -->
+  <header class="max-w-7xl mx-auto w-full px-4 pt-6 sm:pt-8 relative z-30">
+    <nav id="nav-container" class="relative overflow-hidden bg-[#38bdf8] rounded-[28px] border-2 border-sky-200/80 px-4 sm:px-8 py-4 sm:py-6 flex items-center justify-between gap-3 shadow-[0_10px_40px_rgba(56,189,248,0.35)] min-h-[88px] sm:min-h-[105px]" aria-label="Navigation principale">
+
+      <!-- Nuages -->
+      <div class="absolute top-0 left-0 right-0 pointer-events-none z-0 flex justify-between items-center px-4 opacity-85" aria-hidden="true">
+        <svg class="w-24 h-12 text-white fill-current drop-shadow-md animate-cloud-float" viewBox="0 0 24 24"><path d="M19.36 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.64-4.96z"/></svg>
+        <svg class="w-28 h-14 text-white fill-current drop-shadow-md animate-cloud-float" style="animation-delay: 1s;" viewBox="0 0 24 24"><path d="M19.36 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.64-4.96z"/></svg>
+        <svg class="w-24 h-12 text-white fill-current drop-shadow-md animate-cloud-float" style="animation-delay: 2s;" viewBox="0 0 24 24"><path d="M19.36 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.64-4.96z"/></svg>
+        <svg class="w-32 h-16 text-white fill-current drop-shadow-md animate-cloud-float" style="animation-delay: 0.5s;" viewBox="0 0 24 24"><path d="M19.36 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.64-4.96z"/></svg>
+        <svg class="w-28 h-14 text-white fill-current drop-shadow-md animate-cloud-float" style="animation-delay: 1.5s;" viewBox="0 0 24 24"><path d="M19.36 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.64-4.96z"/></svg>
+      </div>
+
+      <!-- Fusée animée : passe DERRIÈRE le logo et les boutons -->
+      <div id="rocket-container" class="absolute top-1/2 left-0 -translate-y-1/2 pointer-events-none hidden md:block will-change-transform" style="z-index:10" aria-hidden="true">
+        <div id="rocket-wrapper" class="relative flex items-center transition-transform duration-300">
+          <svg class="w-24 h-12 drop-shadow-[0_4px_12px_rgba(0,0,0,0.3)]" viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g class="origin-left animate-flame-flicker">
+              <path d="M22 20 L4 12 L10 20 L4 28 Z" fill="url(#flame-outer)" />
+              <path d="M22 20 L11 15 L15 20 L11 25 Z" fill="#facc15" />
+            </g>
+            <path d="M22 13 C22 13 35 10 65 10 C78 10 92 15 98 20 C92 25 78 30 65 30 C35 30 22 27 22 27 Z" fill="#ffffff" stroke="#0f172a" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M80 11.5 C88 13.5 95 18 98 20 C95 22 88 26.5 80 28.5 Z" fill="#ef4444"/>
+            <path d="M30 10 L18 3 L26 16 Z" fill="#475569" stroke="#0f172a" stroke-width="1.5"/>
+            <path d="M30 30 L18 37 L26 24 Z" fill="#475569" stroke="#0f172a" stroke-width="1.5"/>
+            <circle cx="65" cy="20" r="5" fill="#38bdf8" stroke="#0f172a" stroke-width="2"/>
+            <circle cx="66.5" cy="18.5" r="1.5" fill="#ffffff"/>
+            <rect x="20" y="14" width="4" height="12" rx="1" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
+            <defs>
+              <linearGradient id="flame-outer" x1="22" y1="20" x2="0" y2="20" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#f97316"/>
+                <stop offset="60%" stop-color="#ef4444"/>
+                <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Logo -->
+      <a href="#top" id="header-brand" class="relative flex items-center gap-3 shrink-0" style="z-index:20" aria-label="DEVGRAM, accueil">
+        <div class="w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-slate-950/90 flex items-center justify-center text-white shadow-lg border border-sky-300/30">
+          <i class="fa-brands fa-telegram text-2xl sm:text-3xl text-[#38bdf8]"></i>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-xl sm:text-3xl font-black tracking-wider uppercase leading-none text-slate-950">DEV<span class="text-white">GRAM</span></span>
+          <span class="hidden sm:block text-xs uppercase font-extrabold tracking-widest text-slate-900 mt-1">Telegram Mini App &amp; Bots</span>
+        </div>
+      </a>
+
+      <!-- Boutons -->
+      <div id="header-actions" class="relative flex items-center gap-2 sm:gap-3 justify-end" style="z-index:20">
+        <a href="index.html" aria-label="Retour DEVLAB" class="px-3.5 sm:px-5 min-h-[44px] rounded-xl text-sm font-bold text-slate-950 bg-white/50 hover:bg-white/80 border border-white/85 transition-all duration-200 flex items-center gap-2 shadow-sm">
+          <i class="fa-solid fa-house"></i>
+          <span class="hidden sm:inline">Retour DEVLAB</span>
+        </a>
+        <a href="https://t.me/votre_bot" target="_blank" rel="noopener noreferrer" class="px-4 sm:px-6 min-h-[44px] rounded-xl text-sm font-extrabold text-white bg-slate-950 hover:bg-slate-900 border border-slate-800 shadow-md transition-all duration-200 flex items-center gap-2 hover:scale-[1.02]">
+          <i class="fa-brands fa-telegram text-base text-[#38bdf8]"></i>
+          <span class="sm:hidden">Lancer le bot</span>
+          <span class="hidden sm:inline">Lancer le Bot Telegram</span>
+        </a>
+      </div>
+
+    </nav>
+  </header>
+
+  <main id="top">
+
+    <!-- ============ HERO ============ -->
+    <section class="max-w-6xl mx-auto px-4 pt-12 pb-16 sm:pt-20 grid lg:grid-cols-[1.1fr_.9fr] gap-12 items-center">
+      <div class="rise">
+        <p class="inline-flex items-center gap-2 text-sm font-semibold text-emerald-300 bg-emerald-400/10 border border-emerald-400/25 rounded-full px-4 py-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-300"></span> Prêt en moins de 5 minutes
+        </p>
+
+        <h1 class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.05] tracking-tight" style="font-size: clamp(2.2rem, 7vw, 3.9rem)">
+          Votre canal Telegram, configuré et livré en quelques minutes.
+        </h1>
+
+        <p class="mt-6 text-base sm:text-lg text-[color:var(--muted)] leading-relaxed max-w-xl">
+          Choisissez vos options, voyez le résultat en direct, payez. Vous devenez administrateur du canal dès la confirmation.
+        </p>
+
+        <div class="mt-8 flex flex-col sm:flex-row gap-3">
+          <a href="#configurateur" class="btn-primary">Créer mon canal <i class="fa-solid fa-arrow-right"></i></a>
+          <a href="#tarifs" class="btn-ghost">Voir les tarifs</a>
+        </div>
+
+        <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-[color:var(--muted)]">
+          <li><i class="fa-solid fa-bolt text-emerald-300 mr-2"></i>Déploiement instantané</li>
+          <li><i class="fa-solid fa-key text-emerald-300 mr-2"></i>Accès admin garanti</li>
+          <li><i class="fa-solid fa-lock text-emerald-300 mr-2"></i>Paiement par carte ou crypto</li>
+        </ul>
+      </div>
+
+      <!-- Aperçu du résultat : un canal façon Telegram -->
+      <div class="rise flex justify-center" style="animation-delay:.15s" aria-hidden="true">
+        <div class="tg-phone" style="width:290px;height:560px">
+          <div class="tg-status"><span>9:41</span><span class="tg-sicons"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full"></i></span></div>
+          <div class="tg-head">
+            <i class="fa-solid fa-chevron-left"></i>
+            <span class="tg-avatar">M</span>
+            <div class="tg-title"><p>MonShop Annonces</p><p><i class="fa-solid fa-globe"></i> canal public · 1 abonné</p></div>
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <i class="fa-solid fa-ellipsis-vertical"></i>
+          </div>
+          <div class="tg-pin"><i class="fa-solid fa-thumbtack"></i><div><b>Message épinglé</b><span>Bienvenue ! Nouveautés chaque lundi.</span></div></div>
+          <div class="tg-chat">
+            <div class="tg-day">Aujourd'hui</div>
+            <div class="tg-service">Canal créé</div>
+            <div class="tg-service"><i class="fa-solid fa-link"></i> t.me/<b>monshop_annonces</b></div>
+            <div class="tg-msg in">Bienvenue sur <b>MonShop Annonces</b> 👋<span class="tg-time"><i class="fa-regular fa-eye"></i> 128 · 09:00</span></div>
+            <div class="tg-kb">
+              <span class="tg-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Boutique</span>
+              <span class="tg-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Contact</span>
+              <span class="tg-btn tg-web"><i class="fa-regular fa-comment"></i> Commenter</span>
+            </div>
+            <div class="tg-msg in"><span class="tg-tag"><i class="fa-solid fa-robot"></i> Publication automatique</span>Promo du jour : -20 % jusqu'à ce soir.<span class="tg-time"><i class="fa-regular fa-eye"></i> 96 · 12:00</span></div>
+          </div>
+          <div class="tg-input">
+            <span class="tg-field">Diffuser un message…</span>
+            <i class="fa-solid fa-paperclip"></i><i class="fa-regular fa-bell"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ÉTAPES ============ -->
+    <section id="etapes" class="max-w-6xl mx-auto px-4 pb-20" aria-labelledby="etapes-titre">
+      <h2 id="etapes-titre" class="text-2xl sm:text-3xl font-extrabold text-center mb-10">Comment ça marche</h2>
+      <div class="flex flex-col md:flex-row items-stretch justify-center gap-3 w-full max-w-5xl mx-auto">
+      <div class="matrix-card p-6 text-left flex flex-col justify-between w-full md:w-1/3 md:min-h-[350px] relative group overflow-hidden">
+        
+        <div>
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg mb-4 border border-emerald-500/30 group-hover:scale-105 transition-transform"><i class="fa-solid fa-list-check"></i></div>
+          <span class="text-[11px] font-black text-emerald-400 uppercase tracking-widest mb-1 block">Étape 01</span>
+          <h3 class="font-extrabold text-lg text-white mb-2">Remplissez le formulaire</h3>
+          <p class="text-sm text-slate-300 leading-relaxed mb-4">Sélectionnez vos options pour configurer votre projet.</p>
+          <div class="space-y-2 bg-slate-950/40 p-3 rounded-xl border border-emerald-500/15 text-xs text-slate-300"><div class="flex items-center gap-2"><i class="fa-solid fa-bullhorn text-emerald-400 text-xs"></i><span>Type de canal &amp; personnalisation</span></div><div class="flex items-center gap-2"><i class="fa-solid fa-sliders text-emerald-400 text-xs"></i><span>Automatisations en option</span></div></div>
+        </div>
+        <div class="pt-4 mt-4 border-t border-emerald-500/20"><a href="#etape1" class="w-full min-h-[44px] px-4 rounded-xl bg-emerald-500/10 hover:bg-emerald-400 text-emerald-400 hover:text-slate-950 border border-emerald-500/30 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 shadow-sm"><span>Configuration</span><i class="fa-solid fa-arrow-right text-xs"></i></a></div>
+      </div>
+      <div class="hidden md:flex items-center justify-center text-emerald-400/40 shrink-0 px-1" aria-hidden="true">
+        <svg class="w-8 h-6" viewBox="0 0 32 24" fill="none"><path d="M2 12H26M26 12L18 5M26 12L18 19" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3" stroke-linecap="round"/></svg>
+      </div>
+      <div class="md:hidden flex flex-col items-center" aria-hidden="true">
+        <span class="h-5 border-l-2 border-dashed border-emerald-400/50"></span>
+        <span class="nudge w-10 h-10 rounded-full bg-emerald-400/15 border-2 border-emerald-400/70 flex items-center justify-center text-emerald-300 shadow-[0_0_14px_rgba(52,211,153,.35)]">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+        </span>
+        <span class="h-5 border-l-2 border-dashed border-emerald-400/50"></span>
+      </div>
+      <div class="matrix-card p-6 text-left flex flex-col justify-between w-full md:w-1/3 md:min-h-[350px] relative group overflow-hidden">
+        
+        <div>
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg mb-4 border border-emerald-500/30 group-hover:scale-105 transition-transform"><i class="fa-solid fa-address-book"></i></div>
+          <span class="text-[11px] font-black text-emerald-400 uppercase tracking-widest mb-1 block">Étape 02</span>
+          <h3 class="font-extrabold text-lg text-white mb-2">Saisissez vos coordonnées</h3>
+          <p class="text-sm text-slate-300 leading-relaxed mb-4">Entrez votre pseudo Telegram et visualisez votre canal.</p>
+          <div class="space-y-2 bg-slate-950/40 p-3 rounded-xl border border-emerald-500/15 text-xs text-slate-300"><div class="flex items-center gap-2"><i class="fa-solid fa-user-shield text-emerald-400 text-xs"></i><span>Identifiant Telegram</span></div><div class="flex items-center gap-2"><i class="fa-solid fa-eye text-emerald-400 text-xs"></i><span>Aperçu live du canal</span></div></div>
+        </div>
+        <div class="pt-4 mt-4 border-t border-emerald-500/20"><a href="#apercu" class="w-full min-h-[44px] px-4 rounded-xl bg-emerald-500/10 hover:bg-emerald-400 text-emerald-400 hover:text-slate-950 border border-emerald-500/30 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 shadow-sm"><span>Prévisualisation</span><i class="fa-solid fa-arrow-right text-xs"></i></a></div>
+      </div>
+      <div class="hidden md:flex items-center justify-center text-emerald-400/40 shrink-0 px-1" aria-hidden="true">
+        <svg class="w-8 h-6" viewBox="0 0 32 24" fill="none"><path d="M2 12H26M26 12L18 5M26 12L18 19" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3" stroke-linecap="round"/></svg>
+      </div>
+      <div class="md:hidden flex flex-col items-center" aria-hidden="true">
+        <span class="h-5 border-l-2 border-dashed border-emerald-400/50"></span>
+        <span class="nudge w-10 h-10 rounded-full bg-emerald-400/15 border-2 border-emerald-400/70 flex items-center justify-center text-emerald-300 shadow-[0_0_14px_rgba(52,211,153,.35)]">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+        </span>
+        <span class="h-5 border-l-2 border-dashed border-emerald-400/50"></span>
+      </div>
+      <div class="matrix-card-highlight p-6 text-left flex flex-col justify-between w-full md:w-1/3 md:min-h-[350px] relative group overflow-hidden">
+        <div class="absolute top-0 right-0 bg-gradient-to-l from-emerald-400 to-teal-400 text-slate-950 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-bl-xl">ADMIN</div>
+        <div>
+          <div class="w-10 h-10 rounded-xl bg-emerald-400 text-slate-950 flex items-center justify-center text-lg mb-4 shadow-md group-hover:scale-105 transition-transform"><i class="fa-solid fa-shield-halved"></i></div>
+          <span class="text-[11px] font-black text-emerald-400 uppercase tracking-widest mb-1 block">Étape 03</span>
+          <h3 class="font-extrabold text-lg text-white mb-2">Finalisez votre achat</h3>
+          <p class="text-sm text-slate-300 leading-relaxed mb-4">Payez et recevez vos droits d'admin tout de suite.</p>
+          <div class="space-y-2 bg-slate-950/40 p-3 rounded-xl border border-emerald-500/30 text-xs text-slate-300"><div class="flex items-center gap-2"><i class="fa-solid fa-lock text-emerald-400 text-xs"></i><span>Paiement sécurisé carte / crypto</span></div><div class="flex items-center gap-2"><i class="fa-solid fa-key text-emerald-400 text-xs"></i><span>Droits d'Admin immédiats</span></div></div>
+        </div>
+        <div class="pt-4 mt-4 border-t border-emerald-500/30"><a href="#configurateur" class="w-full min-h-[44px] px-4 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 shadow-[0_0_15px_rgba(16,185,129,0.3)]"><span>Activation Admin</span><i class="fa-solid fa-arrow-right text-xs"></i></a></div>
+      </div>
+      </div>
+    </section>
+
+    <!-- ============ CONFIGURATEUR ============ -->
+    <section id="configurateur" class="max-w-6xl mx-auto px-4 pb-20 scroll-mt-24" aria-labelledby="config-titre">
+      <h2 id="config-titre" class="text-2xl sm:text-3xl font-extrabold">Créez votre canal</h2>
+      <p class="mt-2 text-[color:var(--muted)]">Quatre étapes. Le téléphone se met à jour à chaque choix.</p>
+
+      <div class="mt-8 grid lg:grid-cols-[1.15fr_.85fr] gap-8 items-start">
+
+        <form id="order-form" novalidate class="min-w-0">
+
+          <!-- Barre d'étapes -->
+          <ol id="stepper" class="grid grid-cols-4 gap-2 scroll-mt-4" aria-label="Étapes de la commande">
+            <li><button type="button" data-go="1" class="pill"><span class="pill-n">1</span><span><span class="hidden sm:inline">Type de canal</span><span class="sm:hidden">Type</span></span></button></li>
+            <li><button type="button" data-go="2" class="pill"><span class="pill-n">2</span><span><span class="hidden sm:inline">Personnalisation</span><span class="sm:hidden">Identité</span></span></button></li>
+            <li><button type="button" data-go="3" class="pill"><span class="pill-n">3</span><span><span class="hidden sm:inline">Automatisations</span><span class="sm:hidden">Options</span></span></button></li>
+            <li><button type="button" data-go="4" class="pill"><span class="pill-n">4</span><span>Commande</span></button></li>
+          </ol>
+          <div class="h-1.5 rounded-full bg-white/10 overflow-hidden mt-4 mb-5" aria-hidden="true"><div id="progress" class="h-full bg-emerald-400 transition-all duration-300" style="width:25%"></div></div>
+
+          <!-- ÉTAPE 1 -->
+          <section id="etape1" data-step="1" class="card p-5 sm:p-6 space-y-6">
+            <h3 tabindex="-1" class="text-xl font-extrabold">Quel type de canal ?</h3>
+
+            <fieldset>
+              <legend class="font-semibold mb-3">Format</legend>
+              <div class="grid sm:grid-cols-3 gap-3">
+                <label class="choice block"><input type="radio" name="format" value="channel" class="sr-only" checked>
+                  <div class="h-full"><i class="fa-solid fa-bullhorn text-emerald-300 text-xl"></i><p class="mt-2 font-bold">Canal de diffusion</p><p class="text-sm text-[color:var(--muted)] mt-1">Vous publiez, les abonnés lisent.</p></div></label>
+                <label class="choice block"><input type="radio" name="format" value="group" class="sr-only">
+                  <div class="h-full"><i class="fa-solid fa-comments text-emerald-300 text-xl"></i><p class="mt-2 font-bold">Groupe de discussion</p><p class="text-sm text-[color:var(--muted)] mt-1">Tout le monde peut écrire.</p></div></label>
+                <label class="choice block"><input type="radio" name="format" value="forum" class="sr-only">
+                  <div class="h-full"><i class="fa-solid fa-table-list text-emerald-300 text-xl"></i><p class="mt-2 font-bold">Groupe avec sujets</p><p class="text-sm text-[color:var(--muted)] mt-1">Un forum : un sujet par thème.</p></div></label>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend class="font-semibold mb-3">Visibilité</legend>
+              <div class="grid sm:grid-cols-2 gap-3">
+                <label class="choice block"><input type="radio" name="vis" value="public" class="sr-only" checked>
+                  <div class="h-full"><i class="fa-solid fa-globe text-emerald-300 text-xl"></i><p class="mt-2 font-bold">Public</p><p class="text-sm text-[color:var(--muted)] mt-1">Lien t.me/votre_nom, trouvable par tous.</p></div></label>
+                <label class="choice block"><input type="radio" name="vis" value="private" class="sr-only">
+                  <div class="h-full"><i class="fa-solid fa-lock text-emerald-300 text-xl"></i><p class="mt-2 font-bold">Privé</p><p class="text-sm text-[color:var(--muted)] mt-1">Accès par lien d'invitation uniquement.</p></div></label>
+              </div>
+            </fieldset>
+
+            <fieldset id="linked-block">
+              <legend class="font-semibold mb-3">Commentaires</legend>
+              <div class="grid sm:grid-cols-2 gap-3">
+                <label class="choice block"><input type="radio" name="link" value="alone" class="sr-only" checked>
+                  <div class="h-full"><p class="font-bold">Canal seul</p><p class="text-sm text-[color:var(--muted)] mt-1">Pas de discussion sous les publications.</p></div></label>
+                <label class="choice block"><input type="radio" name="link" value="linked" class="sr-only">
+                  <div class="h-full"><div class="flex justify-between gap-2"><p class="font-bold">Canal + groupe relié</p><span class="text-sm font-bold text-emerald-300">+10 €</span></div><p class="text-sm text-[color:var(--muted)] mt-1">Les abonnés commentent chaque publication.</p></div></label>
+              </div>
+            </fieldset>
+          </section>
+
+          <!-- ÉTAPE 2 -->
+          <section data-step="2" class="card p-5 sm:p-6 space-y-5 hidden">
+            <h3 tabindex="-1" class="text-xl font-extrabold">Personnalisez votre canal</h3>
+
+            <div>
+              <label for="f-name" class="block text-sm font-semibold mb-2">Nom <span id="name-kind">du canal</span></label>
+              <input id="f-name" class="field" maxlength="64" placeholder="Ex. MonShop Annonces" autocomplete="off">
+              <p id="e-name" class="err hidden" role="alert"></p>
+            </div>
+
+            <fieldset>
+              <legend class="block text-sm font-semibold mb-1">Type d'activité</legend>
+              <p class="text-sm text-slate-400 mb-3">Nous adaptons la structure et les exemples de contenu à votre métier.</p>
+              <div id="activity-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
+              <div id="activity-other-wrap" class="hidden mt-3">
+                <label for="activity-other" class="block text-sm font-semibold mb-2">Précisez votre activité</label>
+                <input id="activity-other" class="field" maxlength="60" placeholder="Ex. Location de voitures" autocomplete="off">
+              </div>
+              <p id="e-activity" class="err hidden" role="alert"></p>
+            </fieldset>
+
+            <div>
+              <div class="flex justify-between items-end mb-2"><label for="f-desc" class="block text-sm font-semibold">Description <span class="font-normal text-slate-400">(facultatif)</span></label><span id="desc-count" class="text-xs text-slate-400">0 / 255</span></div>
+              <textarea id="f-desc" class="field !py-3" rows="3" maxlength="255" placeholder="De quoi parle votre canal ?"></textarea>
+            </div>
+
+            <div id="user-block">
+              <label for="f-user" class="block text-sm font-semibold mb-2">Nom d'utilisateur souhaité</label>
+              <div class="flex items-stretch">
+                <span class="flex items-center px-4 rounded-l-[14px] border border-r-0 border-[color:var(--line)] bg-white/5 text-[color:var(--muted)] text-base">t.me/</span>
+                <input id="f-user" class="field !rounded-l-none" maxlength="32" placeholder="monshop_annonces" autocapitalize="none" autocomplete="off" spellcheck="false">
+              </div>
+              <p class="text-sm text-slate-400 mt-2">5 à 32 caractères : lettres, chiffres, « _ ». Doit commencer par une lettre.</p>
+              <p id="e-user" class="err hidden" role="alert"></p>
+              <label for="f-alt" class="block text-sm font-semibold mt-4 mb-2">Nom de secours <span class="font-normal text-slate-400">(si le premier est déjà pris)</span></label>
+              <div class="flex items-stretch">
+                <span class="flex items-center px-4 rounded-l-[14px] border border-r-0 border-[color:var(--line)] bg-white/5 text-[color:var(--muted)] text-base">t.me/</span>
+                <input id="f-alt" class="field !rounded-l-none" maxlength="32" placeholder="monshop_officiel" autocapitalize="none" autocomplete="off" spellcheck="false">
+              </div>
+              <p id="e-alt" class="err hidden" role="alert"></p>
+            </div>
+
+            <div>
+              <span class="block text-sm font-semibold mb-2">Logo ou photo de profil <span class="font-normal text-slate-400">(facultatif)</span></span>
+              <label id="drop" class="dropzone" for="f-logo">
+                <span id="logo-thumb" class="w-16 h-16 rounded-full bg-white/5 border border-white/10 grid place-items-center text-slate-400 text-xl bg-cover bg-center shrink-0"><i class="fa-regular fa-image"></i></span>
+                <span class="min-w-0"><span class="block font-semibold text-[15px]" id="logo-name">Déposez une image ou touchez ici</span><span class="block text-sm text-slate-400">JPG, PNG ou WebP, 2 Mo maximum. Carré de préférence.</span></span>
+              </label>
+              <input id="f-logo" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only">
+              <button type="button" id="logo-del" class="linklike mt-1 hidden">Retirer le logo</button>
+              <p id="e-logo" class="err hidden" role="alert"></p>
+            </div>
+
+            <div>
+              <label for="f-welcome" id="welcome-label" class="block text-sm font-semibold mb-2">Message épinglé <span class="font-normal text-slate-400">(facultatif)</span></label>
+              <textarea id="f-welcome" class="field !py-3" rows="3" maxlength="500" placeholder="Ex. Bienvenue ! Retrouvez ici nos nouveautés chaque lundi."></textarea>
+            </div>
+
+            <div>
+              <label for="f-lang" class="block text-sm font-semibold mb-2">Langue du canal</label>
+              <select id="f-lang" class="field">
+                <option value="fr" selected>Français</option><option value="en">English</option><option value="es">Español</option>
+                <option value="de">Deutsch</option><option value="it">Italiano</option><option value="pt">Português</option>
+                <option value="ar">العربية</option><option value="ru">Русский</option><option value="tr">Türkçe</option><option value="other">Autre</option>
+              </select>
+            </div>
+          </section>
+
+          <!-- ÉTAPE 3 -->
+          <section data-step="3" class="card p-5 sm:p-6 space-y-4 hidden">
+            <div>
+              <h3 tabindex="-1" class="text-xl font-extrabold">Automatisations</h3>
+              <p class="mt-1 text-[15px] text-[color:var(--muted)]">Facultatif. Activez ce qui vous fait gagner du temps : chaque option se règle ici et apparaît dans l'aperçu.</p>
+            </div>
+            <div id="opts" class="space-y-3"></div>
+          </section>
+
+          <!-- ÉTAPE 4 -->
+          <section id="paiement" data-step="4" class="card p-5 sm:p-6 space-y-6 hidden">
+            <h3 tabindex="-1" class="text-xl font-extrabold">Commande et livraison</h3>
+
+            <fieldset>
+              <legend class="font-semibold mb-3">Délai de livraison</legend>
+              <!-- TODO : remplace les délais et le supplément par tes vraies valeurs (constante DELIVERY en bas de page) -->
+              <div class="grid sm:grid-cols-2 gap-3">
+                <label class="choice block"><input type="radio" name="delivery" value="standard" class="sr-only" checked>
+                  <div class="h-full"><p class="font-bold">Standard</p><p class="text-sm text-[color:var(--muted)] mt-1">Livré sous 24 h · inclus</p></div></label>
+                <label class="choice block"><input type="radio" name="delivery" value="express" class="sr-only">
+                  <div class="h-full"><div class="flex justify-between gap-2"><p class="font-bold">Express</p><span class="text-sm font-bold text-emerald-300">+15 €</span></div><p class="text-sm text-[color:var(--muted)] mt-1">Livré sous 2 h</p></div></label>
+              </div>
+            </fieldset>
+
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label for="f-email" class="block text-sm font-semibold mb-2">E-mail de confirmation</label>
+                <input id="f-email" type="email" class="field" placeholder="vous@exemple.com" autocomplete="email" inputmode="email">
+                <p id="e-email" class="err hidden" role="alert"></p>
+              </div>
+              <div>
+                <label for="f-tg" class="block text-sm font-semibold mb-2">Votre pseudo Telegram <span class="font-normal text-slate-400">(futur admin)</span></label>
+                <input id="f-tg" class="field" placeholder="@votrepseudo" maxlength="33" autocapitalize="none" autocomplete="off" spellcheck="false">
+                <p id="e-tg" class="err hidden" role="alert"></p>
+              </div>
+            </div>
+
+            <!-- Résumé -->
+            <div class="rounded-2xl border border-[color:var(--line)] bg-black/20 p-4 sm:p-5">
+              <div class="flex items-center justify-between mb-3"><h4 class="font-bold">Résumé de votre commande</h4></div>
+              <ul id="recap-facts" class="space-y-2 text-[15px] text-[color:var(--muted)]"></ul>
+              <ul id="recap-lines" class="mt-4 pt-4 border-t border-white/10 space-y-2 text-[15px]"></ul>
+              <div class="mt-4 pt-4 border-t border-white/10 flex items-end justify-between">
+                <div><p class="text-[color:var(--muted)] text-sm">Total</p><p id="est" class="text-sm text-emerald-300 font-semibold"></p></div>
+                <span id="total" class="text-3xl font-extrabold">29 €</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="flex items-start gap-3 cursor-pointer min-h-[44px]">
+                <input id="f-cgv" type="checkbox" class="mt-1 w-5 h-5 accent-emerald-400 shrink-0">
+                <span class="text-[15px] text-[color:var(--muted)]">J'ai lu et j'accepte les <a href="#" class="underline text-emerald-300">conditions de vente</a>.</span>
+              </label>
+              <p id="e-cgv" class="err hidden" role="alert"></p>
+            </div>
+
+            <div>
+              <button type="submit" id="pay-btn" class="btn-primary w-full"><i class="fa-solid fa-lock"></i><span>Payer et recevoir mon canal</span></button>
+              <p id="form-msg" class="text-sm mt-3 hidden" role="status"></p>
+              <p class="text-sm text-slate-400 mt-3">Paiement sécurisé. Carte bancaire ou crypto.</p>
+            </div>
+          </section>
+
+          <p id="step-msg" class="err hidden mt-4" role="alert"></p>
+
+          <!-- Navigation -->
+          <div class="mt-5 flex flex-wrap items-center gap-3">
+            <button type="button" id="btn-back" class="btn-ghost hidden"><i class="fa-solid fa-arrow-left"></i> Retour</button>
+            <button type="button" id="btn-next" class="btn-primary flex-1 sm:flex-none">Continuer <i class="fa-solid fa-arrow-right"></i></button>
+            <a href="#apercu" class="lg:hidden linklike inline-flex items-center gap-2 ml-auto"><i class="fa-solid fa-mobile-screen"></i> Voir l'aperçu</a>
+          </div>
+        </form>
+
+        <!-- Aperçu live -->
+        <aside id="apercu" class="lg:sticky lg:top-6 scroll-mt-24" aria-label="Aperçu en direct">
+          <div class="tg-phone mx-auto w-full" style="max-width:330px">
+            <div class="tg-status"><span>9:41</span><span class="tg-sicons"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full"></i></span></div>
+            <div class="tg-head">
+              <i class="fa-solid fa-chevron-left"></i>
+              <span id="pv-avatar" class="tg-avatar">?</span>
+              <div class="tg-title"><p id="pv-name">Mon canal</p><p id="pv-kind"></p></div>
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <i class="fa-solid fa-ellipsis-vertical"></i>
+            </div>
+            <div id="pv-pinned"></div>
+            <div id="pv-body" class="tg-chat" style="min-height:380px"></div>
+            <div id="pv-foot" class="tg-input"></div>
+          </div>
+          <div class="card mt-4 p-4 flex items-center justify-between gap-4 max-w-[330px] mx-auto">
+            <div><p class="text-sm text-[color:var(--muted)]">Total estimé</p><p class="text-2xl font-extrabold" id="total-side">29 €</p></div>
+            <p class="text-sm text-right text-[color:var(--muted)]" id="est-side">Livraison sous 24 h</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ TARIFS ============ -->
+    <section id="tarifs" class="max-w-6xl mx-auto px-4 pb-20 scroll-mt-24" aria-labelledby="tarifs-titre">
+      <h2 id="tarifs-titre" class="text-2xl sm:text-3xl font-extrabold">Des prix clairs, sans surprise</h2>
+      <p class="mt-2 text-[color:var(--muted)]">Le prix se calcule en direct dans le formulaire. Options à partir de 5 €.</p>
+      <!-- TODO : remplace ces montants par tes vrais prix (ils sont aussi dans les constantes BASE / OPTS en bas de page) -->
+      <div class="mt-8 grid md:grid-cols-3 gap-4">
+        <div class="card p-6">
+          <h3 class="font-bold text-lg">Canal de diffusion</h3>
+          <p class="mt-2"><span class="text-4xl font-extrabold">29 €</span> <span class="text-[color:var(--muted)]">à partir de</span></p>
+          <ul class="mt-4 space-y-2 text-[15px] text-[color:var(--muted)]">
+            <li><i class="fa-solid fa-check text-emerald-300 mr-2"></i>Public ou privé</li>
+            <li><i class="fa-solid fa-check text-emerald-300 mr-2"></i>Logo, description, message épinglé</li>
+            <li><i class="fa-solid fa-check text-emerald-300 mr-2"></i>Droits d'administrateur</li>
+          </ul>
+        </div>
+        <div class="card p-6">
+          <h3 class="font-bold text-lg">Groupe de discussion</h3>
+          <p class="mt-2"><span class="text-4xl font-extrabold">29 €</span> <span class="text-[color:var(--muted)]">à partir de</span></p>
+          <ul class="mt-4 space-y-2 text-[15px] text-[color:var(--muted)]">
+            <li><i class="fa-solid fa-check text-emerald-300 mr-2"></i>Public ou privé</li>
+            <li><i class="fa-solid fa-check text-emerald-300 mr-2"></i>Modération en option</li>
+            <li><i class="fa-solid fa-check text-emerald-300 mr-2"></i>Droits d'administrateur</li>
+          </ul>
+        </div>
+        <div class="card p-6 !border-emerald-400/60">
+          <h3 class="font-bold text-lg">Groupe avec sujets</h3>
+          <p class="mt-2"><span class="text-4xl font-extrabold">39 €</span> <span class="text-[color:var(--muted)]">à partir de</span></p>
+          <ul class="mt-4 space-y-2 text-[15px] text-[color:var(--muted)]">
+            <li><i class="fa-solid fa-check text-emerald-300 mr-2"></i>Forum avec sujets prêts</li>
+            <li><i class="fa-solid fa-check text-emerald-300 mr-2"></i>Automatisations en option</li>
+            <li><i class="fa-solid fa-check text-emerald-300 mr-2"></i>Droits d'administrateur</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PREUVE SOCIALE ============ -->
+    <!-- TODO : remplace ces chiffres et avis d'exemple par des données réelles ou supprime la section -->
+    <section class="max-w-6xl mx-auto px-4 pb-20" aria-labelledby="avis-titre">
+      <h2 id="avis-titre" class="text-2xl sm:text-3xl font-extrabold">Ils ont lancé leur canal avec DEVGRAM</h2>
+      <div class="mt-8 grid sm:grid-cols-3 gap-4">
+        <div class="card p-6"><p class="text-3xl font-extrabold text-emerald-300">120+</p><p class="mt-1 text-[color:var(--muted)]">canaux créés</p></div>
+        <div class="card p-6"><p class="text-3xl font-extrabold text-emerald-300">5 min</p><p class="mt-1 text-[color:var(--muted)]">délai moyen de livraison</p></div>
+        <div class="card p-6"><p class="text-3xl font-extrabold text-emerald-300">4,9 / 5</p><p class="mt-1 text-[color:var(--muted)]">note moyenne des clients</p></div>
+      </div>
+      <div class="mt-4 grid md:grid-cols-2 gap-4">
+        <blockquote class="card p-6"><p class="leading-relaxed">« J'ai payé, et mon bot était en ligne avant la fin de mon café. »</p><footer class="mt-3 text-sm text-slate-400">Prénom N., e-commerce (avis d'exemple)</footer></blockquote>
+        <blockquote class="card p-6"><p class="leading-relaxed">« L'aperçu m'a convaincu : je voyais exactement ce que j'allais recevoir. »</p><footer class="mt-3 text-sm text-slate-400">Prénom N., communauté (avis d'exemple)</footer></blockquote>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="max-w-3xl mx-auto px-4 pb-24" aria-labelledby="faq-titre">
+      <h2 id="faq-titre" class="text-2xl sm:text-3xl font-extrabold">Questions fréquentes</h2>
+      <div class="mt-8 space-y-3">
+        <details class="card px-5 py-4">
+          <summary class="flex items-center justify-between gap-4 font-bold min-h-[44px]">Combien de temps pour recevoir mon canal ?<i class="fa-solid fa-chevron-down chev text-emerald-300 transition-transform"></i></summary>
+          <p class="mt-2 text-[15px] text-[color:var(--muted)] leading-relaxed">Dès que le paiement est confirmé, votre lien d'accès s'affiche et vous est envoyé par email.</p>
+        </details>
+        <details class="card px-5 py-4">
+          <summary class="flex items-center justify-between gap-4 font-bold min-h-[44px]">Serai-je vraiment administrateur ?<i class="fa-solid fa-chevron-down chev text-emerald-300 transition-transform"></i></summary>
+          <p class="mt-2 text-[15px] text-[color:var(--muted)] leading-relaxed">Oui. Les droits d'administrateur sont attribués au pseudo Telegram que vous avez indiqué.</p>
+        </details>
+        <details class="card px-5 py-4">
+          <summary class="flex items-center justify-between gap-4 font-bold min-h-[44px]">Quels moyens de paiement acceptez-vous ?<i class="fa-solid fa-chevron-down chev text-emerald-300 transition-transform"></i></summary>
+          <p class="mt-2 text-[15px] text-[color:var(--muted)] leading-relaxed">Carte bancaire et crypto. Le paiement est traité par un prestataire sécurisé, nous ne voyons jamais vos données bancaires.</p>
+        </details>
+        <details class="card px-5 py-4">
+          <summary class="flex items-center justify-between gap-4 font-bold min-h-[44px]">Puis-je être remboursé ?<i class="fa-solid fa-chevron-down chev text-emerald-300 transition-transform"></i></summary>
+          <p class="mt-2 text-[15px] text-[color:var(--muted)] leading-relaxed">À toi de compléter ici ta politique de remboursement.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="max-w-6xl mx-auto px-4 pb-28 md:pb-10">
+    <div class="card p-5 sm:p-6 text-sm text-[color:var(--muted)] flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p>© 2026 <span class="text-emerald-300 font-bold">DEVGRAM Studio</span>. Tous droits réservés.</p>
+      <p class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-emerald-300 animate-pulse"></span>Bot Telegram actif</p>
+    </div>
+  </footer>
+
+  <!-- ============ CTA FIXE (mobile) ============ -->
+  <div id="sticky-cta" class="md:hidden fixed inset-x-3 z-40 transition-all duration-300" style="bottom: calc(12px + env(safe-area-inset-bottom))">
+    <a href="#configurateur" class="btn-primary w-full shadow-[0_10px_40px_rgba(0,0,0,.5)]">
+      Créer mon canal · <span id="sticky-total">dès 49 €</span>
+    </a>
+  </div>
+
+  <script>
+    // ⚠️ Prix et délais d'exemple : remplace par tes vrais tarifs.
+    // Le montant réellement débité doit être recalculé côté serveur à partir de la commande, jamais fait confiance au navigateur.
+    const BASE = { channel: 29, group: 29, forum: 39 };
+    const LINKED = 10;
+    const DELIVERY = { standard: { delay: 'sous 24 h', price: 0 }, express: { delay: 'sous 2 h', price: 15 } };
+    const FORMAT_LABEL = { channel: 'Canal de diffusion', group: 'Groupe de discussion', forum: 'Groupe avec sujets' };
+    const KIND = { channel: 'canal', group: 'groupe', forum: 'forum' };
+    const API_URL = 'http://localhost:3000/api/order'; // ton backend
+
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const form = $('order-form');
+    const RE_USER = /^[A-Za-z][A-Za-z0-9_]{4,31}$/;
+    const RE_TG = /^@[A-Za-z][A-Za-z0-9_]{4,31}$/;
+    const isUrl = (u) => { try { const x = new URL(u); return x.protocol === 'https:' || x.protocol === 'http:'; } catch { return false; } };
+
+    // ------------------------------------------------ Types d'activité (servent à adapter le canal)
+    const ACTIVITIES = [
+      { id: 'commerce',  emoji: '🛍️', label: 'Commerce / Boutique',   post: 'Nouveautés et promos de la semaine 🛍️',
+        topics: [['📢', 'Annonces', 'Nouvelle collection en ligne'], ['🛒', 'Catalogue', 'Tous nos produits'], ['📦', 'Commandes', 'Suivi de vos colis'], ['🛠', 'Support', 'Une question ?']] },
+      { id: 'food',      emoji: '🍽️', label: 'Restauration',          post: 'Le menu du jour est disponible 🍽️',
+        topics: [['🍽️', 'Menu du jour', 'Plat du jour et dessert'], ['📅', 'Réservations', 'Réservez votre table'], ['⭐', 'Avis', 'Vos retours'], ['ℹ️', 'Infos pratiques', 'Horaires et accès']] },
+      { id: 'realestate',emoji: '🏠', label: 'Immobilier',            post: 'Nouveau bien disponible à la visite 🏠',
+        topics: [['🏠', 'Nouveaux biens', 'Les dernières annonces'], ['🔑', 'Visites', 'Planifier une visite'], ['❓', 'Questions', 'Posez vos questions'], ['💶', 'Financement', 'Conseils et simulations']] },
+      { id: 'training',  emoji: '🎓', label: 'Formation / Coaching',  post: 'Nouvelle séance disponible cette semaine 🎓',
+        topics: [['📢', 'Annonces', 'Prochaine session'], ['🎓', 'Cours', 'Replays et supports'], ['❓', 'Questions', 'Entraide entre élèves'], ['📚', 'Ressources', 'Fiches et documents']] },
+      { id: 'finance',   emoji: '📈', label: 'Finance / Crypto',      post: 'Point marché du jour 📈',
+        topics: [['📰', 'Actualités', 'Les infos du jour'], ['📊', 'Analyses', 'Notre lecture du marché'], ['💬', 'Discussion', 'Échangez entre membres'], ['🛠', 'Support', 'Besoin d\u2019aide ?']] },
+      { id: 'content',   emoji: '🎬', label: 'Création de contenu',   post: 'Nouvelle vidéo en ligne 🎬',
+        topics: [['🎬', 'Nouveautés', 'Dernier contenu publié'], ['🎞️', 'Coulisses', 'En avant-première'], ['💬', 'Discussion', 'Parlez-nous de vous'], ['💡', 'Idées', 'Proposez vos sujets']] },
+      { id: 'community', emoji: '🤝', label: 'Communauté / Association', post: 'Rendez-vous de la semaine 🤝',
+        topics: [['📢', 'Annonces', 'Infos de l\u2019association'], ['📅', 'Événements', 'Prochaines rencontres'], ['🤝', 'Entraide', 'Un coup de main ?'], ['👋', 'Bienvenue', 'Présentez-vous']] },
+      { id: 'wellness',  emoji: '💆', label: 'Santé / Bien-être',     post: 'Conseil bien-être du jour 💆',
+        topics: [['💆', 'Conseils', 'Astuces de la semaine'], ['📅', 'Rendez-vous', 'Prendre rendez-vous'], ['❓', 'Questions', 'Posez vos questions'], ['📚', 'Ressources', 'Guides à télécharger']] },
+      { id: 'services',  emoji: '💼', label: 'Services / Freelance',  post: 'Disponibilités de la semaine 💼',
+        topics: [['💼', 'Offres', 'Nos services'], ['📁', 'Projets', 'Réalisations récentes'], ['❓', 'Questions', 'Un devis ?'], ['📞', 'Contact', 'Nous joindre']] },
+      { id: 'other',     emoji: '✨', label: 'Autre', post: 'Votre contenu du jour sera publié ici.',
+        topics: [['💬', 'Général', 'Bienvenue dans le forum'], ['📢', 'Annonces', 'Les nouveautés ici'], ['❓', 'Questions', 'Posez vos questions'], ['🛠', 'Support', 'Besoin d\u2019aide ?']] },
+    ];
+    $('activity-grid').innerHTML = ACTIVITIES.map(a => `
+      <label class="choice block"><input type="radio" name="activity" value="${a.id}" class="sr-only">
+        <div class="!p-3 h-full flex items-center gap-2"><span class="text-xl" aria-hidden="true">${a.emoji}</span><span class="text-sm font-semibold leading-tight">${a.label}</span></div></label>`).join('');
+
+    // ------------------------------------------------ Automatisations
+    const OPTS = [
+      { id: 'post', icon: 'fa-robot', price: 15,
+        label: () => 'Publication automatique de messages',
+        desc: () => 'Un bot publie à votre place, selon vos contenus.',
+        show: () => true,
+        body: `<div><label class="block text-sm font-semibold mb-2" for="post-freq">Fréquence</label>
+          <select id="post-freq" class="field"><option>Tous les jours</option><option>Plusieurs fois par jour</option><option>Chaque semaine</option><option>Selon mon calendrier</option></select></div>
+          <p class="text-sm text-slate-400">Vous nous transmettez vos contenus ou votre source après la commande.</p>` },
+      { id: 'schedule', icon: 'fa-clock', price: 10,
+        label: () => 'Programmation des publications',
+        desc: () => 'Planifiez vos messages à l\u2019heure qui convient à votre audience.',
+        show: () => true,
+        body: `<div class="grid sm:grid-cols-2 gap-3">
+          <div><label class="block text-sm font-semibold mb-2" for="sch-time">Heure habituelle</label><input id="sch-time" type="time" value="09:00" class="field"></div>
+          <div><label class="block text-sm font-semibold mb-2" for="sch-tz">Fuseau horaire</label>
+          <select id="sch-tz" class="field"><option>Europe/Paris</option><option>Europe/London</option><option>Africa/Casablanca</option><option>Asia/Dubai</option><option>America/Montreal</option><option>America/New_York</option></select></div></div>` },
+      { id: 'welcome', icon: 'fa-hand', price: 5,
+        label: () => 'Message de bienvenue automatique',
+        desc: () => 'Un bot accueille chaque nouveau membre avec votre message.',
+        show: (s) => s.format !== 'channel',
+        body: `<p id="welcome-note" class="text-sm text-slate-400"></p>` },
+      { id: 'buttons', icon: 'fa-link', price: 5,
+        label: () => 'Boutons avec des liens',
+        desc: () => 'Jusqu\u2019à 3 boutons cliquables sous vos messages.',
+        show: () => true,
+        body: `<div id="btn-rows" class="space-y-2"></div>
+          <button type="button" id="btn-add" class="linklike"><i class="fa-solid fa-plus"></i> Ajouter un bouton</button>
+          <p id="e-buttons" class="err hidden" role="alert"></p>` },
+      { id: 'relay', icon: 'fa-retweet', price: 25,
+        label: () => 'Relais depuis une source autorisée',
+        desc: () => 'Vos publications sont reprises automatiquement depuis une source dont vous avez les droits.',
+        show: () => true,
+        body: `<div><label class="block text-sm font-semibold mb-2" for="relay-src">Source à relayer</label>
+          <input id="relay-src" class="field" placeholder="Lien du canal, du site ou du flux source" autocomplete="off"></div>
+          <label class="flex items-start gap-3 cursor-pointer min-h-[44px]"><input id="relay-ok" type="checkbox" class="mt-1 w-5 h-5 accent-emerald-400 shrink-0">
+          <span class="text-[15px] text-[color:var(--muted)]">Je confirme être propriétaire de cette source ou disposer d'une autorisation pour la relayer.</span></label>
+          <p id="e-relay" class="err hidden" role="alert"></p>` },
+      { id: 'mod', icon: 'fa-shield-halved', price: 15,
+        label: (s) => s.format === 'channel' ? 'Modération des commentaires' : 'Modération du groupe',
+        desc: (s) => s.format === 'channel' ? 'Filtre le spam et les liens dans les commentaires.' : 'Filtre le spam, les liens et les comptes suspects.',
+        show: (s) => s.format !== 'channel' || s.linked,
+        body: `<div><label class="block text-sm font-semibold mb-2" for="mod-level">Niveau</label>
+          <select id="mod-level" class="field"><option value="standard">Standard (spam et liens)</option><option value="strict">Strict (+ mots interdits)</option></select></div>` },
+      { id: 'errors', icon: 'fa-bell', price: 5,
+        label: () => 'Notifications en cas d\u2019erreur',
+        desc: () => 'Vous êtes prévenu si une publication ou une automatisation échoue.',
+        show: () => true,
+        body: `<div><label class="block text-sm font-semibold mb-2" for="err-target">Me prévenir par</label>
+          <select id="err-target" class="field"><option value="email">E-mail</option><option value="telegram">Message Telegram</option></select></div>` },
+    ];
+
+    $('opts').innerHTML = OPTS.map(o => `
+      <div class="opt" id="optw-${o.id}">
+        <label class="flex items-start gap-3 p-4 cursor-pointer">
+          <input type="checkbox" id="opt-${o.id}" class="sr-only">
+          <span class="sw mt-0.5"></span>
+          <span class="flex-1 min-w-0"><span class="block font-bold text-[15px]" id="optl-${o.id}"></span><span class="block text-sm text-[color:var(--muted)] mt-0.5" id="optd-${o.id}"></span></span>
+          <span class="text-sm font-bold text-emerald-300 whitespace-nowrap">+${o.price} €</span>
+        </label>
+        <div class="px-4 pb-4 space-y-3 hidden" id="optb-${o.id}">${o.body}</div>
+      </div>`).join('');
+
+    // Boutons-liens (lignes dynamiques)
+    function addBtnRow(l = '', u = '') {
+      const rows = $('btn-rows');
+      if (rows.children.length >= 3) return;
+      const d = document.createElement('div');
+      d.className = 'btn-row flex flex-col sm:flex-row gap-2';
+      d.innerHTML = `<input class="field b-label sm:max-w-[200px]" maxlength="24" placeholder="Texte du bouton" aria-label="Texte du bouton">
+        <input class="field b-url" type="url" inputmode="url" placeholder="https://…" aria-label="Lien du bouton" autocapitalize="none">
+        <button type="button" class="b-del" aria-label="Supprimer ce bouton"><i class="fa-solid fa-xmark"></i></button>`;
+      d.querySelector('.b-label').value = l; d.querySelector('.b-url').value = u;
+      rows.appendChild(d);
+    }
+    addBtnRow();
+    $('btn-add').addEventListener('click', () => { addBtnRow(); render(); });
+    $('btn-rows').addEventListener('click', (e) => {
+      const b = e.target.closest('.b-del'); if (!b) return;
+      const rows = $('btn-rows');
+      if (rows.children.length > 1) b.closest('.btn-row').remove();
+      else rows.querySelectorAll('input').forEach(i => i.value = '');
+      render();
+    });
+
+    // ------------------------------------------------ Logo
+    let logoFile = null, logoURL = '';
+    function setLogo(file) {
+      const err = $('e-logo'); err.classList.add('hidden');
+      if (!file) { logoFile = null; logoURL = ''; $('f-logo').value = ''; return render(); }
+      if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) { err.textContent = 'Format non accepté : utilisez JPG, PNG ou WebP.'; err.classList.remove('hidden'); return; }
+      if (file.size > 2 * 1024 * 1024) { err.textContent = 'Image trop lourde : 2 Mo maximum.'; err.classList.remove('hidden'); return; }
+      const r = new FileReader();
+      r.onload = () => { logoFile = file; logoURL = r.result; render(); };
+      r.readAsDataURL(file);
+    }
+    $('f-logo').addEventListener('change', (e) => setLogo(e.target.files[0]));
+    $('logo-del').addEventListener('click', () => setLogo(null));
+    const drop = $('drop');
+    ['dragenter', 'dragover'].forEach(t => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add('over'); }));
+    ['dragleave', 'drop'].forEach(t => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.remove('over'); }));
+    drop.addEventListener('drop', (e) => { if (e.dataTransfer.files[0]) setLogo(e.dataTransfer.files[0]); });
+
+    // ------------------------------------------------ Lecture de l'état
+    function collect() {
+      const format = form.elements.format.value;
+      const vis = form.elements.vis.value;
+      const linked = format === 'channel' && form.elements.link.value === 'linked';
+      const ctx = { format, linked };
+      const on = {};
+      OPTS.forEach(o => { on[o.id] = $('opt-' + o.id).checked && o.show(ctx); });
+      const btns = [...document.querySelectorAll('.btn-row')].map(r => ({ label: r.querySelector('.b-label').value.trim(), url: r.querySelector('.b-url').value.trim() }));
+      let tg = $('f-tg').value.trim(); if (tg && !tg.startsWith('@')) tg = '@' + tg;
+      return {
+        format, vis, linked, on, btns,
+        activity: form.elements.activity.value, activityOther: $('activity-other').value.trim(),
+        name: $('f-name').value.trim(), desc: $('f-desc').value.trim(),
+        username: $('f-user').value.trim().replace(/^@/, ''), alt: $('f-alt').value.trim().replace(/^@/, ''),
+        welcome: $('f-welcome').value.trim(), lang: $('f-lang').value, langLabel: $('f-lang').selectedOptions[0].text,
+        freq: $('post-freq').value, time: $('sch-time').value || '09:00', tz: $('sch-tz').value,
+        relaySrc: $('relay-src').value.trim(), relayOk: $('relay-ok').checked,
+        modLevel: $('mod-level').value, errTarget: $('err-target').value,
+        delivery: form.elements.delivery.value, email: $('f-email').value.trim(), tg, cgv: $('f-cgv').checked,
+      };
+    }
+
+    function pricing(s) {
+      const L = [{ l: FORMAT_LABEL[s.format] + (s.vis === 'public' ? ' public' : ' privé'), p: BASE[s.format] }];
+      if (s.linked) L.push({ l: 'Groupe de commentaires relié', p: LINKED });
+      OPTS.forEach(o => { if (s.on[o.id]) L.push({ l: o.label(s), p: o.price }); });
+      if (DELIVERY[s.delivery].price) L.push({ l: 'Livraison express', p: DELIVERY[s.delivery].price });
+      return { L, total: L.reduce((a, x) => a + x.p, 0) };
+    }
+
+    // ------------------------------------------------ Aperçu Telegram
+    function preview(s) {
+      const nm = s.name || ({ channel: 'Mon canal', group: 'Mon groupe', forum: 'Mon forum' })[s.format];
+      const act = ACTIVITIES.find(a => a.id === s.activity);
+      const sample = act ? act.post : 'Votre contenu du jour sera publié ici.';
+      $('pv-name').textContent = nm;
+      const av = $('pv-avatar');
+      if (logoURL) { av.style.backgroundImage = `url("${logoURL}")`; av.style.backgroundSize = 'cover'; av.style.backgroundPosition = 'center'; av.textContent = ''; }
+      else { av.style.backgroundImage = ''; av.textContent = (s.name[0] || '?').toUpperCase(); }
+
+      $('pv-kind').innerHTML = `<i class="fa-solid ${s.vis === 'public' ? 'fa-globe' : 'fa-lock'}"></i> ${KIND[s.format]} ${s.vis === 'public' ? 'public' : 'privé'} · ${s.format === 'channel' ? '1 abonné' : '1 membre'}`;
+      $('pv-pinned').innerHTML = s.welcome
+        ? `<div class="tg-pin"><i class="fa-solid fa-thumbtack"></i><div><b>Message épinglé</b><span>${esc(s.welcome)}</span></div></div>` : '';
+
+      const link = s.vis === 'public'
+        ? `<div class="tg-service"><i class="fa-solid fa-link"></i> t.me/<b>${esc(s.username || 'votre_nom')}</b></div>`
+        : `<div class="tg-service"><i class="fa-solid fa-lock"></i> Lien d\u2019invitation privé</div>`;
+
+      const kbItems = [];
+      if (s.on.buttons) s.btns.filter(b => b.label).forEach(b => kbItems.push(`<span class="tg-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> ${esc(b.label)}</span>`));
+      const kbLinks = kbItems.slice();
+      if (s.linked) kbItems.push(`<span class="tg-btn tg-web"><i class="fa-regular fa-comment"></i> Commenter</span>`);
+      const kb = (items) => items.length ? `<div class="tg-kb">${items.join('')}</div>` : '';
+
+      const src = esc((s.relaySrc || 'votre source').replace(/^https?:\/\//, '').slice(0, 28));
+      const extras = [];
+      const t = (extra) => `<span class="tg-time">${extra}</span>`;
+
+      let body = '', foot = '';
+      if (s.format === 'forum') {
+        const T = (act ? act.topics : ACTIVITIES[ACTIVITIES.length - 1].topics).map((x, i) => [x[0], x[1], x[2], ['09:00', '09:05', '08:40', '08:10'][i]]);
+        if (s.on.welcome) T[0][2] = 'Assistant : 👋 Bienvenue !';
+        if (s.on.post) T[1][2] = '🤖 ' + (act ? act.post : 'Publication automatique');
+        if (s.on.mod) T[3][2] = 'Modération activée';
+        const topics = T;
+        body = link + topics.map(x => `<div class="tg-topic"><span class="ti">${x[0]}</span><div><b>${x[1]}</b><span>${esc(x[2])}</span></div><small>${x[3]}</small></div>`).join('');
+        foot = null;
+      } else {
+        const parts = [`<div class="tg-day">Aujourd'hui</div>`, `<div class="tg-service">${KIND[s.format] === 'canal' ? 'Canal' : KIND[s.format] === 'groupe' ? 'Groupe' : 'Forum'} créé</div>`, link];
+        if (s.format === 'channel') {
+          parts.push(`<div class="tg-msg in">Bienvenue sur <b>${esc(nm)}</b> 👋${t('<i class="fa-regular fa-eye"></i> 128 · 09:00')}</div>`, kb(kbItems));
+          if (s.on.post) parts.push(`<div class="tg-msg in"><span class="tg-tag"><i class="fa-solid fa-robot"></i> Publication automatique</span>${esc(sample)}${t('<i class="fa-regular fa-eye"></i> 96 · 12:00')}</div>`);
+          if (s.on.schedule) parts.push(`<div class="tg-service"><i class="fa-solid fa-clock"></i> Prochaine publication à ${esc(s.time)}</div>`);
+          if (s.on.relay) parts.push(`<div class="tg-msg in"><span class="tg-fwd">Relayé depuis <b>${src}</b></span>Contenu repris automatiquement.${t('<i class="fa-regular fa-eye"></i> 54 · 13:20')}</div>`);
+          if (s.linked && s.on.mod) parts.push(`<div class="tg-service"><i class="fa-solid fa-shield-halved"></i> Modération des commentaires ${s.modLevel === 'strict' ? '(stricte)' : ''}</div>`);
+          foot = `<span class="tg-field">Diffuser un message…</span><i class="fa-solid fa-paperclip"></i><i class="fa-regular fa-bell"></i>`;
+        } else {
+          parts.push(`<div class="tg-msg in"><span class="tg-sender">Camille</span>Salut tout le monde !${t('09:02')}</div>`);
+          if (s.on.welcome) parts.push(`<div class="tg-msg in"><span class="tg-sender" style="color:#6ab3f3">Assistant</span>${esc(s.welcome || 'Bienvenue ! Lisez le message épinglé pour commencer.')}${t('09:02')}</div>`, kb(kbLinks));
+          else { parts.push(`<div class="tg-msg out">Bienvenue dans ${esc(nm)} 👋${t('09:03 <i class="fa-solid fa-check-double"></i>')}</div>`, kb(kbLinks)); }
+          if (s.on.post) parts.push(`<div class="tg-msg in"><span class="tg-tag"><i class="fa-solid fa-robot"></i> Publication automatique</span>${esc(sample)}${t('12:00')}</div>`);
+          if (s.on.schedule) parts.push(`<div class="tg-service"><i class="fa-solid fa-clock"></i> Prochaine publication à ${esc(s.time)}</div>`);
+          if (s.on.relay) parts.push(`<div class="tg-msg in"><span class="tg-fwd">Relayé depuis <b>${src}</b></span>Contenu repris automatiquement.${t('13:20')}</div>`);
+          if (s.on.mod) parts.push(`<div class="tg-service"><i class="fa-solid fa-shield-halved"></i> Modération activée ${s.modLevel === 'strict' ? '(stricte)' : ''}</div>`);
+          foot = `<span class="tg-field">Message</span><i class="fa-solid fa-paperclip"></i><i class="fa-solid fa-microphone"></i>`;
+        }
+        body = parts.join('');
+      }
+      $('pv-body').innerHTML = body;
+      $('pv-foot').style.display = foot === null ? 'none' : 'flex';
+      if (foot !== null) $('pv-foot').innerHTML = foot;
+    }
+
+    // ------------------------------------------------ Rendu global
+    function render() {
+      const s = collect();
+      // Affichages conditionnels
+      $('linked-block').classList.toggle('hidden', s.format !== 'channel');
+      $('user-block').classList.toggle('hidden', s.vis !== 'public');
+      $('activity-other-wrap').classList.toggle('hidden', s.activity !== 'other');
+      $('name-kind').textContent = s.format === 'channel' ? 'du canal' : s.format === 'group' ? 'du groupe' : 'du forum';
+      $('welcome-label').innerHTML = (s.format === 'channel' ? 'Message épinglé' : 'Message de bienvenue / épinglé') + ' <span class="font-normal text-slate-400">(facultatif)</span>';
+      $('desc-count').textContent = $('f-desc').value.length + ' / 255';
+      $('logo-del').classList.toggle('hidden', !logoURL);
+      $('logo-name').textContent = logoFile ? logoFile.name : 'Déposez une image ou touchez ici';
+      const th = $('logo-thumb');
+      th.style.backgroundImage = logoURL ? `url("${logoURL}")` : '';
+      th.innerHTML = logoURL ? '' : '<i class="fa-regular fa-image"></i>';
+      $('btn-add').classList.toggle('hidden', document.querySelectorAll('.btn-row').length >= 3);
+      $('welcome-note').textContent = s.welcome ? 'Le bot enverra le message saisi à l\u2019étape 2 à chaque nouveau membre.' : 'Aucun message saisi à l\u2019étape 2 : un message de bienvenue par défaut sera utilisé.';
+
+      OPTS.forEach(o => {
+        const visible = o.show(s);
+        $('optw-' + o.id).classList.toggle('hidden', !visible);
+        $('optl-' + o.id).textContent = o.label(s);
+        $('optd-' + o.id).textContent = o.desc(s);
+        const checked = $('opt-' + o.id).checked && visible;
+        $('optw-' + o.id).classList.toggle('on', checked);
+        $('optb-' + o.id).classList.toggle('hidden', !checked);
+      });
+
+      preview(s);
+
+      // Résumé + total
+      const { L, total } = pricing(s);
+      const est = 'Livraison estimée : ' + DELIVERY[s.delivery].delay;
+      $('total').textContent = total + ' €';
+      $('total-side').textContent = total + ' €';
+      $('sticky-total').textContent = 'dès ' + total + ' €';
+      $('est').textContent = est;
+      $('est-side').textContent = 'Livraison ' + DELIVERY[s.delivery].delay;
+      $('recap-lines').innerHTML = L.map(x => `<li class="flex justify-between gap-3"><span>${esc(x.l)}</span><span class="font-bold whitespace-nowrap">${x.p} €</span></li>`).join('');
+      const facts = [
+        ['Nom', s.name || '—', 2],
+        ['Activité', s.activity === 'other' ? (s.activityOther || 'Autre') : ((ACTIVITIES.find(a => a.id === s.activity) || {}).label || '—'), 2],
+        ['Lien', s.vis === 'public' ? 't.me/' + (s.username || '—') : 'Lien d\u2019invitation privé', 2],
+        ['Langue', s.langLabel, 2],
+        ['Logo', logoURL ? 'Ajouté' : 'Initiale par défaut', 2],
+        ['Automatisations', OPTS.filter(o => s.on[o.id]).map(o => o.label(s)).join(', ') || 'Aucune', 3],
+      ];
+      $('recap-facts').innerHTML = facts.map(f => `<li class="flex justify-between gap-3"><span>${f[0]}</span><span class="text-right text-white">${esc(f[1])} <button type="button" data-go="${f[2]}" class="linklike ml-1">Modifier</button></span></li>`).join('');
+    }
+    form.addEventListener('input', render);
+    form.addEventListener('change', render);
+
+    // ------------------------------------------------ Validation par étape
+    const sect = (n) => document.querySelector(`[data-step="${n}"]`);
+    function fail(id, msg, el) { const e = $(id); e.textContent = msg; e.classList.remove('hidden'); if (el) el.setAttribute('aria-invalid', 'true'); return el; }
+    function validate(n) {
+      const sc = sect(n);
+      sc.querySelectorAll('.err').forEach(e => e.classList.add('hidden'));
+      sc.querySelectorAll('[aria-invalid]').forEach(i => i.removeAttribute('aria-invalid'));
+      $('step-msg').classList.add('hidden');
+      const s = collect(); let bad = null;
+      if (n === 2) {
+        if (!s.name) bad = fail('e-name', 'Donnez un nom à votre ' + KIND[s.format] + '.', $('f-name'));
+        if (!s.activity) { const f = fail('e-activity', 'Choisissez votre type d\u2019activité.', document.querySelector('input[name=activity]')); bad = bad || f; }
+        else if (s.activity === 'other' && !s.activityOther) { const f = fail('e-activity', 'Précisez votre activité.', $('activity-other')); bad = bad || f; }
+        if (s.vis === 'public') {
+          if (!RE_USER.test(s.username)) { const f = fail('e-user', 'Nom d\u2019utilisateur invalide : 5 à 32 caractères, lettres, chiffres ou « _ », commençant par une lettre.', $('f-user')); bad = bad || f; }
+          if (s.alt && !RE_USER.test(s.alt)) { const f = fail('e-alt', 'Nom de secours invalide (même règle).', $('f-alt')); bad = bad || f; }
+        }
+      }
+      if (n === 3) {
+        if (s.on.buttons) {
+          const filled = s.btns.filter(b => b.label || b.url);
+          const ok = filled.length && filled.every(b => b.label && isUrl(b.url));
+          if (!ok) bad = fail('e-buttons', 'Chaque bouton a besoin d\u2019un texte et d\u2019un lien valide (https://…).', document.querySelector('.b-label'));
+        }
+        if (s.on.relay && (!s.relaySrc || !s.relayOk)) { const f = fail('e-relay', !s.relaySrc ? 'Indiquez la source à relayer.' : 'Confirmez que vous avez le droit de relayer cette source.', $('relay-src')); bad = bad || f; }
+      }
+      if (n === 4) {
+        if (!$('f-email').value || !$('f-email').checkValidity()) bad = fail('e-email', 'Indiquez un e-mail valide.', $('f-email'));
+        if (!RE_TG.test(s.tg)) { const f = fail('e-tg', 'Pseudo Telegram invalide (ex. @votrepseudo, 5 caractères minimum).', $('f-tg')); bad = bad || f; }
+        if (!s.cgv) { const f = fail('e-cgv', 'Vous devez accepter les conditions de vente.', $('f-cgv')); bad = bad || f; }
+      }
+      if (bad) bad.focus();
+      return !bad;
+    }
+
+    // ------------------------------------------------ Navigation entre étapes
+    let step = 1, maxStep = 1;
+    function go(n, scroll = true) {
+      step = n; maxStep = Math.max(maxStep, n);
+      document.querySelectorAll('[data-step]').forEach(sc => sc.classList.toggle('hidden', +sc.dataset.step !== n));
+      document.querySelectorAll('#stepper .pill').forEach(p => {
+        const k = +p.dataset.go;
+        p.classList.toggle('active', k === n);
+        p.classList.toggle('done', k < n);
+        p.disabled = k > maxStep;
+        p.querySelector('.pill-n').textContent = k < n ? '✓' : k;
+        p.setAttribute('aria-current', k === n ? 'step' : 'false');
+      });
+      $('progress').style.width = (n * 25) + '%';
+      $('btn-back').classList.toggle('hidden', n === 1);
+      $('btn-next').classList.toggle('hidden', n === 4);
+      $('step-msg').classList.add('hidden');
+      render();
+      if (scroll) {
+        $('stepper').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const hd = sect(n).querySelector('h3'); if (hd) hd.focus({ preventScroll: true });
+      }
+    }
+    $('btn-next').addEventListener('click', () => { if (validate(step)) go(step + 1); });
+    $('btn-back').addEventListener('click', () => go(step - 1));
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-go]'); if (!b || b.disabled) return;
+      const k = +b.dataset.go;
+      if (k < step) return go(k);
+      let ok = true;
+      for (let i = step; i < k && ok; i++) ok = validate(i) && (go(i + 1, false), true);
+      if (ok) go(k);
+    });
+    document.querySelectorAll('a[href="#etape1"]').forEach(a => a.addEventListener('click', () => go(1, false)));
+    go(1, false);
+
+    // ------------------------------------------------ Envoi de la commande
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      for (const n of [2, 3, 4]) { if (!validate(n)) { if (n !== 4) go(n); return; } }
+      const s = collect();
+      const msg = $('form-msg');
+      const show = (t, ok) => { msg.textContent = t; msg.className = 'text-sm mt-3 ' + (ok ? 'text-emerald-300' : 'text-red-300'); };
+
+      const options = {};
+      if (s.on.post) options.post = { frequency: s.freq };
+      if (s.on.schedule) options.schedule = { time: s.time, timezone: s.tz };
+      if (s.on.welcome) options.welcome = true;
+      if (s.on.buttons) options.buttons = s.btns.filter(b => b.label && b.url);
+      if (s.on.relay) options.relay = { source: s.relaySrc, authorized: s.relayOk };
+      if (s.on.mod) options.moderation = { level: s.modLevel };
+      if (s.on.errors) options.errorAlerts = { via: s.errTarget };
+
+      const order = {
+        format: s.format, visibility: s.vis, linkedGroup: s.linked,
+        activity: s.activity, activityLabel: (ACTIVITIES.find(a => a.id === s.activity) || {}).label || null, activityOther: s.activity === 'other' ? s.activityOther : null,
+        name: s.name, description: s.desc, username: s.vis === 'public' ? s.username : null, altUsername: s.alt || null,
+        welcomeMessage: s.welcome, language: s.lang, options, delivery: s.delivery,
+        email: s.email, telegram: s.tg, acceptedTerms: s.cgv,
+      };
+      const fd = new FormData();
+      fd.append('order', JSON.stringify(order));
+      if (logoFile) fd.append('logo', logoFile);
+
+      const btn = $('pay-btn'); btn.disabled = true;
+      show('Redirection vers le paiement…', true);
+      try {
+        const r = await fetch(API_URL, { method: 'POST', body: fd });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const { url } = await r.json();
+        location.href = url;
+      } catch (err) {
+        btn.disabled = false;
+        show('Le paiement est momentanément indisponible. Réessayez dans un instant.', false);
+      }
+    });
+
+    // Cache le CTA fixe quand le formulaire est à l'écran
+    const sticky = $('sticky-cta');
+    new IntersectionObserver(([en]) => {
+      sticky.style.opacity = en.isIntersecting ? '0' : '1';
+      sticky.style.pointerEvents = en.isIntersecting ? 'none' : 'auto';
+    }, { threshold: 0 }).observe($('configurateur'));
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const nav = document.getElementById('nav-container');
+      const box = document.getElementById('rocket-container');
+      const wrap = document.getElementById('rocket-wrapper');
+      if (!nav || !box || !wrap) return;
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      let x = 15, dir = 1;
+      const speed = 2.4, w = 100;
+
+      function fly() {
+        const maxX = nav.getBoundingClientRect().width - w - 15;
+        if (window.innerWidth < 768 || reduce || maxX <= 15) { box.style.display = 'none'; }
+        else {
+          box.style.display = 'block';
+          x = Math.min(Math.max(x + speed * dir, 15), maxX);
+          if (x >= maxX) { dir = -1; wrap.style.transform = 'scaleX(-1)'; }
+          else if (x <= 15) { dir = 1; wrap.style.transform = 'scaleX(1)'; }
+          box.style.transform = `translate3d(${x}px, -50%, 0)`;
+        }
+        requestAnimationFrame(fly);
+      }
+      requestAnimationFrame(fly);
+    });
+  </script>
+
+  <script>
+    // Filet de sécurité : si la police d'icônes Font Awesome ne charge pas (icônes remplacées par des carrés),
+    // on recharge la même version depuis un second CDN.
+    window.addEventListener('load', () => {
+      const secours = () => {
+        if (document.getElementById('fa-secours')) return;
+        const l = document.createElement('link');
+        l.id = 'fa-secours'; l.rel = 'stylesheet';
+        l.href = 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css';
+        document.head.appendChild(l);
+      };
+      if (!document.fonts || !document.fonts.load) return;
+      document.fonts.load('900 1em "Font Awesome 6 Free"').then(f => { if (!f.length) secours(); }).catch(secours);
+    });
+  </script>
+</body>
+</html>
