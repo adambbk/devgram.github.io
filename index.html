@@ -190,6 +190,9 @@
     .tg-topic span { display: block; font-size: 13px; color: #6d7f8f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .tg-topic small { font-size: 11px; color: #6d7f8f; align-self: flex-start; margin-top: 4px; }
 
+    @keyframes glowSwitch { 0%,100% { box-shadow: 0 0 0 0 rgba(139,92,246,.6); } 50% { box-shadow: 0 0 0 12px rgba(139,92,246,0); } }
+    .cta-switch { background:#8b5cf6; color:#fff; font-weight:800; border-radius:14px; min-height:56px; padding:0 28px; display:inline-flex; align-items:center; justify-content:center; gap:10px; animation: glowSwitch 1.8s ease-out infinite; transition: background .2s, transform .2s; white-space:nowrap; }
+    .cta-switch:hover { background:#a78bfa; transform: translateY(-1px); }
     @keyframes nudge { from { transform: translateY(-2px); } to { transform: translateY(3px); } }
     .nudge { animation: nudge .9s ease-in-out infinite alternate; }
 
@@ -200,6 +203,9 @@
 </head>
 
 <body class="antialiased overflow-x-hidden">
+  <a href="devcord.html" class="block text-center bg-violet-600 hover:bg-violet-500 text-white font-bold text-sm sm:text-[15px] py-2.5 px-4 transition-colors">
+    <i class="fa-brands fa-discord mr-1"></i> Vous préférez Discord ? <span class="underline">Passer à DEVCORD</span> <i class="fa-solid fa-arrow-right ml-1"></i>
+  </a>
 
   <!-- ============ HEADER (bleu ciel animé) ============ -->
   <header class="max-w-7xl mx-auto w-full px-4 pt-6 sm:pt-8 relative z-30">
@@ -438,7 +444,7 @@
                 <label class="choice block"><input type="radio" name="link" value="alone" class="sr-only" checked>
                   <div class="h-full"><p class="font-bold">Canal seul</p><p class="text-sm text-[color:var(--muted)] mt-1">Pas de discussion sous les publications.</p></div></label>
                 <label class="choice block"><input type="radio" name="link" value="linked" class="sr-only">
-                  <div class="h-full"><div class="flex justify-between gap-2"><p class="font-bold">Canal + groupe relié</p><span class="text-sm font-bold text-emerald-300">+10 €</span></div><p class="text-sm text-[color:var(--muted)] mt-1">Les abonnés commentent chaque publication.</p></div></label>
+                  <div class="h-full"><div class="flex justify-between gap-2"><p class="font-bold">Canal + groupe relié</p><span class="text-sm font-bold text-emerald-300">+6 €</span></div><p class="text-sm text-[color:var(--muted)] mt-1">Les abonnés commentent chaque publication.</p></div></label>
               </div>
             </fieldset>
           </section>
@@ -531,7 +537,7 @@
                 <label class="choice block"><input type="radio" name="delivery" value="standard" class="sr-only" checked>
                   <div class="h-full"><p class="font-bold">Standard</p><p class="text-sm text-[color:var(--muted)] mt-1">Livré sous 24 h · inclus</p></div></label>
                 <label class="choice block"><input type="radio" name="delivery" value="express" class="sr-only">
-                  <div class="h-full"><div class="flex justify-between gap-2"><p class="font-bold">Express</p><span class="text-sm font-bold text-emerald-300">+15 €</span></div><p class="text-sm text-[color:var(--muted)] mt-1">Livré sous 2 h</p></div></label>
+                  <div class="h-full"><div class="flex justify-between gap-2"><p class="font-bold">Express</p><span class="text-sm font-bold text-emerald-300">+10 €</span></div><p class="text-sm text-[color:var(--muted)] mt-1">Livré sous 2 h</p></div></label>
               </div>
             </fieldset>
 
@@ -555,7 +561,7 @@
               <ul id="recap-lines" class="mt-4 pt-4 border-t border-white/10 space-y-2 text-[15px]"></ul>
               <div class="mt-4 pt-4 border-t border-white/10 flex items-end justify-between">
                 <div><p class="text-[color:var(--muted)] text-sm">Total</p><p id="est" class="text-sm text-emerald-300 font-semibold"></p></div>
-                <span id="total" class="text-3xl font-extrabold">29 €</span>
+                <span id="total" class="text-3xl font-extrabold">19 €</span>
               </div>
             </div>
 
@@ -571,6 +577,7 @@
               <button type="submit" id="pay-btn" class="btn-primary w-full"><i class="fa-solid fa-lock"></i><span>Payer et recevoir mon canal</span></button>
               <p id="form-msg" class="text-sm mt-3 hidden" role="status"></p>
               <p class="text-sm text-slate-400 mt-3">Paiement sécurisé. Carte bancaire ou crypto.</p>
+              <a href="devcord.html" class="linklike mt-2 inline-flex items-center gap-2"><i class="fa-brands fa-discord"></i> Votre audience est sur Discord ? Passer à DEVCORD</a>
             </div>
           </section>
 
@@ -600,7 +607,7 @@
             <div id="pv-foot" class="tg-input"></div>
           </div>
           <div class="card mt-4 p-4 flex items-center justify-between gap-4 max-w-[330px] mx-auto">
-            <div><p class="text-sm text-[color:var(--muted)]">Total estimé</p><p class="text-2xl font-extrabold" id="total-side">29 €</p></div>
+            <div><p class="text-sm text-[color:var(--muted)]">Total estimé</p><p class="text-2xl font-extrabold" id="total-side">19 €</p></div>
             <p class="text-sm text-right text-[color:var(--muted)]" id="est-side">Livraison sous 24 h</p>
           </div>
         </aside>
@@ -610,12 +617,12 @@
     <!-- ============ TARIFS ============ -->
     <section id="tarifs" class="max-w-6xl mx-auto px-4 pb-20 scroll-mt-24" aria-labelledby="tarifs-titre">
       <h2 id="tarifs-titre" class="text-2xl sm:text-3xl font-extrabold">Des prix clairs, sans surprise</h2>
-      <p class="mt-2 text-[color:var(--muted)]">Le prix se calcule en direct dans le formulaire. Options à partir de 5 €.</p>
+      <p class="mt-2 text-[color:var(--muted)]">Le prix se calcule en direct dans le formulaire. Options à partir de 3 €.</p>
       <!-- TODO : remplace ces montants par tes vrais prix (ils sont aussi dans les constantes BASE / OPTS en bas de page) -->
       <div class="mt-8 grid md:grid-cols-3 gap-4">
         <div class="card p-6">
           <h3 class="font-bold text-lg">Canal de diffusion</h3>
-          <p class="mt-2"><span class="text-4xl font-extrabold">29 €</span> <span class="text-[color:var(--muted)]">à partir de</span></p>
+          <p class="mt-2"><span class="text-4xl font-extrabold">19 €</span> <span class="text-[color:var(--muted)]">à partir de</span></p>
           <ul class="mt-4 space-y-2 text-[15px] text-[color:var(--muted)]">
             <li><i class="fa-solid fa-check text-emerald-300 mr-2"></i>Public ou privé</li>
             <li><i class="fa-solid fa-check text-emerald-300 mr-2"></i>Logo, description, message épinglé</li>
@@ -624,7 +631,7 @@
         </div>
         <div class="card p-6">
           <h3 class="font-bold text-lg">Groupe de discussion</h3>
-          <p class="mt-2"><span class="text-4xl font-extrabold">29 €</span> <span class="text-[color:var(--muted)]">à partir de</span></p>
+          <p class="mt-2"><span class="text-4xl font-extrabold">19 €</span> <span class="text-[color:var(--muted)]">à partir de</span></p>
           <ul class="mt-4 space-y-2 text-[15px] text-[color:var(--muted)]">
             <li><i class="fa-solid fa-check text-emerald-300 mr-2"></i>Public ou privé</li>
             <li><i class="fa-solid fa-check text-emerald-300 mr-2"></i>Modération en option</li>
@@ -633,7 +640,7 @@
         </div>
         <div class="card p-6 !border-emerald-400/60">
           <h3 class="font-bold text-lg">Groupe avec sujets</h3>
-          <p class="mt-2"><span class="text-4xl font-extrabold">39 €</span> <span class="text-[color:var(--muted)]">à partir de</span></p>
+          <p class="mt-2"><span class="text-4xl font-extrabold">24 €</span> <span class="text-[color:var(--muted)]">à partir de</span></p>
           <ul class="mt-4 space-y-2 text-[15px] text-[color:var(--muted)]">
             <li><i class="fa-solid fa-check text-emerald-300 mr-2"></i>Forum avec sujets prêts</li>
             <li><i class="fa-solid fa-check text-emerald-300 mr-2"></i>Automatisations en option</li>
@@ -682,6 +689,18 @@
     </section>
   </main>
 
+  <!-- ============ PASSER À DEVCORD ============ -->
+  <section class="max-w-6xl mx-auto px-4 pb-16" aria-labelledby="switch-titre">
+    <div class="card p-6 sm:p-10 flex flex-col lg:flex-row items-center gap-6 text-center lg:text-left" style="border-color:rgba(139,92,246,.55)">
+      <span class="w-16 h-16 rounded-2xl bg-violet-500/15 border border-violet-300/40 grid place-items-center shrink-0"><i class="fa-brands fa-discord text-4xl text-violet-300"></i></span>
+      <div class="flex-1">
+        <h2 id="switch-titre" class="text-2xl sm:text-3xl font-extrabold">Votre audience est sur Discord ?</h2>
+        <p class="mt-2 text-[color:var(--muted)]">DEVCORD crée votre serveur Discord avec le même formulaire, le même aperçu en direct et les mêmes automatisations.</p>
+      </div>
+      <a href="devcord.html" class="cta-switch"><i class="fa-brands fa-discord text-xl"></i> Passer à DEVCORD <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </section>
+
   <!-- ============ FOOTER ============ -->
   <footer class="max-w-6xl mx-auto px-4 pb-28 md:pb-10">
     <div class="card p-5 sm:p-6 text-sm text-[color:var(--muted)] flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -700,9 +719,9 @@
   <script>
     // ⚠️ Prix et délais d'exemple : remplace par tes vrais tarifs.
     // Le montant réellement débité doit être recalculé côté serveur à partir de la commande, jamais fait confiance au navigateur.
-    const BASE = { channel: 29, group: 29, forum: 39 };
-    const LINKED = 10;
-    const DELIVERY = { standard: { delay: 'sous 24 h', price: 0 }, express: { delay: 'sous 2 h', price: 15 } };
+    const BASE = { channel: 19, group: 19, forum: 24 };
+    const LINKED = 6;
+    const DELIVERY = { standard: { delay: 'sous 24 h', price: 0 }, express: { delay: 'sous 2 h', price: 10 } };
     const FORMAT_LABEL = { channel: 'Canal de diffusion', group: 'Groupe de discussion', forum: 'Groupe avec sujets' };
     const KIND = { channel: 'canal', group: 'groupe', forum: 'forum' };
     const API_URL = 'http://localhost:3000/api/order'; // ton backend
@@ -743,14 +762,14 @@
 
     // ------------------------------------------------ Automatisations
     const OPTS = [
-      { id: 'post', icon: 'fa-robot', price: 15,
+      { id: 'post', icon: 'fa-robot', price: 12,
         label: () => 'Publication automatique de messages',
         desc: () => 'Un bot publie à votre place, selon vos contenus.',
         show: () => true,
         body: `<div><label class="block text-sm font-semibold mb-2" for="post-freq">Fréquence</label>
           <select id="post-freq" class="field"><option>Tous les jours</option><option>Plusieurs fois par jour</option><option>Chaque semaine</option><option>Selon mon calendrier</option></select></div>
           <p class="text-sm text-slate-400">Vous nous transmettez vos contenus ou votre source après la commande.</p>` },
-      { id: 'schedule', icon: 'fa-clock', price: 10,
+      { id: 'schedule', icon: 'fa-clock', price: 8,
         label: () => 'Programmation des publications',
         desc: () => 'Planifiez vos messages à l\u2019heure qui convient à votre audience.',
         show: () => true,
@@ -758,19 +777,19 @@
           <div><label class="block text-sm font-semibold mb-2" for="sch-time">Heure habituelle</label><input id="sch-time" type="time" value="09:00" class="field"></div>
           <div><label class="block text-sm font-semibold mb-2" for="sch-tz">Fuseau horaire</label>
           <select id="sch-tz" class="field"><option>Europe/Paris</option><option>Europe/London</option><option>Africa/Casablanca</option><option>Asia/Dubai</option><option>America/Montreal</option><option>America/New_York</option></select></div></div>` },
-      { id: 'welcome', icon: 'fa-hand', price: 5,
+      { id: 'welcome', icon: 'fa-hand', price: 3,
         label: () => 'Message de bienvenue automatique',
         desc: () => 'Un bot accueille chaque nouveau membre avec votre message.',
         show: (s) => s.format !== 'channel',
         body: `<p id="welcome-note" class="text-sm text-slate-400"></p>` },
-      { id: 'buttons', icon: 'fa-link', price: 5,
+      { id: 'buttons', icon: 'fa-link', price: 3,
         label: () => 'Boutons avec des liens',
         desc: () => 'Jusqu\u2019à 3 boutons cliquables sous vos messages.',
         show: () => true,
         body: `<div id="btn-rows" class="space-y-2"></div>
           <button type="button" id="btn-add" class="linklike"><i class="fa-solid fa-plus"></i> Ajouter un bouton</button>
           <p id="e-buttons" class="err hidden" role="alert"></p>` },
-      { id: 'relay', icon: 'fa-retweet', price: 25,
+      { id: 'relay', icon: 'fa-retweet', price: 19,
         label: () => 'Relais depuis une source autorisée',
         desc: () => 'Vos publications sont reprises automatiquement depuis une source dont vous avez les droits.',
         show: () => true,
@@ -779,13 +798,13 @@
           <label class="flex items-start gap-3 cursor-pointer min-h-[44px]"><input id="relay-ok" type="checkbox" class="mt-1 w-5 h-5 accent-emerald-400 shrink-0">
           <span class="text-[15px] text-[color:var(--muted)]">Je confirme être propriétaire de cette source ou disposer d'une autorisation pour la relayer.</span></label>
           <p id="e-relay" class="err hidden" role="alert"></p>` },
-      { id: 'mod', icon: 'fa-shield-halved', price: 15,
+      { id: 'mod', icon: 'fa-shield-halved', price: 9,
         label: (s) => s.format === 'channel' ? 'Modération des commentaires' : 'Modération du groupe',
         desc: (s) => s.format === 'channel' ? 'Filtre le spam et les liens dans les commentaires.' : 'Filtre le spam, les liens et les comptes suspects.',
         show: (s) => s.format !== 'channel' || s.linked,
         body: `<div><label class="block text-sm font-semibold mb-2" for="mod-level">Niveau</label>
           <select id="mod-level" class="field"><option value="standard">Standard (spam et liens)</option><option value="strict">Strict (+ mots interdits)</option></select></div>` },
-      { id: 'errors', icon: 'fa-bell', price: 5,
+      { id: 'errors', icon: 'fa-bell', price: 3,
         label: () => 'Notifications en cas d\u2019erreur',
         desc: () => 'Vous êtes prévenu si une publication ou une automatisation échoue.',
         show: () => true,
@@ -939,6 +958,8 @@
     }
 
     // ------------------------------------------------ Rendu global
+    // Ne réécrit un bloc que s'il a changé : sinon un bouton peut disparaître entre le toucher et le relâchement (clic perdu après une saisie).
+    function setHTML(el, html) { if (el.dataset.h !== html) { el.dataset.h = html; el.innerHTML = html; } }
     function render() {
       const s = collect();
       // Affichages conditionnels
@@ -976,7 +997,7 @@
       $('sticky-total').textContent = 'dès ' + total + ' €';
       $('est').textContent = est;
       $('est-side').textContent = 'Livraison ' + DELIVERY[s.delivery].delay;
-      $('recap-lines').innerHTML = L.map(x => `<li class="flex justify-between gap-3"><span>${esc(x.l)}</span><span class="font-bold whitespace-nowrap">${x.p} €</span></li>`).join('');
+      setHTML($('recap-lines'), L.map(x => `<li class="flex justify-between gap-3"><span>${esc(x.l)}</span><span class="font-bold whitespace-nowrap">${x.p} €</span></li>`).join(''));
       const facts = [
         ['Nom', s.name || '—', 2],
         ['Activité', s.activity === 'other' ? (s.activityOther || 'Autre') : ((ACTIVITIES.find(a => a.id === s.activity) || {}).label || '—'), 2],
@@ -985,7 +1006,7 @@
         ['Logo', logoURL ? 'Ajouté' : 'Initiale par défaut', 2],
         ['Automatisations', OPTS.filter(o => s.on[o.id]).map(o => o.label(s)).join(', ') || 'Aucune', 3],
       ];
-      $('recap-facts').innerHTML = facts.map(f => `<li class="flex justify-between gap-3"><span>${f[0]}</span><span class="text-right text-white">${esc(f[1])} <button type="button" data-go="${f[2]}" class="linklike ml-1">Modifier</button></span></li>`).join('');
+      setHTML($('recap-facts'), facts.map(f => `<li class="flex justify-between gap-3"><span>${f[0]}</span><span class="text-right text-white">${esc(f[1])} <button type="button" data-go="${f[2]}" class="linklike ml-1">Modifier</button></span></li>`).join(''));
     }
     form.addEventListener('input', render);
     form.addEventListener('change', render);
