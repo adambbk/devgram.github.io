@@ -608,7 +608,10 @@
     const VOICE = 3;
     const DELIVERY = { standard: { delay: 'sous 24 h', price: 0 }, express: { delay: 'sous 2 h', price: 10 } };
     const FORMAT_LABEL = { community: 'Serveur communauté', shop: 'Serveur boutique / support', forum: 'Serveur avec forums' };
-    const API_URL = 'http://localhost:3000/api/order'; // ton backend
+    // URL PUBLIQUE de ton backend DEVCORD (devcord-backend). Remplace-la par ton adresse en production,
+    // par exemple 'https://api.ton-domaine.fr'. En local, laisse http://localhost:3000.
+    const API_BASE = window.DEVCORD_API_BASE || 'http://localhost:3000';
+    const API_URL = API_BASE.replace(/\/+$/, '') + '/api/order';
 
     const $ = (id) => document.getElementById(id);
     const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -887,7 +890,9 @@
       const fd = new FormData(); fd.append('order', JSON.stringify(order)); if (logoFile) fd.append('logo', logoFile);
       const btn = $('pay-btn'); btn.disabled = true; show('Redirection vers le paiement…', true);
       try {
-        const r = await fetch(API_URL, { method: 'POST', body: fd }); if (!r.ok) throw new Error('HTTP ' + r.status);
+        const r = await fetch(API_URL, { method: 'POST', body: fd });
+        if (r.status === 400) { const j = await r.json().catch(() => ({})); btn.disabled = false; return show((j.errors && j.errors[0]) || j.error || 'Commande invalide.', false); }
+        if (!r.ok) throw new Error('HTTP ' + r.status);
         const { url } = await r.json(); location.href = url;
       } catch (err) { btn.disabled = false; show('Le paiement est momentanément indisponible. Réessayez dans un instant.', false); }
     });
