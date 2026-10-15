@@ -1,0 +1,27 @@
+{
+  "name": "devgram-backend",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/server.js",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node src/server.js",
+    "login": "node scripts/login.js",
+    "test:provision": "node scripts/test-provision.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.0",
+    "express-rate-limit": "^7.4.0",
+    "input": "^1.0.1",
+    "multer": "^1.4.5-lts.1",
+    "node-telegram-bot-api": "^0.66.0",
+    "nodemailer": "^6.9.0",
+    "sharp": "^0.33.0",
+    "stripe": "^16.0.0",
+    "telegram": "^2.22.0",
+    "zod": "^3.23.0"
+  }
+}
