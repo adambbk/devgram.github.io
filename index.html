@@ -3,32 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DEVLAB — Studio & Écosystème Web</title>
+  <title>DEVLAB — Studio &amp; Écosystème Web</title>
+  <meta name="description" content="DEVLAB : studio web spécialisé dans la création et la configuration de canaux Telegram et de serveurs Discord, personnalisés et livrés en quelques minutes.">
+  <meta name="theme-color" content="#05060a">
+  <link rel="canonical" href="https://adambbk.github.io/devgram.github.io/">
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            cyborg: {
-              bg: 'rgba(15, 23, 42, 0.6)',
-              card: 'rgba(30, 41, 59, 0.7)',
-              border: 'rgba(16, 185, 129, 0.2)',
-              text: '#94a3b8',
-              orange: '#f97316',
-              orangeHover: '#ea580c',
-              pink: '#e75e8d',
-              cyan: '#10b981',
-              dark: '#05060a'
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <!-- Open Graph / aperçu de partage -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DEVLAB">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:title" content="DEVLAB — Studio &amp; Écosystème Web">
+  <meta property="og:description" content="DEVLAB : studio web spécialisé dans la création et la configuration de canaux Telegram et de serveurs Discord, personnalisés et livrés en quelques minutes.">
+  <meta property="og:url" content="https://adambbk.github.io/devgram.github.io/">
+  <meta property="og:image" content="https://adambbk.github.io/devgram.github.io/og-devlab.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="DEVLAB, studio web pour canaux Telegram et serveurs Discord">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DEVLAB — Studio &amp; Écosystème Web">
+  <meta name="twitter:description" content="DEVLAB : studio web spécialisé dans la création et la configuration de canaux Telegram et de serveurs Discord, personnalisés et livrés en quelques minutes.">
+  <meta name="twitter:image" content="https://adambbk.github.io/devgram.github.io/og-devlab.png">
+
+
+  
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -38,6 +40,8 @@
 
   <!-- Style sur-mesure -->
   <link rel="stylesheet" href="style.css">
+  <!-- Tailwind CSS compilé : npm run build:css -->
+  <link rel="stylesheet" href="tailwind-home.css">
 </head>
 <body class="bg-[#05060a] text-white min-h-screen relative overflow-x-hidden flex flex-col justify-between">
 
@@ -625,15 +629,15 @@
           <p class="text-cyborg-text">Une question ? Échangez directement avec notre équipe :</p>
           
           <div class="flex items-center gap-3 pt-1">
-            <a href="" target="_blank" rel="noopener noreferrer" title="Discord DEVLAB" class="w-10 h-10 rounded-xl bg-black/50 border border-white/10 hover:border-[#5865F2] text-white hover:text-[#5865F2] hover:bg-[#5865F2]/10 flex items-center justify-center text-lg transition-all shadow-md hover:shadow-[0_0_15px_rgba(88,101,242,0.4)]">
+            <button type="button" data-copy="adem2.7" title="Copier mon pseudo Discord : adem2.7" aria-label="Copier mon pseudo Discord : adem2.7" class="w-10 h-10 rounded-xl bg-black/50 border border-white/10 hover:border-[#5865F2] text-white hover:text-[#5865F2] hover:bg-[#5865F2]/10 flex items-center justify-center text-lg transition-all shadow-md hover:shadow-[0_0_15px_rgba(88,101,242,0.4)]">
               <i class="fa-brands fa-discord"></i>
-            </a>
+            </button>
 
-            <a href="" target="_blank" rel="noopener noreferrer" title="Telegram DEVLAB" class="w-10 h-10 rounded-xl bg-black/50 border border-white/10 hover:border-[#24A1DE] text-white hover:text-[#24A1DE] hover:bg-[#24A1DE]/10 flex items-center justify-center text-lg transition-all shadow-md hover:shadow-[0_0_15px_rgba(36,161,222,0.4)]">
+            <a href="https://t.me/drck_03" target="_blank" rel="noopener noreferrer" title="Telegram : @drck_03" aria-label="Telegram : @drck_03" class="w-10 h-10 rounded-xl bg-black/50 border border-white/10 hover:border-[#24A1DE] text-white hover:text-[#24A1DE] hover:bg-[#24A1DE]/10 flex items-center justify-center text-lg transition-all shadow-md hover:shadow-[0_0_15px_rgba(36,161,222,0.4)]">
               <i class="fa-brands fa-telegram"></i>
             </a>
 
-            <a href="" title="Envoyer un e-mail" class="w-10 h-10 rounded-xl bg-black/50 border border-white/10 hover:border-[#10b981] text-white hover:text-[#10b981] hover:bg-[#10b981]/10 flex items-center justify-center text-lg transition-all shadow-md hover:shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+            <a href="mailto:adam.bouberka@gmail.com" title="Envoyer un e-mail" aria-label="Envoyer un e-mail" class="w-10 h-10 rounded-xl bg-black/50 border border-white/10 hover:border-[#10b981] text-white hover:text-[#10b981] hover:bg-[#10b981]/10 flex items-center justify-center text-lg transition-all shadow-md hover:shadow-[0_0_15px_rgba(16,185,129,0.4)]">
               <i class="fa-solid fa-envelope"></i>
             </a>
           </div>
