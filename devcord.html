@@ -5,36 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>DEVCORD — Créez votre serveur Discord</title>
   <meta name="description" content="Configurez, prévisualisez et commandez votre serveur Discord. Droits d'administrateur immédiats.">
+  <meta name="theme-color" content="#05060a">
+  <link rel="canonical" href="https://adambbk.github.io/devgram.github.io/devcord.html">
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'] },
-          animation: {
-            'flame-flicker': 'flame 0.15s ease-in-out infinite alternate',
-            'cloud-float': 'cloudFloat 6s ease-in-out infinite alternate'
-          },
-          keyframes: {
-            flame: {
-              '0%': { transform: 'scaleX(0.85) scaleY(0.9)', opacity: '0.85' },
-              '100%': { transform: 'scaleX(1.15) scaleY(1.1)', opacity: '1' }
-            },
-            cloudFloat: {
-              '0%': { transform: 'translateY(0px)' },
-              '100%': { transform: 'translateY(4px)' }
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <!-- Open Graph / aperçu de partage -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DEVLAB">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:title" content="DEVCORD — Créez votre serveur Discord">
+  <meta property="og:description" content="Configurez, prévisualisez et commandez votre serveur Discord. Droits d'administrateur immédiats.">
+  <meta property="og:url" content="https://adambbk.github.io/devgram.github.io/devcord.html">
+  <meta property="og:image" content="https://adambbk.github.io/devgram.github.io/og-devcord.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="DEVCORD, créez votre serveur Discord">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DEVCORD — Créez votre serveur Discord">
+  <meta name="twitter:description" content="Configurez, prévisualisez et commandez votre serveur Discord. Droits d'administrateur immédiats.">
+  <meta name="twitter:image" content="https://adambbk.github.io/devgram.github.io/og-devcord.png">
+
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
     :root {
       --bg: #060913;
       --card: rgba(12, 18, 32, .78);
@@ -99,7 +100,6 @@
     details > summary { list-style: none; cursor: pointer; }
     details > summary::-webkit-details-marker { display: none; }
     details[open] .chev { transform: rotate(180deg); }
-
 
     /* Cartes d'étapes (style d'origine) */
     .matrix-card {
@@ -198,6 +198,8 @@
       *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
     }
   </style>
+  <!-- Tailwind CSS compilé : npm run build:css -->
+  <link rel="stylesheet" href="tailwind-bots.css">
 </head>
 
 <body class="antialiased overflow-x-hidden">
@@ -253,10 +255,10 @@
         <a href="index.html" aria-label="Retour DEVLAB" class="px-3.5 sm:px-5 min-h-[44px] rounded-xl text-sm font-bold text-white bg-white/15 hover:bg-white/25 border border-white/30 transition-all duration-200 flex items-center gap-2">
           <i class="fa-solid fa-house"></i><span class="hidden sm:inline">Retour DEVLAB</span>
         </a>
-        <a href="https://discord.com/oauth2/authorize?client_id=VOTRE_ID&scope=bot" target="_blank" rel="noopener noreferrer" class="px-4 sm:px-6 min-h-[44px] rounded-xl text-sm font-extrabold text-white bg-slate-950 hover:bg-slate-900 border border-slate-800 shadow-md transition-all duration-200 flex items-center gap-2 hover:scale-[1.02]">
+        <button type="button" data-copy="adem2.7" aria-label="Copier mon pseudo Discord : adem2.7" class="px-4 sm:px-6 min-h-[44px] rounded-xl text-sm font-extrabold text-white bg-slate-950 hover:bg-slate-900 border border-slate-800 shadow-md transition-all duration-200 flex items-center gap-2 hover:scale-[1.02]">
           <i class="fa-brands fa-discord text-base text-violet-300"></i>
           <span class="sm:hidden">Lancer le bot</span><span class="hidden sm:inline">Lancer le Bot Discord</span>
-        </a>
+        </button>
       </div>
     </nav>
   </header>
@@ -608,10 +610,7 @@
     const VOICE = 3;
     const DELIVERY = { standard: { delay: 'sous 24 h', price: 0 }, express: { delay: 'sous 2 h', price: 10 } };
     const FORMAT_LABEL = { community: 'Serveur communauté', shop: 'Serveur boutique / support', forum: 'Serveur avec forums' };
-    // URL PUBLIQUE de ton backend DEVCORD (devcord-backend). Remplace-la par ton adresse en production,
-    // par exemple 'https://api.ton-domaine.fr'. En local, laisse http://localhost:3000.
-    const API_BASE = window.DEVCORD_API_BASE || 'http://localhost:3000';
-    const API_URL = API_BASE.replace(/\/+$/, '') + '/api/order';
+    const API_URL = 'http://localhost:3000/api/order'; // ton backend
 
     const $ = (id) => document.getElementById(id);
     const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -890,9 +889,7 @@
       const fd = new FormData(); fd.append('order', JSON.stringify(order)); if (logoFile) fd.append('logo', logoFile);
       const btn = $('pay-btn'); btn.disabled = true; show('Redirection vers le paiement…', true);
       try {
-        const r = await fetch(API_URL, { method: 'POST', body: fd });
-        if (r.status === 400) { const j = await r.json().catch(() => ({})); btn.disabled = false; return show((j.errors && j.errors[0]) || j.error || 'Commande invalide.', false); }
-        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const r = await fetch(API_URL, { method: 'POST', body: fd }); if (!r.ok) throw new Error('HTTP ' + r.status);
         const { url } = await r.json(); location.href = url;
       } catch (err) { btn.disabled = false; show('Le paiement est momentanément indisponible. Réessayez dans un instant.', false); }
     });
@@ -941,6 +938,23 @@
       };
       if (!document.fonts || !document.fonts.load) return;
       document.fonts.load('900 1em "Font Awesome 6 Free"').then(f => { if (!f.length) secours(); }).catch(secours);
+    });
+  </script>
+  <script>
+    // Les pseudos Discord n'ont pas de lien direct : on copie le pseudo dans le presse-papiers.
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-copy]');
+      if (!btn) return;
+      var value = btn.getAttribute('data-copy');
+      var labels = Array.prototype.slice.call(btn.querySelectorAll('span'));
+      var originals = labels.map(function (s) { return s.textContent; });
+      function flash() {
+        labels.forEach(function (s) { s.textContent = 'Copié !'; });
+        setTimeout(function () { labels.forEach(function (s, i) { s.textContent = originals[i]; }); }, 1800);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(value).then(flash, flash);
+      } else { flash(); }
     });
   </script>
 </body>
