@@ -255,10 +255,10 @@
         <a href="index.html" aria-label="Retour DEVLAB" class="px-3.5 sm:px-5 min-h-[44px] rounded-xl text-sm font-bold text-white bg-white/15 hover:bg-white/25 border border-white/30 transition-all duration-200 flex items-center gap-2">
           <i class="fa-solid fa-house"></i><span class="hidden sm:inline">Retour DEVLAB</span>
         </a>
-        <button type="button" data-copy="adem2.7" aria-label="Copier mon pseudo Discord : adem2.7" class="px-4 sm:px-6 min-h-[44px] rounded-xl text-sm font-extrabold text-white bg-slate-950 hover:bg-slate-900 border border-slate-800 shadow-md transition-all duration-200 flex items-center gap-2 hover:scale-[1.02]">
+        <a href="https://discord.com/users/688390035321782294" target="_blank" rel="noopener noreferrer" class="px-4 sm:px-6 min-h-[44px] rounded-xl text-sm font-extrabold text-white bg-slate-950 hover:bg-slate-900 border border-slate-800 shadow-md transition-all duration-200 flex items-center gap-2 hover:scale-[1.02]">
           <i class="fa-brands fa-discord text-base text-violet-300"></i>
           <span class="sm:hidden">Lancer le bot</span><span class="hidden sm:inline">Lancer le Bot Discord</span>
-        </button>
+        </a>
       </div>
     </nav>
   </header>
@@ -938,23 +938,6 @@
       };
       if (!document.fonts || !document.fonts.load) return;
       document.fonts.load('900 1em "Font Awesome 6 Free"').then(f => { if (!f.length) secours(); }).catch(secours);
-    });
-  </script>
-  <script>
-    // Les pseudos Discord n'ont pas de lien direct : on copie le pseudo dans le presse-papiers.
-    document.addEventListener('click', function (e) {
-      var btn = e.target.closest('[data-copy]');
-      if (!btn) return;
-      var value = btn.getAttribute('data-copy');
-      var labels = Array.prototype.slice.call(btn.querySelectorAll('span'));
-      var originals = labels.map(function (s) { return s.textContent; });
-      function flash() {
-        labels.forEach(function (s) { s.textContent = 'Copié !'; });
-        setTimeout(function () { labels.forEach(function (s, i) { s.textContent = originals[i]; }); }, 1800);
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(value).then(flash, flash);
-      } else { flash(); }
     });
   </script>
 </body>
