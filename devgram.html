@@ -724,7 +724,7 @@
     const DELIVERY = { standard: { delay: 'sous 24 h', price: 0 }, express: { delay: 'sous 2 h', price: 10 } };
     const FORMAT_LABEL = { channel: 'Canal de diffusion', group: 'Groupe de discussion', forum: 'Groupe avec sujets' };
     const KIND = { channel: 'canal', group: 'groupe', forum: 'forum' };
-    const API_URL = 'https://REMPLACE-PAR-L-URL-DE-TON-WORKER.workers.dev'; // relais Cloudflare -> Telegram
+    const API_URL = 'https://devgram-orders.adam-bouberka.workers.dev'; // relais Cloudflare -> Telegram
 
     const $ = (id) => document.getElementById(id);
     const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
