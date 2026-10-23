@@ -515,6 +515,47 @@
                 <option value="ar">العربية</option><option value="ru">Русский</option><option value="tr">Türkçe</option><option value="other">Autre</option>
               </select>
             </div>
+
+            <div class="pt-4 mt-2 border-t border-white/10">
+              <h4 class="font-extrabold text-lg">Pour un rendu professionnel</h4>
+              <p class="text-sm text-slate-400 mt-1">Facultatif, mais plus vous renseignez, plus votre <span id="kind-word">canal</span> est livré complet et prêt à l'emploi.</p>
+            </div>
+
+            <fieldset>
+              <legend class="block text-sm font-semibold mb-1">Rubriques</legend>
+              <p id="sec-help" class="text-sm text-slate-400 mb-3"></p>
+              <div id="sec-rows" class="space-y-3"></div>
+              <button type="button" id="sec-add" class="linklike mt-2"><i class="fa-solid fa-plus"></i> Ajouter une rubrique</button>
+              <p id="e-sections" class="err hidden" role="alert"></p>
+            </fieldset>
+
+            <fieldset>
+              <legend class="block text-sm font-semibold mb-1">Coordonnées à afficher</legend>
+              <p class="text-sm text-slate-400 mb-3">Elles serviront à la description, aux boutons et au message d'accueil.</p>
+              <div class="grid sm:grid-cols-2 gap-3">
+                <input id="c-site" class="field" inputmode="url" maxlength="120" placeholder="Site web (https://…)" aria-label="Site web" autocapitalize="none">
+                <input id="c-insta" class="field" maxlength="80" placeholder="Instagram (@compte ou lien)" aria-label="Instagram" autocapitalize="none">
+                <input id="c-wa" class="field" maxlength="80" placeholder="WhatsApp (numéro ou lien)" aria-label="WhatsApp">
+                <input id="c-phone" class="field" inputmode="tel" maxlength="30" placeholder="Téléphone" aria-label="Téléphone">
+                <input id="c-mail" class="field" type="email" maxlength="80" placeholder="E-mail public" aria-label="E-mail public" autocapitalize="none">
+                <input id="c-addr" class="field" maxlength="120" placeholder="Adresse (facultatif)" aria-label="Adresse">
+              </div>
+              <textarea id="c-hours" class="field !py-3 mt-3" rows="2" maxlength="200" placeholder="Horaires (ex. Lun-Sam 11h-23h)" aria-label="Horaires"></textarea>
+              <p id="e-contacts" class="err hidden" role="alert"></p>
+            </fieldset>
+
+            <div id="rules-wrap">
+              <label for="f-rules" class="block text-sm font-semibold mb-2">Règles du groupe <span class="font-normal text-slate-400">(facultatif)</span></label>
+              <textarea id="f-rules" class="field !py-3" rows="3" maxlength="600" placeholder="Ex. Respect de tous, pas de publicité, pas de liens sans accord."></textarea>
+            </div>
+
+            <div>
+              <label for="f-tone" class="block text-sm font-semibold mb-2">Ton des messages</label>
+              <select id="f-tone" class="field">
+                <option value="pro" selected>Professionnel</option><option value="warm">Chaleureux</option>
+                <option value="dynamic">Dynamique</option><option value="premium">Premium / sobre</option>
+              </select>
+            </div>
           </section>
 
           <!-- ÉTAPE 3 -->
@@ -731,6 +772,7 @@
     const form = $('order-form');
     const RE_USER = /^[A-Za-z][A-Za-z0-9_]{4,31}$/;
     const RE_TG = /^@[A-Za-z][A-Za-z0-9_]{4,31}$/;
+    const normUrl = (u) => { u = (u || '').trim(); return u && !/^https?:\/\//i.test(u) ? 'https://' + u : u; };
     const isUrl = (u) => { try { const x = new URL(u); return x.protocol === 'https:' || x.protocol === 'http:'; } catch { return false; } };
 
     // ------------------------------------------------ Types d'activité (servent à adapter le canal)
@@ -845,6 +887,38 @@
       render();
     });
 
+
+    // Rubriques (onglets du forum / publications de départ)
+    let secDirty = false;
+    function addSecRow(emoji = '', name = '', text = '', hint = '') {
+      const rows = $('sec-rows');
+      if (rows.children.length >= 8) return;
+      const d = document.createElement('div');
+      d.className = 'sec-row rounded-[14px] border border-white/10 p-3 space-y-2';
+      d.innerHTML = `<div class="flex gap-2">
+          <input class="field s-emoji !w-20 text-center" maxlength="4" placeholder="📌" aria-label="Emoji de la rubrique">
+          <input class="field s-name" maxlength="32" placeholder="Nom de la rubrique" aria-label="Nom de la rubrique">
+          <button type="button" class="b-del" aria-label="Supprimer cette rubrique"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <textarea class="field !py-3 s-text" rows="2" maxlength="400" aria-label="Texte de la rubrique"></textarea>`;
+      d.querySelector('.s-emoji').value = emoji; d.querySelector('.s-name').value = name; d.querySelector('.s-text').value = text;
+      d.querySelector('.s-text').placeholder = hint ? 'Ex. ' + hint + ' (texte de la rubrique, facultatif)' : 'Texte de la rubrique (facultatif)';
+      rows.appendChild(d);
+    }
+    function syncSections() {
+      if (secDirty) return;
+      const a = ACTIVITIES.find(x => x.id === form.elements.activity.value);
+      $('sec-rows').innerHTML = '';
+      if (a) a.topics.forEach(x => addSecRow(x[0], x[1], '', x[2]));
+    }
+    document.querySelectorAll('input[name="activity"]').forEach(r => r.addEventListener('change', syncSections));
+    $('sec-add').addEventListener('click', () => { secDirty = true; addSecRow(); render(); });
+    $('sec-rows').addEventListener('input', () => { secDirty = true; });
+    $('sec-rows').addEventListener('click', (e) => {
+      const b = e.target.closest('.b-del'); if (!b) return;
+      secDirty = true; b.closest('.sec-row').remove(); render();
+    });
+
     // ------------------------------------------------ Logo
     let logoFile = null, logoURL = '';
     function setLogo(file) {
@@ -873,8 +947,13 @@
       OPTS.forEach(o => { on[o.id] = $('opt-' + o.id).checked && o.show(ctx); });
       const btns = [...document.querySelectorAll('.btn-row')].map(r => ({ label: r.querySelector('.b-label').value.trim(), url: r.querySelector('.b-url').value.trim() }));
       let tg = $('f-tg').value.trim(); if (tg && !tg.startsWith('@')) tg = '@' + tg;
+      const sections = [...document.querySelectorAll('.sec-row')].map(r => ({
+        emoji: r.querySelector('.s-emoji').value.trim(), name: r.querySelector('.s-name').value.trim(), text: r.querySelector('.s-text').value.trim() }));
+      const contacts = {
+        website: normUrl($('c-site').value), instagram: $('c-insta').value.trim(), whatsapp: $('c-wa').value.trim(),
+        phone: $('c-phone').value.trim(), email: $('c-mail').value.trim(), address: $('c-addr').value.trim(), hours: $('c-hours').value.trim() };
       return {
-        format, vis, linked, on, btns,
+        format, vis, linked, on, btns, sections, contacts, tone: $('f-tone').value, rules: $('f-rules').value.trim(),
         activity: form.elements.activity.value, activityOther: $('activity-other').value.trim(),
         name: $('f-name').value.trim(), desc: $('f-desc').value.trim(),
         username: $('f-user').value.trim().replace(/^@/, ''), alt: $('f-alt').value.trim().replace(/^@/, ''),
@@ -924,12 +1003,15 @@
 
       let body = '', foot = '';
       if (s.format === 'forum') {
-        const T = (act ? act.topics : ACTIVITIES[ACTIVITIES.length - 1].topics).map((x, i) => [x[0], x[1], x[2], ['09:00', '09:05', '08:40', '08:10'][i]]);
-        if (s.on.welcome) T[0][2] = 'Assistant : 👋 Bienvenue !';
-        if (s.on.post) T[1][2] = '🤖 ' + (act ? act.post : 'Publication automatique');
-        if (s.on.mod) T[3][2] = 'Modération activée';
+        const baseT = s.sections.filter(x => x.name).length
+          ? s.sections.filter(x => x.name).map(x => [x.emoji || '💬', x.name, x.text.slice(0, 40)])
+          : (act ? act.topics : ACTIVITIES[ACTIVITIES.length - 1].topics);
+        const T = baseT.map((x, i) => [x[0], x[1], x[2], ['09:00', '09:05', '08:40', '08:10', '08:00', '07:50', '07:40', '07:30'][i]]);
+        if (s.on.welcome && T[0]) T[0][2] = 'Assistant : 👋 Bienvenue !';
+        if (s.on.post && T[1]) T[1][2] = '🤖 ' + (act ? act.post : 'Publication automatique');
+        if (s.on.mod && T[3]) T[3][2] = 'Modération activée';
         const topics = T;
-        body = link + topics.map(x => `<div class="tg-topic"><span class="ti">${x[0]}</span><div><b>${x[1]}</b><span>${esc(x[2])}</span></div><small>${x[3]}</small></div>`).join('');
+        body = link + topics.map(x => `<div class="tg-topic"><span class="ti">${esc(x[0])}</span><div><b>${esc(x[1])}</b><span>${esc(x[2])}</span></div><small>${x[3]}</small></div>`).join('');
         foot = null;
       } else {
         const parts = [`<div class="tg-day">Aujourd'hui</div>`, `<div class="tg-service">${KIND[s.format] === 'canal' ? 'Canal' : KIND[s.format] === 'groupe' ? 'Groupe' : 'Forum'} créé</div>`, link];
@@ -968,6 +1050,12 @@
       $('activity-other-wrap').classList.toggle('hidden', s.activity !== 'other');
       $('name-kind').textContent = s.format === 'channel' ? 'du canal' : s.format === 'group' ? 'du groupe' : 'du forum';
       $('welcome-label').innerHTML = (s.format === 'channel' ? 'Message épinglé' : 'Message de bienvenue / épinglé') + ' <span class="font-normal text-slate-400">(facultatif)</span>';
+      $('kind-word').textContent = KIND[s.format];
+      $('rules-wrap').classList.toggle('hidden', s.format === 'channel');
+      $('sec-help').textContent = s.format === 'forum'
+        ? 'Chaque rubrique devient un sujet (onglet) de votre groupe. Modifiez, supprimez ou ajoutez les vôtres.'
+        : 'Chaque rubrique devient une publication de départ, reliée par un message épinglé avec des boutons de navigation.';
+      $('sec-add').classList.toggle('hidden', document.querySelectorAll('.sec-row').length >= 8);
       $('desc-count').textContent = $('f-desc').value.length + ' / 255';
       $('logo-del').classList.toggle('hidden', !logoURL);
       $('logo-name').textContent = logoFile ? logoFile.name : 'Déposez une image ou touchez ici';
@@ -1003,6 +1091,7 @@
         ['Activité', s.activity === 'other' ? (s.activityOther || 'Autre') : ((ACTIVITIES.find(a => a.id === s.activity) || {}).label || '—'), 2],
         ['Lien', s.vis === 'public' ? 't.me/' + (s.username || '—') : 'Lien d\u2019invitation privé', 2],
         ['Langue', s.langLabel, 2],
+        ['Rubriques', s.sections.filter(x => x.name).map(x => x.name).join(', ') || '—', 2],
         ['Logo', logoURL ? 'Ajouté' : 'Initiale par défaut', 2],
         ['Automatisations', OPTS.filter(o => s.on[o.id]).map(o => o.label(s)).join(', ') || 'Aucune', 3],
       ];
@@ -1027,7 +1116,11 @@
         if (s.vis === 'public') {
           if (!RE_USER.test(s.username)) { const f = fail('e-user', 'Nom d\u2019utilisateur invalide : 5 à 32 caractères, lettres, chiffres ou « _ », commençant par une lettre.', $('f-user')); bad = bad || f; }
           if (s.alt && !RE_USER.test(s.alt)) { const f = fail('e-alt', 'Nom de secours invalide (même règle).', $('f-alt')); bad = bad || f; }
+          else if (s.alt && s.alt.toLowerCase() === s.username.toLowerCase()) { const f = fail('e-alt', 'Le nom de secours doit être différent du premier.', $('f-alt')); bad = bad || f; }
         }
+        if (s.contacts.website && !isUrl(s.contacts.website)) { const f = fail('e-contacts', 'Le site web doit être une adresse valide (https://…).', $('c-site')); bad = bad || f; }
+        else if (s.contacts.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.contacts.email)) { const f = fail('e-contacts', 'L\u2019e-mail public est invalide.', $('c-mail')); bad = bad || f; }
+        if (s.sections.some(x => !x.name && (x.text || x.emoji))) { const f = fail('e-sections', 'Donnez un nom à chaque rubrique (ou supprimez-la).', document.querySelector('.s-name')); bad = bad || f; }
       }
       if (n === 3) {
         if (s.on.buttons) {
@@ -1106,6 +1199,7 @@
         name: s.name, description: s.desc, username: s.vis === 'public' ? s.username : null, altUsername: s.alt || null,
         welcomeMessage: s.welcome, language: s.lang, options, delivery: s.delivery,
         email: s.email, telegram: s.tg, acceptedTerms: s.cgv,
+        brand: { tone: s.tone, rules: s.format === 'channel' ? '' : s.rules, sections: s.sections.filter(x => x.name), contacts: s.contacts },
         total: pr.total, lines: pr.L.map(x => x.l + ' ' + x.p + '€'),
       };
       const fd = new FormData();
