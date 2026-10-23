@@ -38,7 +38,7 @@ const tzOf = (rec) => (rec.order.options.schedule || {}).timezone || 'Europe/Par
 
 function slotsOf(opts) {
   const freq = (opts.post || {}).frequency;
-  if (freq === 'Selon mon calendrier') return [];
+  if (freq === 'Selon mon calendrier') return { times: [], weekly: false };
   const t = (opts.schedule || {}).time || '09:00';
   return { times: freq === 'Plusieurs fois par jour' ? ['09:00', '13:00', '18:00'] : [t], weekly: freq === 'Chaque semaine' };
 }
@@ -236,17 +236,36 @@ async function clientMessage(env, m, t, cmd, args) {
   if (cmd) return say(env, chat, 'Commande inconnue.');
 
   if (!isActive(rec)) return say(env, chat, '🕓 Votre commande n\'est pas encore active (paiement en attente).');
-  if (!rec.target) return say(env, chat, '🛠️ Votre canal est en cours de préparation, je vous préviens dès qu\'il est prêt.');
+  if (!rec.target) return say(env, chat, '🛠️ Votre canal est en cours de préparation, je vous prévenons dès qu\'il est prêt.');
   if (!o.post && !o.schedule && !o.buttons) return say(env, chat, 'Votre commande n\'inclut pas la publication via le bot.');
 
-  let item;
-  if (m.photo && m.photo.length) item = { type: 'photo', file_id: m.photo[m.photo.length - 1].file_id, caption: m.caption || '' };
-  else if (m.text) item = { type: 'text', text: m.text };
-  else return say(env, chat, 'Envoyez du texte ou une photo.');
+  let item = {
+    type: 'text',
+    text: '',
+    caption: '',
+    file_id: '',
+    at: null,
+    id: '',
+    tries: 0
+  };
+
+  if (m.photo && m.photo.length) {
+    item.type = 'photo';
+    item.file_id = m.photo[m.photo.length - 1].file_id;
+    item.caption = m.caption || '';
+  } else if (m.text) {
+    item.type = 'text';
+    item.text = m.text;
+  } else {
+    return say(env, chat, 'Envoyez du texte ou une photo.');
+  }
 
   const key = item.type === 'photo' ? 'caption' : 'text';
   const dm = (item[key] || '').match(/^@(\d{4}-\d{2}-\d{2})\s+(\d{1,2}):(\d{2})\s*/);
-  if (dm) { item.at = `${dm[1]} ${dm[2].padStart(2, '0')}:${dm[3]}`; item[key] = item[key].slice(dm[0].length); }
+  if (dm) { 
+    item.at = `${dm[1]} ${dm[2].padStart(2, '0')}:${dm[3]}`; 
+    item[key] = item[key].slice(dm[0].length); 
+  }
   if (item.type === 'text' && !item.text) return say(env, chat, 'Message vide.');
 
   if (!o.post && !o.schedule) {           // boutons seuls : publication immédiate
@@ -255,9 +274,10 @@ async function clientMessage(env, m, t, cmd, args) {
     return say(env, chat, r.ok ? '✅ Publié.' : '❌ Échec de la publication, nous sommes prévenus.');
   }
   const s = slotsOf(o);
-  if (!item.at && !s.times) return say(env, chat, 'Indiquez une date en début de message : @AAAA-MM-JJ HH:MM votre texte');
+  if (!item.at && (!s.times || !s.times.length)) return say(env, chat, 'Indiquez une date en début de message : @AAAA-MM-JJ HH:MM votre texte');
 
-  item.id = Date.now().toString(36); item.tries = 0;
+  item.id = Date.now().toString(36); 
+  item.tries = 0;
   const q = await getQueue(env, ref); q.push(item); await setQueue(env, ref, q);
   const when = item.at ? `le ${item.at}` : `au prochain créneau (${s.times.join(' / ')}${s.weekly ? ', le lundi' : ''})`;
   return say(env, chat, `✅ Message n°${q.length} programmé ${when} (${tzOf(rec)}).`);
@@ -358,9 +378,11 @@ async function handleApi(req, env, url) {
 
 // ---------- Commande du site ----------
 async function handleOrder(req, env) {
-  const origin = req.headers.get('Origin') || '';
+  const origin = (req.headers.get('Origin') || '').trim().toLowerCase();
+  const allowedOrigin = (env.ALLOWED_ORIGIN || '').trim().toLowerCase();
+  
   const cors = {
-    'Access-Control-Allow-Origin': env.ALLOWED_ORIGIN,
+    'Access-Control-Allow-Origin': env.ALLOWED_ORIGIN || '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   };
@@ -369,7 +391,7 @@ async function handleOrder(req, env) {
 
   if (req.method === 'OPTIONS') return new Response(null, { headers: cors });
   if (req.method !== 'POST') return json({ error: 'method' }, 405);
-  if (origin !== env.ALLOWED_ORIGIN) return json({ error: 'origin' }, 403);
+  if (origin !== allowedOrigin) return json({ error: 'origin' }, 403);
 
   let order, logo;
   try {
@@ -429,6 +451,8 @@ Ensuite : /paid ${ref} · /link ${ref} @canal`;
   await sendBrief(env, env.ADMIN_CHAT, rec);
   return json({ ok: true, ref });
 }
+
+// ... (tout le reste du code au-dessus)
 
 export default {
   async fetch(req, env, ctx) {
