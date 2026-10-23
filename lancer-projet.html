@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lancer mon projet — Quel réseau vous faut-il ? | DEVLAB</title>
+<meta name="description" content="Répondez à 5 questions : DEVLAB vous recommande Telegram (DEVGRAM), Discord (DEVCORD) ou les deux selon votre activité.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{--bg:#05060a;--tg:#24A1DE;--dc:#5865F2;--em:#10b981;--line:rgba(255,255,255,.1);--mut:#9aa6b8;--card:rgba(12,16,30,.72)}
+*{box-sizing:border-box;margin:0}
+html,body{min-height:100%}
+body{background:var(--bg);color:#fff;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5;overflow-x:hidden}
+body::before,body::after{content:"";position:fixed;width:60vmax;height:60vmax;border-radius:50%;filter:blur(90px);opacity:.28;z-index:0;pointer-events:none;animation:drift 22s ease-in-out infinite alternate}
+body::before{background:radial-gradient(circle,var(--tg),transparent 65%);top:-30vmax;left:-20vmax}
+body::after{background:radial-gradient(circle,var(--dc),transparent 65%);bottom:-30vmax;right:-20vmax;animation-delay:-11s}
+@keyframes drift{to{transform:translate(8vmax,6vmax) scale(1.12)}}
+.top,main{position:relative;z-index:1;max-width:1040px;margin:0 auto;padding:0 18px}
+.top{display:flex;justify-content:space-between;align-items:center;padding-top:22px;padding-bottom:10px}
+.logo{color:#fff;text-decoration:none;font-weight:900;letter-spacing:.04em;font-size:1.15rem}.logo i{color:var(--em);margin-right:8px}.logo b{color:var(--em)}
+.back{color:var(--mut);text-decoration:none;font-size:.9rem}.back:hover{color:#fff}
+main{padding-bottom:60px}
+.kicker{display:inline-block;margin-top:26px;padding:5px 14px;border:1px solid rgba(16,185,129,.4);border-radius:99px;color:#6ee7b7;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.prog{height:6px;background:rgba(255,255,255,.08);border-radius:9px;margin:22px 0 8px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--tg),var(--dc));border-radius:9px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.step{color:var(--mut);font-size:.85rem;display:flex;justify-content:space-between}
+h1{font-size:clamp(1.6rem,4.5vw,2.5rem);line-height:1.15;font-weight:900;margin:22px 0 6px}
+.sub{color:var(--mut);margin-bottom:24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
+.opt{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:14px;align-items:center;padding:16px;border-radius:18px;background:var(--card);border:1px solid var(--line);backdrop-filter:blur(10px);transition:transform .2s,border-color .2s,background .2s,box-shadow .2s;opacity:0;transform:translateY(14px);animation:up .5s forwards}
+@keyframes up{to{opacity:1;transform:none}}
+.opt:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.07)}
+.opt:focus-visible{outline:2px solid var(--em);outline-offset:2px}
+.opt.sel{border-color:var(--em);background:rgba(16,185,129,.14);box-shadow:0 0 28px rgba(16,185,129,.3);transform:scale(1.02)}
+.opt .ic{flex:none;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:rgba(255,255,255,.07);font-size:1.15rem;color:#a7f3d0}
+.opt b{display:block;font-size:.98rem}.opt small{color:var(--mut);font-size:.8rem;line-height:1.3;display:block}
+.nav{margin-top:22px;min-height:36px}
+.ghost{background:none;border:0;color:var(--mut);cursor:pointer;font:inherit;padding:8px 0}.ghost:hover{color:#fff}
+.center{text-align:center}
+#analyse{padding:70px 0;text-align:center}
+.orbit{position:relative;width:170px;height:170px;margin:0 auto 26px}
+.orbit .core{position:absolute;inset:55px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,.5),transparent 70%);animation:pulse 1.2s infinite}
+.orbit .ring{position:absolute;inset:0;border:1px dashed rgba(255,255,255,.25);border-radius:50%;animation:spin 3s linear infinite}
+.orbit .ring i{position:absolute;top:-19px;left:calc(50% - 19px);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:1.2rem;background:var(--tg)}
+.orbit .ring i+i{top:auto;bottom:-19px;background:var(--dc)}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{50%{transform:scale(1.35);opacity:.6}}
+#msg{color:#cbd5e1;font-weight:600;min-height:1.5em}
+.head{text-align:center;margin:24px 0 8px}
+.head h1{margin:14px 0 4px}
+.cards{display:grid;gap:18px;margin-top:34px;align-items:stretch}
+.cards.one{grid-template-columns:minmax(0,520px);justify-content:center}.cards.two{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.net{--c:var(--tg);position:relative;padding:30px 24px 24px;border-radius:26px;background:var(--card);border:1px solid var(--line);backdrop-filter:blur(12px);text-align:center;opacity:0;transform:translateY(30px) scale(.96);transition:opacity .7s,transform .7s cubic-bezier(.2,.9,.2,1.2)}
+.net.dc{--c:var(--dc)}
+.net.show{opacity:1;transform:none}
+.net.win{border-color:var(--c);box-shadow:0 0 0 1px var(--c),0 0 60px color-mix(in srgb,var(--c) 45%,transparent)}
+.net:not(.win){transform:scale(.97)}.net.show:not(.win){opacity:.8}
+.badge{position:absolute;top:-15px;left:50%;transform:translateX(-50%) translateY(-14px);opacity:0;white-space:nowrap;padding:7px 16px;border-radius:99px;background:linear-gradient(110deg,#fbbf24,#f59e0b,#fde68a,#f59e0b);background-size:220% 100%;color:#241500;font-weight:900;font-size:.74rem;letter-spacing:.1em;box-shadow:0 8px 24px rgba(245,158,11,.5);transition:.6s cubic-bezier(.2,.9,.2,1.4) .5s}
+.net.show .badge{opacity:1;transform:translateX(-50%);animation:shine 2.6s linear 1.1s infinite}
+@keyframes shine{to{background-position:-220% 0}}
+.ringw{position:relative;width:104px;height:104px;margin:6px auto 10px}
+.ringw svg{transform:rotate(-90deg)}
+.ringw circle{fill:none;stroke-width:8;stroke-linecap:round}
+.ringw .bg{stroke:rgba(255,255,255,.1)}.ringw .fg{stroke:var(--c);stroke-dasharray:289;stroke-dashoffset:289;transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1) .3s;filter:drop-shadow(0 0 6px var(--c))}
+.ringw span{position:absolute;inset:0;display:grid;place-items:center;font-weight:900;font-size:1.5rem}
+.net h2{font-size:1.5rem;display:flex;justify-content:center;gap:10px;align-items:center}.net h2 i{color:var(--c)}
+.tag{color:var(--mut);font-size:.85rem;margin-bottom:14px}
+.why{list-style:none;padding:0;text-align:left;display:grid;gap:9px;margin:0 0 20px}
+.why li{display:flex;gap:10px;font-size:.9rem;color:#dbe3ee}.why li i{color:var(--c);margin-top:4px}
+.cta{--c:var(--tg);position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:#fff;padding:16px 22px;border-radius:99px;background:linear-gradient(135deg,var(--c),color-mix(in srgb,var(--c) 60%,#000));font-weight:800;font-size:1.02rem;box-shadow:0 10px 34px color-mix(in srgb,var(--c) 55%,transparent);transition:transform .25s,box-shadow .25s;animation:beat 2.4s ease-in-out 2s infinite}
+.cta.dc{--c:var(--dc)}
+.cta small{font-weight:500;font-size:.76rem;opacity:.85}
+.cta::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:sweep 3s ease-in-out 2.2s infinite}
+.cta:hover{transform:translateY(-3px) scale(1.03)}.cta i.fa-arrow-right{margin-left:8px;transition:transform .25s}.cta:hover i.fa-arrow-right{transform:translateX(5px)}
+@keyframes sweep{60%,100%{left:130%}}@keyframes beat{50%{transform:scale(1.035)}}
+.alt{display:inline-block;margin-top:6px;color:var(--mut);font-size:.85rem;text-decoration:none}.alt:hover{color:#fff}
+.again{margin-top:30px;text-align:center}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:5}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01s!important}.opt{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="index.html"><i class="fa-solid fa-flask"></i>DEV<b>LAB</b></a><a class="back" href="index.html"><i class="fa-solid fa-arrow-left"></i> Retour au site</a></header>
+<main>
+ <div class="center"><span class="kicker">Lancer mon projet</span></div>
+ <section id="quiz">
+  <div class="prog"><i id="bar"></i></div>
+  <div class="step"><span id="stp"></span><span>Environ 1 minute</span></div>
+  <div id="stage" aria-live="polite"></div>
+  <div class="nav"><button class="ghost" id="prev" type="button"><i class="fa-solid fa-arrow-left"></i> Question précédente</button></div>
+ </section>
+ <section id="analyse" hidden>
+  <div class="orbit"><div class="core"></div><div class="ring"><i class="fa-brands fa-telegram"></i><i class="fa-brands fa-discord"></i></div></div>
+  <p id="msg"></p>
+ </section>
+ <section id="result" hidden></section>
+</main>
+<canvas id="fx"></canvas>
+<script>
+/*PURE*/
+const Q=[
+{t:"Quelle est votre activité ?",s:"Choisissez ce qui vous ressemble le plus.",o:[
+ {l:"Boutique / e-commerce",d:"Produits, promos, commandes",i:"fa-bag-shopping",t:3,c:2},
+ {l:"Restauration",d:"Menu, réservations, offres",i:"fa-utensils",t:3,c:1},
+ {l:"Immobilier",d:"Biens, visites, alertes",i:"fa-house",t:3,c:1},
+ {l:"Formation / coaching",d:"Cours, accompagnement",i:"fa-graduation-cap",t:2,c:3},
+ {l:"Finance / crypto / actu",d:"Signaux, analyses, veille",i:"fa-chart-line",t:3,c:2},
+ {l:"Créateur de contenu",d:"Vidéos, lives, fans",i:"fa-clapperboard",t:2,c:3},
+ {l:"Communauté / association",d:"Membres, entraide, événements",i:"fa-people-group",t:1,c:3},
+ {l:"Gaming / e-sport",d:"Équipes, tournois, vocal",i:"fa-gamepad",t:0,c:4},
+ {l:"Agence / freelance",d:"Clients, projets, support",i:"fa-briefcase",t:3,c:2},
+ {l:"Autre",d:"Un projet unique",i:"fa-wand-magic-sparkles",t:2,c:2}]},
+{t:"Quel est votre objectif principal ?",s:"Ce que votre espace doit faire avant tout.",o:[
+ {l:"Diffuser des infos à beaucoup de monde",d:"Annonces, promos, actualités",i:"fa-bullhorn",t:4,c:1,rt:"Vos messages arrivent en notification directe, à une audience illimitée.",rd:""},
+ {l:"Faire discuter et animer",d:"Échanges, entraide, vie de groupe",i:"fa-comments",t:1,c:4,rt:"",rd:"Salons thématiques et fils : chaque sujet a sa place."},
+ {l:"Vendre et prendre des commandes",d:"Catalogue, suivi, relances",i:"fa-cart-shopping",t:3,c:2,rt:"Un canal et un bot gèrent catalogue, commandes et relances simplement.",rd:""},
+ {l:"Assurer un support organisé",d:"Demandes, tickets, équipe",i:"fa-headset",t:1,c:4,rt:"",rd:"Tickets privés et rôles d’équipe : un support vraiment structuré."},
+ {l:"Organiser lives et événements",d:"Vocal, scène, rendez-vous",i:"fa-microphone-lines",t:0,c:4,rt:"",rd:"Vocal, scène et événements sont intégrés nativement."}]},
+{t:"Qui souhaitez-vous toucher ?",s:"Le public détermine l’endroit où il est déjà.",o:[
+ {l:"Le grand public, surtout sur mobile",d:"Large audience, simple d’accès",i:"fa-mobile-screen",t:4,c:1,rt:"Telegram est sur tous les téléphones, sans friction pour s’abonner.",rd:""},
+ {l:"Jeunes, gamers, créateurs",d:"Une communauté qui vit en ligne",i:"fa-headphones",t:1,c:4,rt:"",rd:"Votre public est déjà sur Discord : c’est sa maison."},
+ {l:"Clients et professionnels",d:"Relation de confiance",i:"fa-handshake",t:3,c:2,rt:"Un canal sobre et direct rassure et informe les professionnels.",rd:""},
+ {l:"Un petit cercle privé",d:"Accès sur invitation",i:"fa-lock",t:2,c:3,rt:"",rd:"Des rôles et des salons privés cloisonnent chaque groupe."}]},
+{t:"Quelle place pour l’interaction en direct ?",s:"Vocal, live, discussions entre membres.",o:[
+ {l:"Surtout du contenu à lire",d:"Je publie, ils lisent",i:"fa-book-open",t:4,c:0,rt:"Un canal de diffusion est idéal quand on lit plus qu’on ne discute.",rd:""},
+ {l:"Des discussions et des commentaires",d:"Échanges réguliers",i:"fa-message",t:2,c:3,rt:"",rd:"Fils de discussion et réactions animent vos annonces."},
+ {l:"Beaucoup : vocal, live, salons",d:"Une vraie vie communautaire",i:"fa-podcast",t:0,c:5,rt:"",rd:"Vocal, live et salons : l’interaction en direct est native."}]},
+{t:"Ce qui compte le plus pour vous ?",s:"Dernière question.",o:[
+ {l:"Toucher le plus de monde, vite",d:"Portée et rapidité",i:"fa-rocket",t:4,c:1,rt:"Diffusion rapide : aucun algorithme entre vous et votre audience.",rd:""},
+ {l:"Une communauté bien organisée",d:"Rôles, salons, modération",i:"fa-sitemap",t:1,c:4,rt:"",rd:"Rôles, salons et modération automatique pour une communauté tenue."},
+ {l:"Les deux : audience et communauté",d:"Attirer puis fidéliser",i:"fa-scale-balanced",t:3,c:3,rt:"",rd:"",bal:1}]}];
+function recommend(a){let t=0,c=0,rt=[],rd=[],bal=false;
+ a.forEach((k,q)=>{const o=Q[q].o[k];t+=o.t;c+=o.c;if(o.bal)bal=true;if(o.rt&&o.t-o.c>=2)rt.push(o.rt);if(o.rd&&o.c-o.t>=2)rd.push(o.rd)});
+ const pt=Math.round(100*t/(t+c)),pd=100-pt,gap=Math.abs(pt-pd);
+ const both=gap<=8||(bal&&gap<=16);
+ rt.push("Votre canal est livré clé en main, en quelques minutes.");rd.push("Votre serveur est livré structuré, avec bot et rôles.");
+ return{pt,pd,both,win:pt>=pd?"tg":"dc",tg:rt.slice(0,3),dc:rd.slice(0,3)}}
+/*END*/
+const NET={tg:{n:"Telegram",b:"DEVGRAM",ic:"fa-telegram",tag:"Diffusion et audience",cta:"Créer mon canal Telegram",url:"devgram.html#configurateur"},
+ dc:{n:"Discord",b:"DEVCORD",ic:"fa-discord",tag:"Communauté et vocal",cta:"Créer mon serveur Discord",url:"devcord.html#configurateur"}};
+const $=id=>document.getElementById(id);let i=0,ans=[];
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function show(id){["quiz","analyse","result"].forEach(x=>$(x).hidden=x!==id);scrollTo({top:0,behavior:reduce?"auto":"smooth"})}
+function render(){const q=Q[i];$("bar").style.width=(i/Q.length*100)+"%";$("stp").textContent="Question "+(i+1)+" sur "+Q.length;
+ $("prev").style.visibility=i?"visible":"hidden";
+ $("stage").innerHTML='<h1>'+q.t+'</h1><p class="sub">'+q.s+'</p><div class="grid">'+q.o.map((o,k)=>
+  '<button type="button" class="opt'+(ans[i]===k?" sel":"")+'" data-k="'+k+'" style="animation-delay:'+(k*60)+'ms"><span class="ic"><i class="fa-solid '+o.i+'"></i></span><span><b>'+o.l+'</b><small>'+o.d+'</small></span></button>').join("")+'</div>';
+ document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ans[i]=+b.dataset.k;document.querySelectorAll(".opt").forEach(x=>x.classList.toggle("sel",x===b));setTimeout(()=>{i++;i<Q.length?render():analyse()},reduce?0:380)})}
+$("prev").onclick=()=>{if(i>0){i--;render()}};
+function analyse(){$("bar").style.width="100%";show("analyse");const m=["Analyse de votre activité…","Comparaison de Telegram et de Discord…","Calcul de votre recommandation…"];let k=0;$("msg").textContent=m[0];
+ const iv=setInterval(()=>{k++;if(k<m.length)$("msg").textContent=m[k]},reduce?100:850);setTimeout(()=>{clearInterval(iv);result()},reduce?300:2700)}
+function card(k,r,win){const n=NET[k],p=k==="tg"?r.pt:r.pd;
+ return '<article class="net '+k+(win?" win":"")+'">'+(win?'<div class="badge">'+(r.both?'★ RECOMMANDÉ':'★ LE PLUS RECOMMANDÉ')+'</div>':'')+
+ '<div class="ringw"><svg viewBox="0 0 104 104" width="104" height="104"><circle class="bg" cx="52" cy="52" r="46"/><circle class="fg" cx="52" cy="52" r="46" data-p="'+p+'"/></svg><span data-n="'+p+'">0%</span></div>'+
+ '<h2><i class="fa-brands '+n.ic+'"></i>'+n.n+'</h2><div class="tag">'+n.tag+' · '+n.b+'</div>'+
+ '<ul class="why">'+r[k].map(t=>'<li><i class="fa-solid fa-circle-check"></i><span>'+t+'</span></li>').join("")+'</ul>'+
+ (win?'<a class="cta '+k+'" href="'+n.url+'"><span>'+n.cta+' <i class="fa-solid fa-arrow-right"></i></span><small>sur '+n.b+' · livré en quelques minutes</small></a>':
+ '<a class="alt" href="'+n.url+'">Voir aussi '+n.b+' →</a>')+'</article>'}
+function result(){const r=recommend(ans),o=r.win==="tg"?["tg","dc"]:["dc","tg"];show("result");
+ const title=r.both?'Votre projet a besoin des <span style="color:var(--tg)">deux</span> réseaux':'Votre réseau idéal : <span style="color:var(--'+r.win+')">'+NET[r.win].n+'</span>';
+ const sub=r.both?"Telegram pour toucher large, Discord pour fidéliser : les deux se complètent.":"D’après vos réponses, c’est le réseau qui répondra le mieux à votre projet.";
+ $("result").innerHTML='<div class="head"><h1>'+title+'</h1><p class="sub">'+sub+'</p></div><div class="cards '+(r.both?"two":"one")+'">'+
+  (r.both?card("tg",r,1)+card("dc",r,1):card(o[0],r,1))+'</div>'+(r.both?"":'<div class="center" style="margin-top:14px">'+card(o[1],r,0).replace(/<article[^>]*>[\s\S]*?<a class="alt"/,'<a class="alt"')+'</div>')+
+  '<div class="again"><button class="ghost" id="redo" type="button"><i class="fa-solid fa-rotate-left"></i> Refaire le test</button></div>';
+ $("redo").onclick=()=>{i=0;ans=[];show("quiz");render()};
+ const cs=[...document.querySelectorAll(".net")];
+ cs.forEach((c,k)=>setTimeout(()=>{c.classList.add("show");const f=c.querySelector(".fg"),n=c.querySelector("[data-n]"),p=+f.dataset.p;
+  f.style.strokeDashoffset=289*(1-p/100);let s=null;const to=+n.dataset.n;
+  (function t(ts){s=s||ts;const x=Math.min((ts-s)/1500,1);n.textContent=Math.round(to*(1-Math.pow(1-x,3)))+"%";if(x<1)requestAnimationFrame(t)})(performance.now());
+  if(c.classList.contains("win"))setTimeout(()=>confetti(c,c.classList.contains("dc")?"#5865F2":"#24A1DE"),700)},reduce?0:250+k*250))}
+function confetti(el,col){if(reduce)return;const cv=$("fx"),x=cv.getContext("2d");cv.width=innerWidth;cv.height=innerHeight;
+ const b=el.getBoundingClientRect(),cl=[col,"#fbbf24","#10b981","#ffffff"],P=Array.from({length:110},()=>({x:b.left+b.width/2,y:b.top+10,vx:(Math.random()-.5)*14,vy:-Math.random()*13-3,s:Math.random()*7+3,r:Math.random()*6,c:cl[Math.random()*4|0]}));
+ let f=0;(function d(){x.clearRect(0,0,cv.width,cv.height);P.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.vx*=.99;p.r+=.2;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/3,p.s,p.s*.6);x.restore()});
+ if(++f<150)requestAnimationFrame(d);else x.clearRect(0,0,cv.width,cv.height)})()}
+render();
+</script>
+</body>
+</html>
