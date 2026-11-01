@@ -192,38 +192,35 @@ function renderCatalogue() {
     const cat = catOf(item.category);
     const logos = (item.platforms || []).map(p => {
       const pf = PLATFORMS[p];
-      return `<span title="${pf.label}" aria-label="${pf.label}" class="w-7 h-7 rounded-full flex items-center justify-center text-sm border" style="color:${pf.color};background:${pf.color}22;border-color:${pf.color}66"><i class="fa-brands ${pf.icon}"></i></span>`;
+      return `<span class="dl-logo" title="${pf.label}" aria-label="${pf.label}" style="color:${pf.color};background:${pf.color}22;border-color:${pf.color}66"><i class="fa-brands ${pf.icon}"></i></span>`;
     }).join('');
     const views = (item.platforms || []).map(p => {
       const pf = PLATFORMS[p], url = safeUrl(item[p + 'Url']);
-      const base = 'flex-1 py-2.5 px-2 rounded-full text-xs font-bold uppercase border transition-all flex items-center justify-center gap-2 whitespace-nowrap';
       const style = `color:${pf.color};background:${pf.color}1a;border-color:${pf.color}66`;
+      const inner = `<i class="fa-brands ${pf.icon}"></i><span>${pf.view}</span>`;
       return url
-        ? `<a href="${escHtml(url)}" target="_blank" rel="noopener noreferrer" class="${base} hover:brightness-125" style="${style}"><i class="fa-brands ${pf.icon}"></i><span>${pf.view}</span></a>`
-        : `<span aria-disabled="true" title="Lien bientôt disponible" class="${base} opacity-40 cursor-not-allowed" style="${style}"><i class="fa-brands ${pf.icon}"></i><span>${pf.view}</span></span>`;
+        ? `<a class="dl-btn" href="${escHtml(url)}" target="_blank" rel="noopener noreferrer" style="${style}">${inner}</a>`
+        : `<span class="dl-btn is-off" aria-disabled="true" title="Lien bientôt disponible" style="${style}">${inner}</span>`;
     }).join('');
     return `
-    <div class="bg-cyborg-card rounded-[23px] p-6 border border-cyborg-border hover:border-cyborg-accent transition-all duration-300 flex flex-col justify-between space-y-4 group card-hover-effect">
-      <div class="space-y-3">
-        <div class="flex items-center justify-between gap-2">
-          <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-cyborg-accent/20 text-cyborg-accent border border-cyborg-accent/30">${cat.emoji} ${escHtml(cat.label)}</span>
-          <span class="flex items-center gap-1.5">${logos}</span>
+    <div class="dl-card">
+      <div>
+        <div class="dl-top">
+          <span class="dl-badge">${cat.emoji} ${escHtml(cat.label)}</span>
+          <span class="dl-logos">${logos}</span>
         </div>
-        <div class="flex items-center gap-3 pt-2">
-          <div class="w-12 h-12 rounded-2xl bg-cyborg-bg border border-cyborg-border flex items-center justify-center text-cyborg-accent text-xl group-hover:scale-110 transition-transform flex-shrink-0">
-            <i class="fa-solid ${escHtml(item.icon)}"></i>
-          </div>
-          <div>
-            <h3 class="font-extrabold text-base uppercase text-white group-hover:text-cyborg-accent transition-colors line-clamp-1">${escHtml(item.name)}</h3>
-            <p class="text-xs text-cyborg-text line-clamp-2">${escHtml(item.slogan)}</p>
+        <div class="dl-head">
+          <div class="dl-ico"><i class="fa-solid ${escHtml(item.icon)}"></i></div>
+          <div style="min-width:0">
+            <h3 class="dl-name">${escHtml(item.name)}</h3>
+            <p class="dl-slogan">${escHtml(item.slogan)}</p>
           </div>
         </div>
       </div>
-      <div class="space-y-2">
-        <div class="flex gap-2">${views}</div>
-        <button onclick="openModal('${escHtml(item.id)}')" class="w-full py-2.5 rounded-full text-xs font-bold uppercase bg-cyborg-bg hover:bg-cyborg-accent hover:text-[#05080a] text-cyborg-text border border-cyborg-border transition-all flex items-center justify-center gap-2">
-          <i class="fa-solid fa-circle-info"></i>
-          <span>À propos du projet</span>
+      <div class="dl-actions">
+        <div class="dl-views">${views}</div>
+        <button type="button" class="dl-btn dl-about" onclick="openModal('${escHtml(item.id)}')">
+          <i class="fa-solid fa-circle-info"></i><span>À propos du projet</span>
         </button>
       </div>
     </div>`;
@@ -231,8 +228,8 @@ function renderCatalogue() {
 }
 
 // Filtres (onglets = activités du formulaire)
-const CAT_ON  = 'cat-btn px-5 py-2 rounded-full text-xs font-bold uppercase bg-cyborg-accent text-[#05080a] shadow-[0_0_15px_rgba(0,240,255,0.35)] transition-all whitespace-nowrap';
-const CAT_OFF = 'cat-btn px-5 py-2 rounded-full text-xs font-bold uppercase bg-cyborg-card text-cyborg-text border border-cyborg-border hover:text-white transition-all whitespace-nowrap';
+const CAT_ON  = 'cat-btn dl-tab is-active';
+const CAT_OFF = 'cat-btn dl-tab';
 
 function renderCategoryFilters() {
   const box = document.getElementById('category-filters');
@@ -290,15 +287,8 @@ function closeModal() {
 }
 
 function customizeCurrentModel() {
-  if (selectedModelForCustom) {
-    const companyEl = document.getElementById('ob-company');
-    if (companyEl) companyEl.value = selectedModelForCustom.name;
-    
-    showToast('Modèle chargé !', `Établissement "${selectedModelForCustom.name}" pré-rempli pour la personnalisation.`);
-  }
-  
   closeModal();
-  switchView('onboarding');
+  location.href = 'lancer-projet.html';
 }
 
 // Dashboard
