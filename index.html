@@ -43,6 +43,20 @@
   <link rel="stylesheet" href="catalogue.css">
   <!-- Tailwind CSS compilé : npm run build:css -->
   <link rel="stylesheet" href="tailwind-home.css">
+
+<style>
+/* Hero : 3 boutons alignés sur la largeur du paragraphe */
+.hero-cta{display:grid;grid-template-columns:1fr;gap:12px;width:100%;max-width:672px;padding-top:8px}
+.hero-cta>*{width:100%;min-height:56px;box-sizing:border-box;text-align:center;line-height:1.2}
+@media (min-width:640px){
+  .hero-cta{grid-template-columns:1fr 1fr}
+  .hero-cta>:nth-child(3){grid-column:1 / -1;min-height:50px}
+}
+/* Pourquoi choisir DEVLAB : appel à l'action vers le test */
+.why-cta{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:center;margin-top:30px;color:#9aa6b8;font-size:.92rem}
+.why-cta-btn{display:inline-flex;gap:8px;align-items:center;padding:13px 24px;border-radius:999px;background:linear-gradient(135deg,#10b981,#059669);color:#04130d;font-weight:800;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;text-decoration:none;box-shadow:0 0 18px rgba(16,185,129,.4);transition:transform .2s,box-shadow .2s}
+.why-cta-btn:hover{transform:translateY(-2px);box-shadow:0 0 26px rgba(16,185,129,.6)}
+</style>
 </head>
 <body class="bg-[#05060a] text-white min-h-screen relative overflow-x-hidden flex flex-col justify-between">
 
@@ -169,7 +183,7 @@
               Votre <strong class="text-[#24A1DE] font-semibold">canal Telegram</strong> ou votre <strong class="text-[#8b95ff] font-semibold">serveur Discord</strong>, configuré, personnalisé et livré en quelques minutes. Vous choisissez, vous voyez l'aperçu en direct, vous devenez administrateur dès le paiement.
             </p>
 
-            <div class="grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap items-stretch gap-3 pt-2">
+            <div class="hero-cta">
               <a href="devgram.html" class="px-6 py-4 rounded-full font-bold bg-[#24A1DE] hover:bg-[#1d8fc7] text-white shadow-[0_0_18px_rgba(36,161,222,0.45)] transition-all uppercase tracking-wider text-xs sm:text-sm flex items-center justify-center gap-2.5">
                 <i class="fa-brands fa-telegram text-lg"></i>
                 <span>Créer mon canal Telegram</span>
@@ -353,7 +367,7 @@
               Pourquoi choisir <span class="text-emerald-400">DEVLAB</span> ?
             </h2>
             <p class="text-cyborg-text text-sm font-light">
-              Comparez notre formule clé en main face aux alternatives du marché.
+              Telegram ou Discord : comparez notre formule clé en main face aux alternatives.
             </p>
           </div>
 
@@ -362,14 +376,14 @@
             <div class="compare-card compare-card-agence p-6 sm:p-8 flex flex-col justify-between">
               <div>
                 <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-5">
-                  <h3 class="font-bold text-lg sm:text-xl text-red-400">Agence Classique</h3>
+                  <h3 class="font-bold text-lg sm:text-xl text-red-400">Agence / Freelance</h3>
                   <i class="fa-solid fa-building text-2xl text-red-400"></i>
                 </div>
                 <ul class="space-y-4 text-sm text-gray-300 font-medium">
-                  <li class="flex items-start gap-3"><i class="fa-solid fa-xmark text-red-400 text-lg mt-0.5"></i><span>Coût élevé : 1 500 € à 8 000 €</span></li>
-                  <li class="flex items-start gap-3"><i class="fa-solid fa-xmark text-red-400 text-lg mt-0.5"></i><span>Délais longs (2 à 12 semaines)</span></li>
-                  <li class="flex items-start gap-3"><i class="fa-solid fa-xmark text-red-400 text-lg mt-0.5"></i><span>Frais de maintenance récurrents</span></li>
-                  <li class="flex items-start gap-3"><i class="fa-solid fa-xmark text-red-400 text-lg mt-0.5"></i><span>Aucun réseau de visibilité croisée</span></li>
+                  <li class="flex items-start gap-3"><i class="fa-solid fa-xmark text-red-400 text-lg mt-0.5"></i><span>Devis à demander et budget élevé</span></li>
+                  <li class="flex items-start gap-3"><i class="fa-solid fa-xmark text-red-400 text-lg mt-0.5"></i><span>Plusieurs jours, voire semaines, de délai</span></li>
+                  <li class="flex items-start gap-3"><i class="fa-solid fa-xmark text-red-400 text-lg mt-0.5"></i><span>Un prestataire différent pour chaque réseau</span></li>
+                  <li class="flex items-start gap-3"><i class="fa-solid fa-xmark text-red-400 text-lg mt-0.5"></i><span>Peu ou pas de suivi après la livraison</span></li>
                 </ul>
               </div>
             </div>
@@ -377,14 +391,14 @@
             <div class="compare-card compare-card-diy p-6 sm:p-8 flex flex-col justify-between">
               <div>
                 <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-5">
-                  <h3 class="font-bold text-lg sm:text-xl text-amber-400">Créateur DIY (Wix/WP)</h3>
+                  <h3 class="font-bold text-lg sm:text-xl text-amber-400">Le faire soi-même</h3>
                   <i class="fa-solid fa-laptop-code text-2xl text-amber-400"></i>
                 </div>
                 <ul class="space-y-4 text-sm text-gray-300 font-medium">
-                  <li class="flex items-start gap-3"><i class="fa-solid fa-xmark text-amber-400 text-lg mt-0.5"></i><span>Vous y passez vos soirées</span></li>
-                  <li class="flex items-start gap-3"><i class="fa-solid fa-xmark text-amber-400 text-lg mt-0.5"></i><span>20 à 60 heures de paramétrage</span></li>
-                  <li class="flex items-start gap-3"><i class="fa-solid fa-xmark text-amber-400 text-lg mt-0.5"></i><span>SEO technique souvent bâclé</span></li>
-                  <li class="flex items-start gap-3"><i class="fa-solid fa-xmark text-amber-400 text-lg mt-0.5"></i><span>Site isolé sans réseau partenaire</span></li>
+                  <li class="flex items-start gap-3"><i class="fa-solid fa-xmark text-amber-400 text-lg mt-0.5"></i><span>Des heures de paramétrage</span></li>
+                  <li class="flex items-start gap-3"><i class="fa-solid fa-xmark text-amber-400 text-lg mt-0.5"></i><span>Rôles, salons et droits faciles à rater</span></li>
+                  <li class="flex items-start gap-3"><i class="fa-solid fa-xmark text-amber-400 text-lg mt-0.5"></i><span>Bots à installer et régler un par un</span></li>
+                  <li class="flex items-start gap-3"><i class="fa-solid fa-xmark text-amber-400 text-lg mt-0.5"></i><span>Aucun aperçu avant de se lancer</span></li>
                 </ul>
               </div>
             </div>
@@ -399,14 +413,19 @@
                   <i class="fa-solid fa-shield-halved text-2xl text-emerald-400"></i>
                 </div>
                 <ul class="space-y-4 text-sm text-white font-medium">
-                  <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-400 text-lg mt-0.5"></i><span>Tarif accessible et fixe</span></li>
-                  <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-400 text-lg mt-0.5"></i><span>Canal / serveur livré en quelques minutes</span></li>
-                  <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-400 text-lg mt-0.5"></i><span>Support technique &amp; aperçu inclus</span></li>
-                  <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-400 text-lg mt-0.5"></i><span>Intégration au réseau partenaire DEVLAB</span></li>
+                  <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-400 text-lg mt-0.5"></i><span>DEVGRAM (Telegram) et DEVCORD (Discord) : un seul interlocuteur</span></li>
+                  <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-400 text-lg mt-0.5"></i><span>Tarif fixe et annoncé, dès 19 €</span></li>
+                  <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-400 text-lg mt-0.5"></i><span>Livré en quelques minutes, admin dès la confirmation</span></li>
+                  <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-400 text-lg mt-0.5"></i><span>Aperçu en direct, bots et automatisations inclus</span></li>
                 </ul>
               </div>
             </div>
 
+          </div>
+
+          <div class="why-cta">
+            <span>Pas sûr du bon réseau pour votre projet ?</span>
+            <a href="lancer-projet.html" class="why-cta-btn"><i class="fa-solid fa-wand-magic-sparkles"></i> Faire le test en 1 minute</a>
           </div>
         </div>
 
