@@ -99,6 +99,20 @@ const CLIENTS_DATA = [
     icon: 'fa-scissors',
     siteUrl: '#',
     stats: { visitors: [180, 240, 310, 410, 490, 620], contacts: [12, 18, 26, 34, 41, 52], conversion: '8.3%', score: '92/100' }
+  },
+  {
+    id: 'drackonomics',
+    name: 'Drackonomics',
+    category: 'finance',
+    featured: true,   // affiché en premier dans le catalogue
+    platforms: ['telegram', 'discord'],
+    telegramUrl: 'https://t.me/benka_crypto',
+    discordUrl: 'https://discord.gg/5TTEd35km',
+    slogan: 'Communauté crypto & finance sur Telegram et Discord.',
+    description: '<p class="font-bold text-white text-sm mb-1">Crypto & Finance, en communauté.</p><p class="text-gray-300">Actualités, analyses et échanges autour de la crypto et de la finance. Retrouvez Drackonomics sur Telegram et sur Discord.</p>',
+    icon: 'fa-chart-line',
+    siteUrl: '#',
+    stats: { visitors: [0, 0, 0, 0, 0, 0], contacts: [0, 0, 0, 0, 0, 0], conversion: '—', score: '—' }
   }
 ];
 
@@ -162,7 +176,7 @@ function renderCatalogue() {
     const haystack = [item.name, item.slogan, catOf(item.category).label, platformsLabel(item)].join(' ').toLowerCase();
     const matchSearch = haystack.includes(searchVal);
     return matchCat && matchSearch;
-  });
+  }).sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));   // les projets « featured » d'abord
 
   if (filtered.length === 0) {
     grid.innerHTML = `
@@ -189,25 +203,25 @@ function renderCatalogue() {
         : `<span aria-disabled="true" title="Lien bientôt disponible" class="${base} opacity-40 cursor-not-allowed" style="${style}"><i class="fa-brands ${pf.icon}"></i><span>${pf.view}</span></span>`;
     }).join('');
     return `
-    <div class="bg-cyborg-card rounded-[23px] p-6 border border-cyborg-border hover:border-cyborg-orange transition-all duration-300 flex flex-col justify-between space-y-4 group card-hover-effect">
+    <div class="bg-cyborg-card rounded-[23px] p-6 border border-cyborg-border hover:border-cyborg-accent transition-all duration-300 flex flex-col justify-between space-y-4 group card-hover-effect">
       <div class="space-y-3">
         <div class="flex items-center justify-between gap-2">
-          <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-cyborg-orange/20 text-cyborg-orange border border-cyborg-orange/30">${cat.emoji} ${escHtml(cat.label)}</span>
+          <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-cyborg-accent/20 text-cyborg-accent border border-cyborg-accent/30">${cat.emoji} ${escHtml(cat.label)}</span>
           <span class="flex items-center gap-1.5">${logos}</span>
         </div>
         <div class="flex items-center gap-3 pt-2">
-          <div class="w-12 h-12 rounded-2xl bg-cyborg-bg border border-cyborg-border flex items-center justify-center text-cyborg-orange text-xl group-hover:scale-110 transition-transform flex-shrink-0">
+          <div class="w-12 h-12 rounded-2xl bg-cyborg-bg border border-cyborg-border flex items-center justify-center text-cyborg-accent text-xl group-hover:scale-110 transition-transform flex-shrink-0">
             <i class="fa-solid ${escHtml(item.icon)}"></i>
           </div>
           <div>
-            <h3 class="font-extrabold text-base uppercase text-white group-hover:text-cyborg-orange transition-colors line-clamp-1">${escHtml(item.name)}</h3>
+            <h3 class="font-extrabold text-base uppercase text-white group-hover:text-cyborg-accent transition-colors line-clamp-1">${escHtml(item.name)}</h3>
             <p class="text-xs text-cyborg-text line-clamp-2">${escHtml(item.slogan)}</p>
           </div>
         </div>
       </div>
       <div class="space-y-2">
         <div class="flex gap-2">${views}</div>
-        <button onclick="openModal('${escHtml(item.id)}')" class="w-full py-2.5 rounded-full text-xs font-bold uppercase bg-cyborg-bg hover:bg-cyborg-orange hover:text-white text-cyborg-text border border-cyborg-border transition-all flex items-center justify-center gap-2">
+        <button onclick="openModal('${escHtml(item.id)}')" class="w-full py-2.5 rounded-full text-xs font-bold uppercase bg-cyborg-bg hover:bg-cyborg-accent hover:text-[#05080a] text-cyborg-text border border-cyborg-border transition-all flex items-center justify-center gap-2">
           <i class="fa-solid fa-circle-info"></i>
           <span>À propos du projet</span>
         </button>
@@ -217,7 +231,7 @@ function renderCatalogue() {
 }
 
 // Filtres (onglets = activités du formulaire)
-const CAT_ON  = 'cat-btn px-5 py-2 rounded-full text-xs font-bold uppercase bg-cyborg-orange text-white glow-orange transition-all whitespace-nowrap';
+const CAT_ON  = 'cat-btn px-5 py-2 rounded-full text-xs font-bold uppercase bg-cyborg-accent text-[#05080a] shadow-[0_0_15px_rgba(0,240,255,0.35)] transition-all whitespace-nowrap';
 const CAT_OFF = 'cat-btn px-5 py-2 rounded-full text-xs font-bold uppercase bg-cyborg-card text-cyborg-text border border-cyborg-border hover:text-white transition-all whitespace-nowrap';
 
 function renderCategoryFilters() {
