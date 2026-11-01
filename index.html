@@ -3,32 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DEVLAB — Studio & Écosystème Web</title>
+  <title>DEVLAB — Studio &amp; Écosystème Web</title>
+  <meta name="description" content="DEVLAB : studio web spécialisé dans la création et la configuration de canaux Telegram et de serveurs Discord, personnalisés et livrés en quelques minutes.">
+  <meta name="theme-color" content="#05060a">
+  <link rel="canonical" href="https://adambbk.github.io/devgram.github.io/">
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            cyborg: {
-              bg: 'rgba(15, 23, 42, 0.6)',
-              card: 'rgba(30, 41, 59, 0.7)',
-              border: 'rgba(16, 185, 129, 0.2)',
-              text: '#94a3b8',
-              accent: '#00f0ff',
-              accentHover: '#00c8d6',
-              pink: '#e75e8d',
-              cyan: '#10b981',
-              dark: '#05060a'
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <!-- Open Graph / aperçu de partage -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DEVLAB">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:title" content="DEVLAB — Studio &amp; Écosystème Web">
+  <meta property="og:description" content="DEVLAB : studio web spécialisé dans la création et la configuration de canaux Telegram et de serveurs Discord, personnalisés et livrés en quelques minutes.">
+  <meta property="og:url" content="https://adambbk.github.io/devgram.github.io/">
+  <meta property="og:image" content="https://adambbk.github.io/devgram.github.io/og-devlab.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="DEVLAB, studio web pour canaux Telegram et serveurs Discord">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DEVLAB — Studio &amp; Écosystème Web">
+  <meta name="twitter:description" content="DEVLAB : studio web spécialisé dans la création et la configuration de canaux Telegram et de serveurs Discord, personnalisés et livrés en quelques minutes.">
+  <meta name="twitter:image" content="https://adambbk.github.io/devgram.github.io/og-devlab.png">
+
+
+  
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -38,6 +40,9 @@
 
   <!-- Style sur-mesure -->
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="catalogue.css">
+  <!-- Tailwind CSS compilé : npm run build:css -->
+  <link rel="stylesheet" href="tailwind-home.css">
 </head>
 <body class="bg-[#05060a] text-white min-h-screen relative overflow-x-hidden flex flex-col justify-between">
 
@@ -97,7 +102,7 @@
           <span>Espace Client</span>
         </button>
 
-        <button onclick="switchView('onboarding')" id="nav-onboarding" class="nav-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white/80 bg-transparent border border-white/10 hover:border-emerald-500/60 hover:text-emerald-400 hover:bg-emerald-500/10 hover:backdrop-blur-md transition-all flex items-center gap-2">
+        <button onclick="location.href='lancer-projet.html'" id="nav-onboarding" class="nav-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white/80 bg-transparent border border-white/10 hover:border-emerald-500/60 hover:text-emerald-400 hover:bg-emerald-500/10 hover:backdrop-blur-md transition-all flex items-center gap-2">
           <i class="fa-solid fa-rocket"></i>
           <span>Lancer Projet</span>
         </button>
@@ -132,7 +137,7 @@
       <button type="button" onclick="switchView('dashboard'); toggleMobileMenu();" class="w-full px-4 py-3 rounded-xl text-left text-white/90 hover:text-emerald-400 hover:bg-emerald-500/10 border border-transparent hover:border-emerald-500/30 flex items-center gap-3 transition-all">
         <i class="fa-solid fa-chart-line w-5 text-center"></i> Espace Client
       </button>
-      <button type="button" onclick="switchView('onboarding'); toggleMobileMenu();" class="w-full px-4 py-3 rounded-xl text-left font-bold text-white bg-emerald-500 hover:bg-emerald-600 flex items-center gap-3 transition-all shadow-[0_0_15px_rgba(16,185,129,0.35)]">
+      <button type="button" onclick="location.href='lancer-projet.html'; toggleMobileMenu();" class="w-full px-4 py-3 rounded-xl text-left font-bold text-white bg-emerald-500 hover:bg-emerald-600 flex items-center gap-3 transition-all shadow-[0_0_15px_rgba(16,185,129,0.35)]">
         <i class="fa-solid fa-rocket w-5 text-center"></i> Lancer Projet
       </button>
     </div>
@@ -301,7 +306,7 @@
               <div>
                 <div class="flex flex-wrap items-center gap-2">
                   <h3 class="font-bold text-white">Sites web &amp; écosystème partenaire</h3>
-                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#00f0ff]/10 text-[#00f0ff] border border-[#00f0ff]/40">Bientôt</span>
+                  <span class="dl-soon">Bientôt</span>
                 </div>
                 <p class="text-xs sm:text-sm text-cyborg-text mt-1">Sites vitrines en 48 h et catalogue interconnecté d'artisans et commerçants locaux.</p>
               </div>
@@ -451,16 +456,16 @@
       <section id="view-catalogue" class="hidden space-y-8 fade-in">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
           <div>
-            <h2 class="text-2xl sm:text-3xl font-black uppercase">Catalogue <span class="text-cyborg-accent">Partenaires</span></h2>
+            <h2 class="text-2xl sm:text-3xl font-black uppercase">Catalogue <span class="dl-accent">Partenaires</span></h2>
             <p class="text-cyborg-text text-xs sm:text-sm">Découvrez les canaux Telegram et serveurs Discord créés avec DEVLAB.</p>
           </div>
           <div class="relative w-full md:w-80">
-            <input type="text" id="catalogue-search" oninput="filterCatalogue()" placeholder="Rechercher un projet, une activité..." class="w-full bg-black/40 border border-white/10 rounded-full px-4 py-2.5 pl-10 text-sm text-white placeholder-cyborg-text focus:outline-none focus:border-cyborg-accent transition-all">
+            <input type="text" id="catalogue-search" oninput="filterCatalogue()" placeholder="Rechercher un projet, une activité..." class="w-full bg-black/40 border border-white/10 rounded-full px-4 py-2.5 pl-10 text-sm text-white placeholder-cyborg-text focus:outline-none dl-search transition-all">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-cyborg-text text-sm"></i>
           </div>
         </div>
 
-        <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none" id="category-filters"></div>
+        <div class="dl-tabs" id="category-filters"></div>
 
         <div id="catalogue-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
       </section>
@@ -586,7 +591,7 @@
             <li><button onclick="switchView('landing')" class="hover:text-emerald-400 transition-colors">Accueil</button></li>
             <li><button onclick="switchView('catalogue')" class="hover:text-emerald-400 transition-colors">Catalogue Partenaires</button></li>
             <li><button onclick="switchView('dashboard')" class="hover:text-emerald-400 transition-colors">Espace Client</button></li>
-            <li><button onclick="switchView('onboarding')" class="hover:text-emerald-400 transition-colors">Lancer un projet</button></li>
+            <li><button onclick="location.href='lancer-projet.html'" class="hover:text-emerald-400 transition-colors">Lancer un projet</button></li>
             <li><a href="devgram.html" class="hover:text-[#24A1DE] transition-colors">DEVGRAM · Telegram</a></li>
             <li><a href="devcord.html" class="hover:text-[#8b95ff] transition-colors">DEVCORD · Discord</a></li>
           </ul>
@@ -609,15 +614,15 @@
           <p class="text-cyborg-text">Une question ? Échangez directement avec notre équipe :</p>
           
           <div class="flex items-center gap-3 pt-1">
-            <a href="https://discord.gg/votre-invite" target="_blank" rel="noopener noreferrer" title="Discord DEVLAB" class="w-10 h-10 rounded-xl bg-black/50 border border-white/10 hover:border-[#5865F2] text-white hover:text-[#5865F2] hover:bg-[#5865F2]/10 flex items-center justify-center text-lg transition-all shadow-md hover:shadow-[0_0_15px_rgba(88,101,242,0.4)]">
+            <a href="https://discord.com/users/688390035321782294" target="_blank" rel="noopener noreferrer" title="Discord : adem2.7" aria-label="Discord : adem2.7" class="w-10 h-10 rounded-xl bg-black/50 border border-white/10 hover:border-[#5865F2] text-white hover:text-[#5865F2] hover:bg-[#5865F2]/10 flex items-center justify-center text-lg transition-all shadow-md hover:shadow-[0_0_15px_rgba(88,101,242,0.4)]">
               <i class="fa-brands fa-discord"></i>
             </a>
 
-            <a href="https://t.me/votre_pseudo" target="_blank" rel="noopener noreferrer" title="Telegram DEVLAB" class="w-10 h-10 rounded-xl bg-black/50 border border-white/10 hover:border-[#24A1DE] text-white hover:text-[#24A1DE] hover:bg-[#24A1DE]/10 flex items-center justify-center text-lg transition-all shadow-md hover:shadow-[0_0_15px_rgba(36,161,222,0.4)]">
+            <a href="https://t.me/drck_03" target="_blank" rel="noopener noreferrer" title="Telegram : @drck_03" aria-label="Telegram : @drck_03" class="w-10 h-10 rounded-xl bg-black/50 border border-white/10 hover:border-[#24A1DE] text-white hover:text-[#24A1DE] hover:bg-[#24A1DE]/10 flex items-center justify-center text-lg transition-all shadow-md hover:shadow-[0_0_15px_rgba(36,161,222,0.4)]">
               <i class="fa-brands fa-telegram"></i>
             </a>
 
-            <a href="mailto:contact@devlab.fr" title="Envoyer un e-mail" class="w-10 h-10 rounded-xl bg-black/50 border border-white/10 hover:border-[#10b981] text-white hover:text-[#10b981] hover:bg-[#10b981]/10 flex items-center justify-center text-lg transition-all shadow-md hover:shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+            <a href="mailto:adam.bouberka@gmail.com" title="Envoyer un e-mail" aria-label="Envoyer un e-mail" class="w-10 h-10 rounded-xl bg-black/50 border border-white/10 hover:border-[#10b981] text-white hover:text-[#10b981] hover:bg-[#10b981]/10 flex items-center justify-center text-lg transition-all shadow-md hover:shadow-[0_0_15px_rgba(16,185,129,0.4)]">
               <i class="fa-solid fa-envelope"></i>
             </a>
           </div>
@@ -627,7 +632,7 @@
 
       <!-- Section Inférieure : Droits & Copyright -->
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-cyborg-text pt-2">
-        <p>© 2026 <span class="text-[#00f0ff] font-bold">DEVLAB Studio</span>. Tous droits réservés.</p>
+        <p>© 2026 <span class="dl-accent font-bold">DEVLAB Studio</span>. Tous droits réservés.</p>
         <div class="flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <span class="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">Écosystème En Ligne</span>
