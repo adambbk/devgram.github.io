@@ -1,10 +1,34 @@
+// Catégories = les mêmes activités que dans le formulaire (devgram.html / devcord.html)
+const CATEGORIES = [
+  { id: 'commerce',  emoji: '🛍️', label: 'Commerce / Boutique' },
+  { id: 'food',      emoji: '🍽️', label: 'Restauration' },
+  { id: 'realestate',emoji: '🏠', label: 'Immobilier' },
+  { id: 'training',  emoji: '🎓', label: 'Formation / Coaching' },
+  { id: 'finance',   emoji: '📈', label: 'Finance / Crypto' },
+  { id: 'content',   emoji: '🎬', label: 'Création de contenu' },
+  { id: 'community', emoji: '🤝', label: 'Communauté / Association' },
+  { id: 'wellness',  emoji: '💆', label: 'Santé / Bien-être' },
+  { id: 'services',  emoji: '💼', label: 'Services / Freelance' },
+  { id: 'other',     emoji: '✨', label: 'Autre' },
+];
+
+// Plateformes : mini-logo + libellé du bouton principal
+const PLATFORMS = {
+  telegram: { label: 'Telegram', icon: 'fa-telegram', color: '#24A1DE', view: 'Voir le canal' },
+  discord:  { label: 'Discord',  icon: 'fa-discord',  color: '#8b95ff', view: 'Voir le serveur' },
+};
+
 // Données des partenaires et exemples
+// Pour chaque projet : category (id ci-dessus), platforms (['telegram'], ['discord'] ou les deux),
+// telegramUrl / discordUrl (lien public ou d'invitation). Un lien vide = bouton « bientôt disponible ».
 const CLIENTS_DATA = [
   {
     id: 'boomerang',
     name: 'Le Boomerang',
-    category: 'Restauration',
-    city: 'Saint-Savournin',
+    category: 'food',
+    platforms: ['telegram', 'discord'],
+    telegramUrl: '',   // lien du canal  (ex. 'https://t.me/moncanal')
+    discordUrl: '',    // lien d'invitation du serveur (ex. 'https://discord.gg/xxxx')
     slogan: 'Restaurant & Cuisine conviviale au cœur du village.',
     description: '<p class="font-bold text-white text-sm mb-1">Cuisine conviviale & Produits frais.</p><p class="text-gray-300">Un espace chaleureux pour vos repas entre amis ou en famille, proposant des menus de saison élaborés localement.</p>',
     icon: 'fa-utensils',
@@ -14,8 +38,10 @@ const CLIENTS_DATA = [
   {
     id: 'bois-metal',
     name: 'Atelier Bois & Métal',
-    category: 'Artisans',
-    city: 'Aix-en-Provence',
+    category: 'services',
+    platforms: ['telegram'],
+    telegramUrl: '',   // lien du canal  (ex. 'https://t.me/moncanal')
+    discordUrl: '',    // lien d'invitation du serveur (ex. 'https://discord.gg/xxxx')
     slogan: 'Création de mobilier sur-mesure et ferronnerie d’art.',
     description: '<p class="font-bold text-white text-sm mb-1">Artisanat & Design Industriel.</p><p class="text-gray-300">Conception de verrières, tables et garde-corps personnalisés sur toute la région PACA.</p>',
     icon: 'fa-hammer',
@@ -25,8 +51,10 @@ const CLIENTS_DATA = [
   {
     id: 'eleganza',
     name: 'Boutique Éléganza',
-    category: 'Commerces',
-    city: 'Marseille',
+    category: 'commerce',
+    platforms: ['telegram'],
+    telegramUrl: '',   // lien du canal  (ex. 'https://t.me/moncanal')
+    discordUrl: '',    // lien d'invitation du serveur (ex. 'https://discord.gg/xxxx')
     slogan: 'Prêt-à-porter féminin & Accessoires de créateurs.',
     description: '<p class="font-bold text-white text-sm mb-1">Collection Mode & Tendances.</p><p class="text-gray-300">Sélection exclusive de vêtements et accessoires italiens et français en plein centre-ville.</p>',
     icon: 'fa-bag-shopping',
@@ -36,8 +64,10 @@ const CLIENTS_DATA = [
   {
     id: 'dracode',
     name: 'Dracode Digital',
-    category: 'Services',
-    city: 'Saint-Savournin',
+    category: 'services',
+    platforms: ['discord'],
+    telegramUrl: '',   // lien du canal  (ex. 'https://t.me/moncanal')
+    discordUrl: '',    // lien d'invitation du serveur (ex. 'https://discord.gg/xxxx')
     slogan: 'Solutions web & Automatismes de contenu.',
     description: '<p class="font-bold text-white text-sm mb-1">Créez votre site en quelques clics.</p><p class="text-gray-300">Pas besoin de connaissances techniques : choisissez votre modèle, ajoutez vos informations et recevez votre site prêt à être mis en ligne.</p>',
     icon: 'fa-code',
@@ -47,8 +77,10 @@ const CLIENTS_DATA = [
   {
     id: 'auto-diag',
     name: 'Auto Diag 13',
-    category: 'Services',
-    city: 'Gardanne',
+    category: 'services',
+    platforms: ['telegram'],
+    telegramUrl: '',   // lien du canal  (ex. 'https://t.me/moncanal')
+    discordUrl: '',    // lien d'invitation du serveur (ex. 'https://discord.gg/xxxx')
     slogan: 'Entretien automobile & Diagnostic électronique.',
     description: '<p class="font-bold text-white text-sm mb-1">Garage & Mécanique de précision.</p><p class="text-gray-300">Réparation multimarques, révision et diagnostic rapide avec équipements haute précision.</p>',
     icon: 'fa-wrench',
@@ -58,8 +90,10 @@ const CLIENTS_DATA = [
   {
     id: 'coiffure-studio',
     name: 'Studio Coiffure & Beauté',
-    category: 'Commerces',
-    city: 'Auriol',
+    category: 'wellness',
+    platforms: ['discord'],
+    telegramUrl: '',   // lien du canal  (ex. 'https://t.me/moncanal')
+    discordUrl: '',    // lien d'invitation du serveur (ex. 'https://discord.gg/xxxx')
     slogan: 'Salon de coiffure mixte & Soins capillaires bio.',
     description: '<p class="font-bold text-white text-sm mb-1">Coiffure & Visagisme.</p><p class="text-gray-300">Prestations de coiffure sur-mesure dans une ambiance cocooning et avec des produits écoresponsables.</p>',
     icon: 'fa-scissors',
@@ -68,6 +102,11 @@ const CLIENTS_DATA = [
   }
 ];
 
+const escHtml = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const safeUrl = (u) => (/^https?:\/\//i.test(String(u || '').trim()) ? String(u).trim() : '');
+const catOf = (id) => CATEGORIES.find(c => c.id === id) || { id, emoji: '✨', label: id };
+const platformsLabel = (c) => (c.platforms || []).map(p => PLATFORMS[p].label).join(' + ');
+
 let currentCategory = 'all';
 let currentStep = 1;
 let chartInstance = null;
@@ -75,6 +114,7 @@ let selectedModelForCustom = null;
 
 // Initialisation au chargement du DOM
 document.addEventListener('DOMContentLoaded', () => {
+  renderCategoryFilters();
   renderCatalogue();
   initDashboardSelect();
   initChart();
@@ -119,9 +159,8 @@ function renderCatalogue() {
 
   const filtered = CLIENTS_DATA.filter(item => {
     const matchCat = (currentCategory === 'all' || item.category === currentCategory);
-    const matchSearch = item.name.toLowerCase().includes(searchVal) || 
-                        item.city.toLowerCase().includes(searchVal) || 
-                        item.slogan.toLowerCase().includes(searchVal);
+    const haystack = [item.name, item.slogan, catOf(item.category).label, platformsLabel(item)].join(' ').toLowerCase();
+    const matchSearch = haystack.includes(searchVal);
     return matchCat && matchSearch;
   });
 
@@ -135,40 +174,67 @@ function renderCatalogue() {
     return;
   }
 
-  grid.innerHTML = filtered.map(item => `
+  grid.innerHTML = filtered.map(item => {
+    const cat = catOf(item.category);
+    const logos = (item.platforms || []).map(p => {
+      const pf = PLATFORMS[p];
+      return `<span title="${pf.label}" aria-label="${pf.label}" class="w-7 h-7 rounded-full flex items-center justify-center text-sm border" style="color:${pf.color};background:${pf.color}22;border-color:${pf.color}66"><i class="fa-brands ${pf.icon}"></i></span>`;
+    }).join('');
+    const views = (item.platforms || []).map(p => {
+      const pf = PLATFORMS[p], url = safeUrl(item[p + 'Url']);
+      const base = 'flex-1 py-2.5 px-2 rounded-full text-xs font-bold uppercase border transition-all flex items-center justify-center gap-2 whitespace-nowrap';
+      const style = `color:${pf.color};background:${pf.color}1a;border-color:${pf.color}66`;
+      return url
+        ? `<a href="${escHtml(url)}" target="_blank" rel="noopener noreferrer" class="${base} hover:brightness-125" style="${style}"><i class="fa-brands ${pf.icon}"></i><span>${pf.view}</span></a>`
+        : `<span aria-disabled="true" title="Lien bientôt disponible" class="${base} opacity-40 cursor-not-allowed" style="${style}"><i class="fa-brands ${pf.icon}"></i><span>${pf.view}</span></span>`;
+    }).join('');
+    return `
     <div class="bg-cyborg-card rounded-[23px] p-6 border border-cyborg-border hover:border-cyborg-orange transition-all duration-300 flex flex-col justify-between space-y-4 group card-hover-effect">
       <div class="space-y-3">
-        <div class="flex items-center justify-between">
-          <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-cyborg-orange/20 text-cyborg-orange border border-cyborg-orange/30">${item.category}</span>
-          <span class="text-xs text-cyborg-text"><i class="fa-solid fa-location-dot text-cyborg-orange mr-1"></i>${item.city}</span>
+        <div class="flex items-center justify-between gap-2">
+          <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-cyborg-orange/20 text-cyborg-orange border border-cyborg-orange/30">${cat.emoji} ${escHtml(cat.label)}</span>
+          <span class="flex items-center gap-1.5">${logos}</span>
         </div>
         <div class="flex items-center gap-3 pt-2">
           <div class="w-12 h-12 rounded-2xl bg-cyborg-bg border border-cyborg-border flex items-center justify-center text-cyborg-orange text-xl group-hover:scale-110 transition-transform flex-shrink-0">
-            <i class="fa-solid ${item.icon}"></i>
+            <i class="fa-solid ${escHtml(item.icon)}"></i>
           </div>
           <div>
-            <h3 class="font-extrabold text-base uppercase text-white group-hover:text-cyborg-orange transition-colors line-clamp-1">${item.name}</h3>
-            <p class="text-xs text-cyborg-text line-clamp-2">${item.slogan}</p>
+            <h3 class="font-extrabold text-base uppercase text-white group-hover:text-cyborg-orange transition-colors line-clamp-1">${escHtml(item.name)}</h3>
+            <p class="text-xs text-cyborg-text line-clamp-2">${escHtml(item.slogan)}</p>
           </div>
         </div>
       </div>
-      <button onclick="openModal('${item.id}')" class="w-full py-2.5 rounded-full text-xs font-bold uppercase bg-cyborg-bg hover:bg-cyborg-orange hover:text-white text-cyborg-text border border-cyborg-border transition-all flex items-center justify-center gap-2">
-        <i class="fa-solid fa-eye"></i>
-        <span>VOIR LA MAQUETTE</span>
-      </button>
-    </div>
-  `).join('');
+      <div class="space-y-2">
+        <div class="flex gap-2">${views}</div>
+        <button onclick="openModal('${escHtml(item.id)}')" class="w-full py-2.5 rounded-full text-xs font-bold uppercase bg-cyborg-bg hover:bg-cyborg-orange hover:text-white text-cyborg-text border border-cyborg-border transition-all flex items-center justify-center gap-2">
+          <i class="fa-solid fa-circle-info"></i>
+          <span>À propos du projet</span>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
 }
 
-// Filtres
+// Filtres (onglets = activités du formulaire)
+const CAT_ON  = 'cat-btn px-5 py-2 rounded-full text-xs font-bold uppercase bg-cyborg-orange text-white glow-orange transition-all whitespace-nowrap';
+const CAT_OFF = 'cat-btn px-5 py-2 rounded-full text-xs font-bold uppercase bg-cyborg-card text-cyborg-text border border-cyborg-border hover:text-white transition-all whitespace-nowrap';
+
+function renderCategoryFilters() {
+  const box = document.getElementById('category-filters');
+  if (!box) return;
+  const tabs = [{ id: 'all', emoji: '', label: 'Tous' }, ...CATEGORIES];
+  box.innerHTML = tabs.map(c => `
+    <button onclick="setCategoryFilter('${c.id}')" data-cat="${c.id}" class="${c.id === currentCategory ? CAT_ON : CAT_OFF}">
+      ${c.emoji ? c.emoji + ' ' : ''}${escHtml(c.label)} (<span id="cnt-${c.id}">0</span>)
+    </button>`).join('');
+  updateCategoryCounts();
+}
+
 function setCategoryFilter(cat) {
   currentCategory = cat;
   document.querySelectorAll('.cat-btn').forEach(btn => {
-    if (btn.dataset.cat === cat) {
-      btn.className = 'cat-btn px-5 py-2 rounded-full text-xs font-bold uppercase bg-cyborg-orange text-white glow-orange transition-all whitespace-nowrap';
-    } else {
-      btn.className = 'cat-btn px-5 py-2 rounded-full text-xs font-bold uppercase bg-cyborg-card text-cyborg-text border border-cyborg-border hover:text-white transition-all whitespace-nowrap';
-    }
+    btn.className = btn.dataset.cat === cat ? CAT_ON : CAT_OFF;
   });
   renderCatalogue();
 }
@@ -180,10 +246,7 @@ function filterCatalogue() {
 function updateCategoryCounts() {
   const setTxt = (id, txt) => { const el = document.getElementById(id); if (el) el.innerText = txt; };
   setTxt('cnt-all', CLIENTS_DATA.length);
-  setTxt('cnt-restauration', CLIENTS_DATA.filter(c => c.category === 'Restauration').length);
-  setTxt('cnt-artisans', CLIENTS_DATA.filter(c => c.category === 'Artisans').length);
-  setTxt('cnt-commerces', CLIENTS_DATA.filter(c => c.category === 'Commerces').length);
-  setTxt('cnt-services', CLIENTS_DATA.filter(c => c.category === 'Services').length);
+  CATEGORIES.forEach(c => setTxt('cnt-' + c.id, CLIENTS_DATA.filter(x => x.category === c.id).length));
 }
 
 // Modal
@@ -200,9 +263,9 @@ function openModal(clientId) {
   const modalDescription = document.getElementById('modal-description');
 
   if (modalIcon) modalIcon.innerHTML = `<i class="fa-solid ${client.icon}"></i>`;
-  if (modalCategory) modalCategory.innerText = client.category;
+  if (modalCategory) modalCategory.innerText = catOf(client.category).emoji + ' ' + catOf(client.category).label;
   if (modalTitle) modalTitle.innerText = client.name;
-  if (modalLocation) modalLocation.innerHTML = `<i class="fa-solid fa-location-dot text-cyborg-orange mr-1"></i>${client.city}`;
+  if (modalLocation) modalLocation.innerHTML = (client.platforms || []).map(p => `<span class="inline-flex items-center gap-1.5 mr-3" style="color:${PLATFORMS[p].color}"><i class="fa-brands ${PLATFORMS[p].icon}"></i>${PLATFORMS[p].label}</span>`).join('');
   if (modalDescription) modalDescription.innerHTML = client.description;
 
   document.getElementById('modal-client')?.classList.remove('hidden');
@@ -228,7 +291,7 @@ function customizeCurrentModel() {
 function initDashboardSelect() {
   const select = document.getElementById('dashboard-client-select');
   if (!select) return;
-  select.innerHTML = CLIENTS_DATA.map(c => `<option value="${c.id}">${c.name} (${c.city})</option>`).join('');
+  select.innerHTML = CLIENTS_DATA.map(c => `<option value="${c.id}">${escHtml(c.name)} (${platformsLabel(c)})</option>`).join('');
 }
 
 function changeDashboardClient() {
@@ -516,39 +579,22 @@ document.addEventListener('DOMContentLoaded', () => {
   animate();
 });
 
-function toggleMobileMenu(forceClose) {
+function toggleMobileMenu() {
   const menu = document.getElementById('mobile-menu');
   const icon = document.getElementById('menu-icon');
-  const btn = document.getElementById('mobile-menu-btn');
 
   if (!menu || !icon) return;
 
-  if (forceClose === true) menu.classList.add('hidden');
-  else menu.classList.toggle('hidden');
+  menu.classList.toggle('hidden');
 
-  const isOpen = !menu.classList.contains('hidden');
-  icon.classList.toggle('fa-xmark', isOpen);
-  icon.classList.toggle('fa-bars', !isOpen);
-  if (btn) {
-    btn.setAttribute('aria-expanded', String(isOpen));
-    btn.setAttribute('aria-label', isOpen ? 'Fermer le menu' : 'Ouvrir le menu');
+  if (menu.classList.contains('hidden')) {
+    icon.classList.remove('fa-xmark');
+    icon.classList.add('fa-bars');
+  } else {
+    icon.classList.remove('fa-bars');
+    icon.classList.add('fa-xmark');
   }
 }
-
-// Ferme le menu mobile : clic à l'extérieur, touche Échap, ou passage en grand écran
-document.addEventListener('click', (e) => {
-  const menu = document.getElementById('mobile-menu');
-  const btn = document.getElementById('mobile-menu-btn');
-  if (!menu || menu.classList.contains('hidden')) return;
-  if (menu.contains(e.target) || (btn && btn.contains(e.target))) return;
-  toggleMobileMenu(true);
-});
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') toggleMobileMenu(true);
-});
-window.addEventListener('resize', () => {
-  if (window.innerWidth >= 1280) toggleMobileMenu(true);
-});
 
 // Canvas d'arrière-plan Cyber
 (function initCyberBackground() {
