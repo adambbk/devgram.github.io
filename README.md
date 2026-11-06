@@ -1,10 +1,8 @@
 # DEVLAB — Studio & Écosystème Web
 
-Site vitrine d'un studio fictif qui configurerait des **canaux Telegram** (DEVGRAM) et des **serveurs Discord** (DEVCORD). Projet personnel de démonstration pour travailler une interface front-end complète, sans backend.
+Site vitrine d'un studio qui configure des **canaux Telegram** (DEVGRAM) et des **serveurs Discord** (DEVCORD). Projet personnel de démonstration pour travailler une interface front-end complète, avec backend.
 
 🌐 **Démo en ligne :** https://adambbk.github.io/devgram.github.io/
-
-> ⚠️ **Projet fictif.** Aucun service n'est réellement vendu : paiements, prix, partenaires et statistiques du tableau de bord sont des données de démonstration.
 
 
 ## Fonctionnalités
