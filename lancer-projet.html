@@ -18,7 +18,8 @@ body::after{background:radial-gradient(circle,var(--dc),transparent 65%);bottom:
 @keyframes drift{to{transform:translate(8vmax,6vmax) scale(1.12)}}
 .top,main{position:relative;z-index:1;max-width:1040px;margin:0 auto;padding:0 18px}
 .top{display:flex;justify-content:space-between;align-items:center;padding-top:22px;padding-bottom:10px}
-.logo{color:#fff;text-decoration:none;font-weight:900;letter-spacing:.04em;font-size:1.15rem}.logo i{color:var(--em);margin-right:8px}.logo b{color:var(--em)}
+.logo{color:#fff;text-decoration:none;font-weight:900;letter-spacing:.04em;font-size:1.15rem;display:inline-flex;align-items:center;gap:10px}.logo i{color:var(--em);margin-right:8px}.logo b{color:var(--em)}
+.logo img{width:38px;height:38px;flex:none;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1px rgba(255,255,255,.14),0 0 14px rgba(88,101,242,.45),0 0 9px rgba(36,161,222,.30)}
 .back{color:var(--mut);text-decoration:none;font-size:.9rem}.back:hover{color:#fff}
 main{padding-bottom:60px}
 .kicker{display:inline-block;margin-top:26px;padding:5px 14px;border:1px solid rgba(16,185,129,.4);border-radius:99px;color:#6ee7b7;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
@@ -81,7 +82,7 @@ h1{font-size:clamp(1.6rem,4.5vw,2.5rem);line-height:1.15;font-weight:900;margin:
 </style>
 </head>
 <body>
-<header class="top"><a class="logo" href="index.html"><i class="fa-solid fa-flask"></i>DEV<b>LAB</b></a><a class="back" href="index.html"><i class="fa-solid fa-arrow-left"></i> Retour au site</a></header>
+<header class="top"><a class="logo" href="index.html"><img src="logo-devlab.png" alt="" width="38" height="38" decoding="async"><span>DEV<b>LAB</b></span></a><a class="back" href="index.html"><i class="fa-solid fa-arrow-left"></i> Retour au site</a></header>
 <main>
  <div class="center"><span class="kicker">Lancer mon projet</span></div>
  <section id="quiz">
