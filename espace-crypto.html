@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="fr" data-neon="ton">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace Crypto — Payez en TON, payez moins cher | DEVLAB</title>
+  <meta name="description" content="Réglez votre commande DEVGRAM ou DEVCORD en TON, la crypto de Telegram, avec une remise. Cours BTC, ETH, SOL et TON en direct.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="theme-color" content="#05060f">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="catalogue.css">
+  <link rel="stylesheet" href="tailwind-home.css">
+  <link rel="stylesheet" href="neon.css">
+<style>
+.cx .hero{text-align:center;padding:clamp(34px,6vw,64px) 0 clamp(26px,4vw,40px)}
+.cx .kicker{display:inline-flex;gap:8px;align-items:center;padding:6px 16px;border-radius:99px;font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#7dd3fc;border:1px solid rgba(56,189,248,.4);background:rgba(0,152,234,.12)}
+.cx h1{font-size:clamp(1.9rem,5vw,3.2rem);line-height:1.12;font-weight:900;margin:20px 0 14px}
+.cx h1 span{color:#38bdf8}
+.cx .lead{color:#b8c6d8;max-width:38rem;margin:0 auto;font-size:1.02rem}
+.cx .badge{display:inline-block;margin-top:18px;padding:7px 16px;border-radius:99px;background:rgba(16,185,129,.15);border:1px solid rgba(52,211,153,.45);color:#6ee7b7;font-weight:800;font-size:.85rem}
+.cx .cx-grid{display:grid;gap:22px;grid-template-columns:1fr;margin-top:8px}
+@media(min-width:900px){.cx .cx-grid{grid-template-columns:5fr 6fr;align-items:start}}
+.cx .card{padding:clamp(22px,3vw,32px);border-radius:24px;background:rgba(10,16,32,.62);border:1px solid rgba(var(--n2),.22);backdrop-filter:blur(10px)}
+.cx .card h2{font-size:1.15rem;font-weight:800;margin-bottom:4px;display:flex;gap:10px;align-items:center}
+.cx .card h2 i{color:#38bdf8}
+.cx .sub{color:#9fb0c3;font-size:.88rem;margin-bottom:18px}
+.cx label{display:block;font-size:.8rem;font-weight:700;color:#cbd5e1;margin:14px 0 6px;letter-spacing:.03em}
+.cx input{width:100%;padding:13px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.16);background:rgba(2,6,14,.6);color:#fff;font:inherit;outline:none;transition:.2s}
+.cx input:focus{border-color:#38bdf8;box-shadow:0 0 0 3px rgba(56,189,248,.22)}
+.cx .hint{color:#8394a8;font-size:.78rem;margin-top:6px}
+.cx .btn{display:flex;width:100%;align-items:center;justify-content:center;gap:10px;margin-top:20px;padding:15px 20px;border-radius:999px;font:inherit;font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:.85rem;text-decoration:none;cursor:pointer}
+.cx .btn[disabled]{opacity:.5;cursor:not-allowed;filter:grayscale(.4)}
+.cx .btn-ghost{display:flex;width:100%;align-items:center;justify-content:center;gap:10px;padding:13px 18px;border-radius:999px;font:inherit;font-weight:700;font-size:.82rem;text-decoration:none;cursor:pointer;margin-top:10px}
+.cx .msg{margin-top:14px;padding:11px 14px;border-radius:12px;font-size:.85rem;display:none}
+.cx .msg.err{display:block;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.4);color:#fca5a5}
+.cx .msg.ok{display:block;background:rgba(16,185,129,.12);border:1px solid rgba(52,211,153,.4);color:#6ee7b7}
+.cx .msg.warn{display:block;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.4);color:#fcd34d}
+.cx .empty{text-align:center;color:#8394a8;padding:36px 10px}
+.cx .empty i{font-size:2.2rem;color:#38bdf8;opacity:.7;display:block;margin-bottom:12px}
+.cx .price{display:grid;gap:10px;margin-bottom:6px}
+.cx .row{display:flex;justify-content:space-between;gap:12px;font-size:.92rem;color:#b8c6d8}
+.cx .row s{color:#8394a8}
+.cx .row .off{color:#6ee7b7;font-weight:800}
+.cx .big{margin:14px 0 4px;padding:18px;border-radius:18px;text-align:center;background:linear-gradient(160deg,rgba(0,152,234,.22),rgba(0,152,234,.06));border:1px solid rgba(56,189,248,.4)}
+.cx .big small{display:block;color:#9fb0c3;font-size:.78rem;text-transform:uppercase;letter-spacing:.12em}
+.cx .big strong{display:block;font-size:clamp(1.9rem,5vw,2.5rem);font-weight:900;color:#fff;margin:2px 0}
+.cx .big em{font-style:normal;color:#7dd3fc;font-size:.9rem}
+.cx .rate{color:#8394a8;font-size:.76rem;text-align:center;margin-top:8px}
+.cx .pay{display:grid;gap:16px;grid-template-columns:1fr;margin-top:20px}
+@media(min-width:560px){.cx .pay{grid-template-columns:1fr 190px;align-items:center}}
+.cx .field{margin:0 0 12px}
+.cx .field small{display:block;color:#8394a8;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+.cx .copy{display:flex;gap:8px;align-items:stretch}
+.cx .copy code{flex:1;min-width:0;padding:10px 12px;border-radius:12px;background:rgba(2,6,14,.6);border:1px solid rgba(255,255,255,.12);font-size:.78rem;word-break:break-all;color:#e2e8f0}
+.cx .copy button{flex:none;padding:0 14px;border-radius:12px;border:1px solid rgba(56,189,248,.45);background:rgba(0,152,234,.14);color:#bae6fd;cursor:pointer;font:inherit;font-size:.78rem;font-weight:700}
+.cx .copy button:hover{background:rgba(0,152,234,.28)}
+.cx #qr{width:176px;height:176px;margin:0 auto;padding:8px;background:#fff;border-radius:16px;display:grid;place-items:center}
+.cx #qr img,.cx #qr canvas{max-width:100%;height:auto}
+.cx .sep{height:1px;background:rgba(255,255,255,.1);margin:22px 0}
+.cx .why{display:grid;gap:16px;grid-template-columns:1fr;margin:clamp(40px,6vw,64px) 0 0}
+@media(min-width:760px){.cx .why{grid-template-columns:repeat(3,1fr)}}
+.cx .mini{padding:22px;border-radius:20px;background:rgba(10,16,32,.5);border:1px solid rgba(255,255,255,.1)}
+.cx .mini i{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:1.1rem;color:#38bdf8;background:rgba(0,152,234,.14);border:1px solid rgba(56,189,248,.35);margin-bottom:12px}
+.cx .mini h3{font-size:1rem;margin-bottom:4px}
+.cx .mini p{color:#9fb0c3;font-size:.86rem}
+.cx .steps{counter-reset:s;margin-top:clamp(40px,6vw,64px)}
+.cx .steps h2{text-align:center;font-size:1.5rem;font-weight:900;margin-bottom:22px}
+.cx .steps ol{list-style:none;padding:0;display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:760px){.cx .steps ol{grid-template-columns:repeat(3,1fr)}}
+.cx .steps li{counter-increment:s;padding:22px 22px 22px 70px;position:relative;border-radius:20px;background:rgba(10,16,32,.5);border:1px solid rgba(255,255,255,.1);color:#b8c6d8;font-size:.9rem}
+.cx .steps li::before{content:counter(s);position:absolute;left:20px;top:20px;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:900;background:#0098EA;color:#fff}
+.cx .steps b{display:block;color:#fff;margin-bottom:2px}
+.cx .ticker{display:flex;align-items:stretch;border-radius:18px;overflow:hidden;background:rgba(8,14,28,.72);border:1px solid rgba(var(--n2),.28);margin-bottom:clamp(8px,2vw,18px)}
+.cx .tk-label{flex:none;display:flex;align-items:center;gap:8px;padding:0 16px;font-size:.68rem;font-weight:800;letter-spacing:.14em;color:#6ee7b7;border-right:1px solid rgba(255,255,255,.1);background:rgba(16,185,129,.08);white-space:nowrap}
+.cx .live-dot{width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 0 0 rgba(52,211,153,.6);animation:livePulse 1.8s infinite}
+@keyframes livePulse{70%{box-shadow:0 0 0 8px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+.cx .tk-viewport{flex:1;min-width:0;overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+.cx .tk-track{display:flex;width:max-content;animation:tkScroll 38s linear infinite}
+.cx .ticker:hover .tk-track{animation-play-state:paused}
+@keyframes tkScroll{to{transform:translateX(-50%)}}
+.cx .tk-item{display:flex;align-items:center;gap:10px;padding:13px 26px;white-space:nowrap;font-size:.88rem;border-right:1px solid rgba(255,255,255,.07)}
+.cx .coin{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;font-style:normal;font-weight:900;color:#fff;background:var(--c)}
+.cx .tk-item b{font-weight:800;letter-spacing:.04em}
+.cx .tk-item .nm{color:#8394a8;font-size:.76rem}
+.cx .tk-item .p{font-variant-numeric:tabular-nums;font-weight:700;color:#fff}
+.cx .chg{font-variant-numeric:tabular-nums;font-weight:700;font-size:.8rem;padding:2px 8px;border-radius:99px}
+.cx .chg.up{color:#6ee7b7;background:rgba(16,185,129,.14)}
+.cx .chg.down{color:#fca5a5;background:rgba(239,68,68,.14)}
+.cx .chg.na{color:#8394a8;background:rgba(255,255,255,.06)}
+.cx .tk-ton{background:linear-gradient(90deg,rgba(0,152,234,.16),transparent)}
+.cx .tk-tag{font-size:.64rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#7dd3fc;border:1px solid rgba(56,189,248,.45);border-radius:99px;padding:2px 8px}
+.cx .tk-time{flex:none;display:none;align-items:center;padding:0 16px;font-size:.7rem;color:#8394a8;border-left:1px solid rgba(255,255,255,.1);white-space:nowrap}
+@media(min-width:900px){.cx .tk-time{display:flex}}
+@media (prefers-reduced-motion:reduce){.cx .tk-track{animation:none}
+.cx .tk-viewport{overflow-x:auto}
+.cx .live-dot{animation:none}}
+.cx .cx [hidden]{display:none!important}
+</style>
+</head>
+<body class="bg-[#05060a] text-white min-h-screen relative overflow-x-hidden flex flex-col justify-between">
+
+  <canvas id="cyber-bg" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+  <header class="max-w-7xl mx-auto w-full px-4 pt-6 relative z-40">
+    <nav id="nav-container" class="relative overflow-hidden bg-[#0a0f1d]/75 backdrop-blur-xl rounded-[23px] border border-emerald-500/30 px-6 py-4 flex items-center justify-between gap-6 shadow-[0_0_30px_rgba(0,0,0,0.8)]">
+      
+      <div id="neon-line" class="neon-line"></div>
+
+      <div id="mini-pc" class="absolute top-0 left-0 w-[50px] h-[42px] pointer-events-none z-0 opacity-90 will-change-transform">
+        <svg class="w-full h-full" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2">
+          <rect x="2" y="3" width="20" height="13" rx="2" id="pc-screen" fill="#10b981" />
+          <path d="M8 20h8M12 16v4" stroke="#ffffff" />
+        </svg>
+      </div>
+
+      <!-- Groupe Logo DEVLAB + Boutons Telegram & Discord -->
+      <div class="flex items-center gap-6 z-10">
+        <a href="index.html" class="flex items-center gap-3 group shrink-0">
+          <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center text-white shadow-[0_0_18px_rgba(16,185,129,0.4)] group-hover:scale-105 transition-transform duration-300">
+            <i class="fa-solid fa-gamepad text-xl"></i>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-2xl font-black tracking-wider uppercase leading-none text-white">DEV<span class="text-emerald-400">LAB</span></span>
+            <span class="text-[9px] uppercase font-bold tracking-widest text-cyborg-text mt-0.5">Studio & Ecosystème Web</span>
+          </div>
+        </a>
+
+        <!-- Boutons Telegram & Discord épurés (liens vers tes pages HTML) -->
+        <div class="hidden xl:flex items-center gap-3 px-4 py-2 bg-black/40 border border-emerald-500/30 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+          <a href="devgram.html" title="Page Telegram" class="w-9 h-9 rounded-full bg-[#24A1DE]/20 border border-[#24A1DE]/60 text-[#24A1DE] hover:bg-[#24A1DE] hover:text-white flex items-center justify-center text-sm transition-all shadow-[0_0_10px_rgba(36,161,222,0.4)] hover:scale-110">
+            <i class="fa-brands fa-telegram"></i>
+          </a>
+          <a href="devcord.html" title="Page Discord" class="w-9 h-9 rounded-full bg-[#5865F2]/20 border border-[#5865F2]/60 text-[#5865F2] hover:bg-[#5865F2] hover:text-white flex items-center justify-center text-sm transition-all shadow-[0_0_10px_rgba(88,101,242,0.4)] hover:scale-110">
+            <i class="fa-brands fa-discord"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Navigation Desktop -->
+      <div class="hidden xl:flex items-center gap-4 sm:gap-5 z-10">
+        <button onclick="location.href='index.html'" id="nav-landing" class="nav-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white/80 bg-transparent border border-white/10 hover:border-emerald-500/60 hover:text-emerald-400 hover:bg-emerald-500/10 hover:backdrop-blur-md transition-all flex items-center gap-2">
+          <i class="fa-solid fa-house"></i>
+          <span>Accueil</span>
+        </button>
+
+        <button onclick="location.href='index.html#catalogue'" id="nav-catalogue" class="nav-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white/80 bg-transparent border border-white/10 hover:border-emerald-500/60 hover:text-emerald-400 hover:bg-emerald-500/10 hover:backdrop-blur-md transition-all flex items-center gap-2">
+          <i class="fa-solid fa-border-all"></i>
+          <span>Catalogue</span>
+        </button>
+
+        <button onclick="location.href='espace-crypto.html'" id="nav-crypto" class="nav-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500 backdrop-blur-md shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all flex items-center gap-2">
+          <i class="fa-solid fa-gem"></i>
+          <span>Espace Crypto</span>
+        </button>
+
+        <button onclick="location.href='lancer-projet.html'" id="nav-onboarding" class="nav-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white/80 bg-transparent border border-white/10 hover:border-emerald-500/60 hover:text-emerald-400 hover:bg-emerald-500/10 hover:backdrop-blur-md transition-all flex items-center gap-2">
+          <i class="fa-solid fa-rocket"></i>
+          <span>Lancer Projet</span>
+        </button>
+      </div>
+
+      <!-- Bouton Menu Mobile (à droite) -->
+      <button id="mobile-menu-btn" type="button" onclick="toggleMobileMenu()" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-menu" class="xl:hidden relative z-20 w-11 h-11 shrink-0 rounded-xl bg-emerald-500/10 border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/20 flex items-center justify-center transition-all shadow-[0_0_12px_rgba(16,185,129,0.25)]">
+        <i id="menu-icon" class="fa-solid fa-bars text-lg"></i>
+      </button>
+
+    </nav>
+
+    <!-- Menu Mobile (hors du nav pour ne pas être coupé par overflow-hidden) -->
+    <div id="mobile-menu" class="hidden xl:hidden absolute top-full left-4 right-4 mt-2 p-4 bg-[#0a0f1d]/95 backdrop-blur-xl border border-emerald-500/30 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.85)] z-50 flex flex-col gap-2">
+
+      <p class="text-[10px] uppercase font-bold tracking-widest text-cyborg-text px-1">Nos créations</p>
+      <div class="grid grid-cols-2 gap-2 pb-3 mb-1 border-b border-white/10">
+        <a href="devgram.html" class="px-3 py-3 rounded-xl bg-[#24A1DE]/15 border border-[#24A1DE]/50 text-[#24A1DE] hover:bg-[#24A1DE] hover:text-white font-bold text-sm flex items-center justify-center gap-2 transition-all">
+          <i class="fa-brands fa-telegram text-lg"></i> DEVGRAM
+        </a>
+        <a href="devcord.html" class="px-3 py-3 rounded-xl bg-[#5865F2]/15 border border-[#5865F2]/50 text-[#8b95ff] hover:bg-[#5865F2] hover:text-white font-bold text-sm flex items-center justify-center gap-2 transition-all">
+          <i class="fa-brands fa-discord text-lg"></i> DEVCORD
+        </a>
+      </div>
+
+      <button type="button" onclick="location.href='index.html'" class="w-full px-4 py-3 rounded-xl text-left text-white/90 hover:text-emerald-400 hover:bg-emerald-500/10 border border-transparent hover:border-emerald-500/30 flex items-center gap-3 transition-all">
+        <i class="fa-solid fa-house w-5 text-center"></i> Accueil
+      </button>
+      <button type="button" onclick="location.href='index.html#catalogue'" class="w-full px-4 py-3 rounded-xl text-left text-white/90 hover:text-emerald-400 hover:bg-emerald-500/10 border border-transparent hover:border-emerald-500/30 flex items-center gap-3 transition-all">
+        <i class="fa-solid fa-border-all w-5 text-center"></i> Catalogue
+      </button>
+      <button type="button" onclick="location.href='espace-crypto.html'; toggleMobileMenu();" class="w-full px-4 py-3 rounded-xl text-left text-white/90 hover:text-emerald-400 hover:bg-emerald-500/10 border border-transparent hover:border-emerald-500/30 flex items-center gap-3 transition-all">
+        <i class="fa-solid fa-gem w-5 text-center"></i> Espace Crypto
+      </button>
+      <button type="button" onclick="location.href='lancer-projet.html'; toggleMobileMenu();" class="w-full px-4 py-3 rounded-xl text-left font-bold text-white bg-emerald-500 hover:bg-emerald-600 flex items-center gap-3 transition-all shadow-[0_0_15px_rgba(16,185,129,0.35)]">
+        <i class="fa-solid fa-rocket w-5 text-center"></i> Lancer Projet
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto w-full px-3 sm:px-4 my-6 sm:my-8 flex-grow relative z-10">
+    <div class="main-card-container p-4 sm:p-10 lg:p-14 min-h-[60vh] relative">
+<div class="cx">
+  <div class="ticker" role="region" aria-label="Cours des cryptomonnaies en direct">
+    <div class="tk-label"><span class="live-dot"></span> EN DIRECT</div>
+    <div class="tk-viewport"><div class="tk-track" id="tkTrack" aria-live="off"></div></div>
+    <div class="tk-time" id="tkTime">Chargement…</div>
+  </div>
+<section class="hero">
+    <span class="kicker"><i class="fa-solid fa-gem"></i> Espace Crypto</span>
+    <h1>Payez en <span>TON</span>,<br>payez moins cher</h1>
+    <p class="lead">Réglez votre commande DEVGRAM ou DEVCORD avec la crypto de Telegram. Même service, même livraison, un prix réduit.</p>
+    <span class="badge" id="badge"><i class="fa-solid fa-tag"></i> <span id="badgeTxt">Remise en TON</span></span>
+  </section>
+
+  <div class="cx-grid">
+    <section class="card" aria-labelledby="t1">
+      <h2 id="t1"><i class="fa-solid fa-file-invoice"></i> Votre commande</h2>
+      <p class="sub">Retrouvez la référence dans le message de confirmation, et le montant sur le formulaire.</p>
+      <label for="ref">Référence de commande</label>
+      <input id="ref" placeholder="DG-ABC123XY" autocomplete="off" maxlength="16" style="text-transform:uppercase">
+      <label for="eur">Montant de la commande (€)</label>
+      <input id="eur" type="number" inputmode="decimal" min="1" step="0.01" placeholder="49">
+      <p class="hint">C'est le « Total » affiché par le formulaire, avant remise.</p>
+      <button class="btn neon-btn" id="calc" type="button"><i class="fa-solid fa-calculator"></i> Calculer mon prix en TON</button>
+      <div id="m1" class="msg" role="status"></div>
+    </section>
+
+    <section class="card" aria-labelledby="t2" aria-live="polite">
+      <h2 id="t2"><i class="fa-solid fa-wallet"></i> Votre paiement</h2>
+      <div id="empty" class="empty"><i class="fa-solid fa-gem"></i>Renseignez votre commande pour voir le prix en TON.</div>
+      <div id="result" hidden>
+        <div class="price">
+          <div class="row"><span>Prix par carte</span><s id="pCard"></s></div>
+          <div class="row"><span>Remise paiement TON</span><span class="off" id="pOff"></span></div>
+          <div class="row"><span>Prix en euros</span><b id="pEur"></b></div>
+        </div>
+        <div class="big"><small>Vous envoyez exactement</small><strong id="pTon"></strong><em id="pApprox"></em></div>
+        <p class="rate" id="rate"></p>
+        <div class="sep"></div>
+        <div class="pay">
+          <div>
+            <div class="field"><small>Adresse TON</small><div class="copy"><code id="addr"></code><button type="button" data-copy="addr">Copier</button></div></div>
+            <div class="field"><small>Commentaire (obligatoire)</small><div class="copy"><code id="memo"></code><button type="button" data-copy="memo">Copier</button></div></div>
+          </div>
+          <div id="qr" aria-label="QR code de paiement"></div>
+        </div>
+        <a class="btn neon-btn" id="walletBtn" href="#"><i class="fa-solid fa-wallet"></i> Payer avec mon wallet TON</a>
+        <a class="btn-ghost" id="tkBtn" href="#" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ouvrir avec Tonkeeper</a>
+        <div class="sep"></div>
+        <label for="hash">Une fois payé : hash de la transaction (facultatif)</label>
+        <input id="hash" placeholder="Collez le hash ou le lien de la transaction" maxlength="140" autocomplete="off">
+        <button class="btn neon-btn" id="paid" type="button"><i class="fa-solid fa-circle-check"></i> J'ai payé</button>
+        <div id="m2" class="msg" role="status"></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="why" aria-label="Avantages du paiement en TON">
+    <div class="mini"><i class="fa-solid fa-percent"></i><h3>Prix réduit</h3><p>Une remise appliquée automatiquement quand vous réglez en TON.</p></div>
+    <div class="mini"><i class="fa-solid fa-bolt"></i><h3>Rapide et peu coûteux</h3><p>Confirmation en quelques secondes et frais de réseau très faibles.</p></div>
+    <div class="mini"><i class="fa-brands fa-telegram"></i><h3>Dans Telegram</h3><p>Pas de wallet ? Le bot @wallet de Telegram permet d'acheter et d'envoyer du TON.</p></div>
+  </section>
+
+  <section class="steps">
+    <h2>Comment payer</h2>
+    <ol>
+      <li><b>Indiquez votre commande</b>Référence et montant, puis calculez votre prix en TON.</li>
+      <li><b>Envoyez le paiement</b>Avec votre wallet, en gardant le commentaire : il nous permet de retrouver votre commande.</li>
+      <li><b>Confirmez</b>Cliquez sur « J'ai payé ». Nous vérifions le paiement puis livrons votre commande.</li>
+    </ol>
+  </section>
+  <p style="text-align:center;color:#6b7c92;font-size:.78rem;padding:34px 0 4px">Le taux TON/EUR varie : le montant affiché se met à jour chaque minute. Payez le montant affiché au moment de l'envoi. Les cours sont indicatifs.</p>
+</div>
+    </div>
+  </main>
+
+  <footer class="max-w-7xl mx-auto w-full px-4 pb-8 relative z-10">
+    <div class="relative bg-[#090d16] backdrop-blur-xl rounded-[23px] border border-emerald-500/20 p-8 sm:p-10 text-xs text-cyborg-text shadow-[0_10px_30px_rgba(0,0,0,0.8)] space-y-8">
+      
+      <!-- Section Supérieure : Branding + Navigation + Réseaux -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-white/10">
+        
+        <!-- Identité DEVLAB -->
+        <div class="space-y-3 md:col-span-1">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center text-white shadow-[0_0_12px_rgba(16,185,129,0.4)]">
+              <i class="fa-solid fa-gamepad text-sm"></i>
+            </div>
+            <span class="text-xl font-black tracking-wider uppercase text-white">DEV<span class="text-emerald-400">LAB</span></span>
+          </div>
+          <p class="text-cyborg-text leading-relaxed">
+            Studio & Écosystème Web. Solutions sur-mesure ultra-performantes et réseau local interconnecté.
+          </p>
+        </div>
+
+        <!-- Navigation Rapide -->
+        <div class="space-y-3">
+          <h4 class="text-white font-bold uppercase tracking-wider text-xs">Navigation</h4>
+          <ul class="space-y-2">
+            <li><button onclick="location.href='index.html'" class="hover:text-emerald-400 transition-colors">Accueil</button></li>
+            <li><button onclick="location.href='index.html#catalogue'" class="hover:text-emerald-400 transition-colors">Catalogue Partenaires</button></li>
+            <li><button onclick="location.href='espace-crypto.html'" class="hover:text-emerald-400 transition-colors">Espace Crypto</button></li>
+            <li><button onclick="location.href='lancer-projet.html'" class="hover:text-emerald-400 transition-colors">Lancer un projet</button></li>
+            <li><a href="devgram.html" class="hover:text-[#24A1DE] transition-colors">DEVGRAM · Telegram</a></li>
+            <li><a href="devcord.html" class="hover:text-[#8b95ff] transition-colors">DEVCORD · Discord</a></li>
+          </ul>
+        </div>
+
+        <!-- Informations -->
+        <div class="space-y-3">
+          <h4 class="text-white font-bold uppercase tracking-wider text-xs">Informations</h4>
+          <ul class="space-y-2">
+            <li><a href="mentions-legales.html" class="hover:text-emerald-400 transition-colors">Mentions Légales</a></li>
+            <li><a href="confidentialite.html" class="hover:text-emerald-400 transition-colors">Politique de Confidentialité</a></li>
+            <li><a href="cgv.html" class="hover:text-emerald-400 transition-colors">Conditions Générales de Vente</a></li>
+            <li><a href="faq-support.html" class="hover:text-emerald-400 transition-colors">FAQ & Support</a></li>
+          </ul>
+        </div>
+
+        <!-- Réseaux Sociaux & Contact -->
+        <div class="space-y-3">
+          <h4 class="text-white font-bold uppercase tracking-wider text-xs">Nous Rejoindre</h4>
+          <p class="text-cyborg-text">Une question ? Échangez directement avec notre équipe :</p>
+          
+          <div class="flex items-center gap-3 pt-1">
+            <a href="https://discord.com/users/688390035321782294" target="_blank" rel="noopener noreferrer" title="Discord : adem2.7" aria-label="Discord : adem2.7" class="w-10 h-10 rounded-xl bg-black/50 border border-white/10 hover:border-[#5865F2] text-white hover:text-[#5865F2] hover:bg-[#5865F2]/10 flex items-center justify-center text-lg transition-all shadow-md hover:shadow-[0_0_15px_rgba(88,101,242,0.4)]">
+              <i class="fa-brands fa-discord"></i>
+            </a>
+
+            <a href="https://t.me/drck_03" target="_blank" rel="noopener noreferrer" title="Telegram : @drck_03" aria-label="Telegram : @drck_03" class="w-10 h-10 rounded-xl bg-black/50 border border-white/10 hover:border-[#24A1DE] text-white hover:text-[#24A1DE] hover:bg-[#24A1DE]/10 flex items-center justify-center text-lg transition-all shadow-md hover:shadow-[0_0_15px_rgba(36,161,222,0.4)]">
+              <i class="fa-brands fa-telegram"></i>
+            </a>
+
+            <a href="mailto:adam.bouberka@gmail.com" title="Envoyer un e-mail" aria-label="Envoyer un e-mail" class="w-10 h-10 rounded-xl bg-black/50 border border-white/10 hover:border-[#10b981] text-white hover:text-[#10b981] hover:bg-[#10b981]/10 flex items-center justify-center text-lg transition-all shadow-md hover:shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+              <i class="fa-solid fa-envelope"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Section Inférieure : Droits & Copyright -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-cyborg-text pt-2">
+        <p>© 2026 <span class="dl-accent font-bold">DEVLAB Studio</span>. Tous droits réservés.</p>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">Écosystème En Ligne</span>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <script src="neon-bg.js"></script>
+  <script src="shell.js"></script>
+<script>
+/* ====== À RÉGLER ====== */
+const CONFIG = {
+  TON_ADDRESS: 'REMPLACEZ_PAR_VOTRE_ADRESSE_TON',            // votre adresse de réception (commence par UQ ou EQ)
+  DISCOUNT_PERCENT: 10,                                       // remise appliquée au paiement en TON
+  API_URL: 'https://devgram-orders.adam-bouberka.workers.dev', // votre Worker Cloudflare
+  MIN_EUR: 5, MAX_EUR: 2000,
+};
+
+/*PURE*/
+const RE_REF = /^[A-Z]{2}-[A-Z0-9]{5,12}$/;
+const RE_ADDR = /^(UQ|EQ)[A-Za-z0-9_-]{46}$/;
+const discounted = (eur, pct) => Math.round(eur * (1 - pct / 100) * 100) / 100;
+function quote(eur, rate, pct) {
+  const eurTon = discounted(eur, pct);
+  const ton = Math.ceil((eurTon / rate) * 100) / 100;      // arrondi au centième de TON, toujours vers le haut
+  return { eurTon, ton, nano: Math.round(ton * 1e9) };
+}
+const query = (nano, memo) => `?amount=${nano}&text=${encodeURIComponent(memo)}`;
+const tonLink = (a, nano, memo) => `ton://transfer/${a}${query(nano, memo)}`;
+const tkLink = (a, nano, memo) => `https://app.tonkeeper.com/transfer/${a}${query(nano, memo)}`;
+/*END*/
+
+const $ = (id) => document.getElementById(id);
+const fmt = (n, d = 2) => n.toLocaleString('fr-FR', { minimumFractionDigits: d, maximumFractionDigits: d });
+const addrOk = RE_ADDR.test(CONFIG.TON_ADDRESS);
+let state = null, tickTimer = null, done = false;
+$('badgeTxt').textContent = `−${CONFIG.DISCOUNT_PERCENT} % en payant en TON`;
+function note(id, kind, text) { const el = $(id); el.className = 'msg' + (text ? ' ' + kind : ''); el.textContent = text || ''; }
+
+/* ---------- Cours en direct (bandeau + calcul du TON) ---------- */
+const COINS = [
+  { id: 'bitcoin', sym: 'BTC', name: 'Bitcoin', c: '#f7931a', ic: '<i class="fa-brands fa-bitcoin"></i>', d: 0 },
+  { id: 'ethereum', sym: 'ETH', name: 'Ethereum', c: '#627eea', ic: '<i class="fa-brands fa-ethereum"></i>', d: 2 },
+  { id: 'solana', sym: 'SOL', name: 'Solana', c: 'linear-gradient(135deg,#9945ff,#14f195)', ic: 'S', d: 2 },
+  { id: 'the-open-network', sym: 'TON', name: 'Toncoin', c: '#0098EA', ic: '<i class="fa-solid fa-gem"></i>', d: 3, hl: true },
+];
+let prices = {}, pricesAt = 0;
+async function getJSON(url) { const r = await fetch(url, { cache: 'no-store' }); if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }
+async function loadPrices() {
+  const out = {};
+  try {
+    const j = await getJSON('https://api.coingecko.com/api/v3/simple/price?ids=' + COINS.map((c) => c.id).join(',') + '&vs_currencies=eur&include_24hr_change=true');
+    for (const c of COINS) if (j[c.id] && j[c.id].eur > 0) out[c.sym] = { eur: j[c.id].eur, chg: j[c.id].eur_24h_change };
+  } catch (e) { /* source suivante */ }
+  if (COINS.some((c) => !out[c.sym])) {
+    try {
+      const j = await getJSON('https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + COINS.map((c) => c.sym).join(',') + '&tsyms=EUR');
+      for (const c of COINS) { const r = j.RAW && j.RAW[c.sym] && j.RAW[c.sym].EUR; if (!out[c.sym] && r && r.PRICE > 0) out[c.sym] = { eur: r.PRICE, chg: r.CHANGEPCT24HOUR }; }
+    } catch (e) { /* on garde les derniers cours connus */ }
+  }
+  if (!Object.keys(out).length) throw new Error('prices');
+  return out;
+}
+function renderTicker() {
+  const item = (c) => {
+    const p = prices[c.sym], chg = p && typeof p.chg === 'number' && isFinite(p.chg) ? p.chg : null;
+    const cls = chg === null ? 'na' : chg >= 0 ? 'up' : 'down';
+    const txt = chg === null ? '—' : (chg >= 0 ? '▲ ' : '▼ ') + fmt(Math.abs(chg), 2) + ' %';
+    return `<span class="tk-item${c.hl ? ' tk-ton' : ''}"><i class="coin" style="--c:${c.c}">${c.ic}</i><b>${c.sym}</b><span class="nm">${c.name}</span>` +
+      `<span class="p">${p ? fmt(p.eur, c.d) + ' €' : '…'}</span><span class="chg ${cls}">${txt}</span>` +
+      (c.hl ? `<span class="tk-tag">Paiement −${CONFIG.DISCOUNT_PERCENT} %</span>` : '') + '</span>';
+  };
+  const row = COINS.map(item).join('');
+  $('tkTrack').innerHTML = row + row;                                   // doublé pour un défilement sans coupure
+  $('tkTime').textContent = pricesAt ? 'Mis à jour ' + new Date(pricesAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : 'Chargement…';
+}
+async function updatePrices() {
+  try { Object.assign(prices, await loadPrices()); pricesAt = Date.now(); } catch (e) { if (!pricesAt) $('tkTime').textContent = 'Cours indisponibles'; }
+  renderTicker(); draw();
+}
+renderTicker(); updatePrices(); tickTimer = setInterval(updatePrices, 60000);
+
+/* ---------- Calcul du paiement en TON ---------- */
+function draw() {
+  if (!state || !prices.TON) return;
+  const rate = prices.TON.eur, q = quote(state.eur, rate, CONFIG.DISCOUNT_PERCENT);
+  state.q = q;
+  $('pCard').textContent = fmt(state.eur) + ' €';
+  $('pOff').textContent = '−' + CONFIG.DISCOUNT_PERCENT + ' %';
+  $('pEur').textContent = fmt(q.eurTon) + ' €';
+  $('pTon').textContent = fmt(q.ton) + ' TON';
+  $('pApprox').textContent = '≈ ' + fmt(q.eurTon) + ' €';
+  $('rate').textContent = '1 TON = ' + fmt(rate, 3) + ' € · taux mis à jour à ' + new Date(pricesAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  $('addr').textContent = CONFIG.TON_ADDRESS; $('memo').textContent = state.ref;
+  $('walletBtn').href = addrOk ? tonLink(CONFIG.TON_ADDRESS, q.nano, state.ref) : '#';
+  $('tkBtn').href = addrOk ? tkLink(CONFIG.TON_ADDRESS, q.nano, state.ref) : '#';
+  const qr = $('qr'); qr.textContent = '';
+  if (addrOk && typeof QRCode !== 'undefined') new QRCode(qr, { text: tonLink(CONFIG.TON_ADDRESS, q.nano, state.ref), width: 160, height: 160, colorDark: '#0b1220', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
+  else qr.innerHTML = '<i class="fa-solid fa-qrcode" style="font-size:3rem;color:#0b1220"></i>';
+  for (const id of ['walletBtn', 'tkBtn']) $(id).style.pointerEvents = addrOk ? '' : 'none';
+  $('paid').disabled = done || !addrOk;
+  if (!addrOk) note('m2', 'warn', "Adresse de paiement TON non configurée : ce paiement n'est pas encore disponible.");
+}
+
+$('calc').onclick = async () => {
+  const ref = $('ref').value.trim().toUpperCase(), eur = Number(String($('eur').value).replace(',', '.'));
+  if (!RE_REF.test(ref)) return note('m1', 'err', 'Référence invalide. Elle ressemble à DG-ABC123XY.');
+  if (!(eur >= CONFIG.MIN_EUR && eur <= CONFIG.MAX_EUR)) return note('m1', 'err', `Montant invalide (entre ${CONFIG.MIN_EUR} et ${CONFIG.MAX_EUR} €).`);
+  state = { ref, eur }; note('m1', '', ''); note('m2', '', '');
+  $('calc').disabled = true; await updatePrices(); $('calc').disabled = false;
+  if (!prices.TON) return note('m1', 'err', "Impossible de récupérer le cours du TON pour l'instant. Réessayez dans un instant.");
+  $('empty').hidden = true; $('result').hidden = false; draw();
+  $('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+};
+
+document.querySelectorAll('[data-copy]').forEach((b) => b.onclick = async () => {
+  const t = $(b.dataset.copy).textContent;
+  try { await navigator.clipboard.writeText(t); } catch (e) { const r = document.createRange(); r.selectNodeContents($(b.dataset.copy)); getSelection().removeAllRanges(); getSelection().addRange(r); document.execCommand('copy'); }
+  const old = b.textContent; b.textContent = 'Copié ✓'; setTimeout(() => b.textContent = old, 1500);
+});
+
+$('paid').onclick = async () => {
+  if (!state || !state.q) return;
+  $('paid').disabled = true; note('m2', '', '');
+  try {
+    const r = await fetch(CONFIG.API_URL.replace(/\/$/, '') + '/crypto', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ref: state.ref, eur: state.eur, eurTon: state.q.eurTon, ton: state.q.ton, hash: $('hash').value.trim().slice(0, 140) }),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d.ok) throw new Error(d.error || 'HTTP ' + r.status);
+    done = true; note('m2', 'ok', 'Merci ! Votre paiement est annoncé. Nous le vérifions sur la blockchain puis nous vous contactons pour la livraison.');
+  } catch (e) { $('paid').disabled = false; note('m2', 'err', "L'envoi a échoué. Réessayez, ou écrivez-nous depuis la page FAQ & Support en indiquant votre référence."); }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</body>
+</html>
