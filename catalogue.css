@@ -67,3 +67,4 @@
 .dl-btn.is-off { opacity: .4; cursor: not-allowed; }
 .dl-about { width: 100%; flex: none; background: rgba(15, 23, 42, .6); color: #94a3b8; border-color: var(--dl-line); }
 .dl-about:hover { background: var(--dl-accent); color: var(--dl-ink); border-color: var(--dl-accent); filter: none; }
+
