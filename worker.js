@@ -142,10 +142,78 @@ async function handleOrder(req, env) {
   return json({ ok: true, ref });
 }
 
+// ---------- Espace Crypto : le client annonce un paiement en TON ----------
+async function handleCrypto(req, env) {
+  const cors = {
+    'Access-Control-Allow-Origin': env.ALLOWED_ORIGIN,
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+  const json = (obj, status = 200) => new Response(JSON.stringify(obj), { status, headers: { ...cors, 'Content-Type': 'application/json' } });
+
+  if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
+  if (req.method !== 'POST') return json({ error: 'method' }, 405);
+  if ((req.headers.get('Origin') || '') !== env.ALLOWED_ORIGIN) return json({ error: 'origin' }, 403);
+
+  let d;
+  try { d = await req.json(); } catch { return json({ error: 'bad request' }, 400); }
+  const ref = S(d.ref, 16).toUpperCase(), eur = Number(d.eur), eurTon = Number(d.eurTon), ton = Number(d.ton);
+  if (!/^[A-Z]{2}-[A-Z0-9]{5,12}$/.test(ref) || !(eur > 0 && eur <= 5000) || !(eurTon > 0 && eurTon <= eur) || !(ton > 0 && ton < 1e6)) return json({ error: 'invalid' }, 400);
+
+  const text = [
+    '💎 <b>PAIEMENT TON ANNONCÉ</b>',
+    `Référence : <code>${esc(ref)}</code>`,
+    `Prix carte : ${eur} € · prix remisé : ${eurTon} €`,
+    `À recevoir : <b>${ton} TON</b>`,
+    d.hash ? `Hash : <code>${esc(S(d.hash, 140))}</code>` : 'Hash : non communiqué',
+    '',
+    'À vérifier dans le wallet (montant + commentaire = référence), puis livrer la commande.',
+  ].join('\n');
+  const r = await tg(env, 'sendMessage', { chat_id: env.ADMIN_CHAT, text, parse_mode: 'HTML', disable_web_page_preview: true });
+  if (!r.ok) { console.log('telegram', r); return json({ error: 'telegram' }, 502); }
+  return json({ ok: true });
+}
+
+// ---------- FAQ & Support : formulaire de contact ----------
+async function handleContact(req, env) {
+  const cors = {
+    'Access-Control-Allow-Origin': env.ALLOWED_ORIGIN,
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+  const json = (obj, status = 200) => new Response(JSON.stringify(obj), { status, headers: { ...cors, 'Content-Type': 'application/json' } });
+
+  if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
+  if (req.method !== 'POST') return json({ error: 'method' }, 405);
+  if ((req.headers.get('Origin') || '') !== env.ALLOWED_ORIGIN) return json({ error: 'origin' }, 403);
+
+  let d;
+  try { d = await req.json(); } catch { return json({ error: 'bad request' }, 400); }
+  if (d.website) return json({ ok: true });                       // champ piège : on fait comme si c'était bon
+  const name = S(d.name, 80), contact = S(d.contact, 120), message = S(d.message, 2000);
+  const SUBJECTS = { commande: 'Ma commande', paiement: 'Un paiement', technique: 'Problème technique', rgpd: 'Données personnelles', autre: 'Autre question' };
+  const subject = SUBJECTS[d.subject] || SUBJECTS.autre;
+  if (name.length < 2 || contact.length < 3 || message.length < 10) return json({ error: 'invalid' }, 400);
+
+  const text = [
+    '✉️ <b>NOUVEAU MESSAGE (FAQ &amp; Support)</b>',
+    `Sujet : ${esc(subject)}`,
+    `De : ${esc(name)}`,
+    `Pour répondre : ${esc(contact)}`,
+    '',
+    esc(message),
+  ].join('\n');
+  const r = await tg(env, 'sendMessage', { chat_id: env.ADMIN_CHAT, text, parse_mode: 'HTML', disable_web_page_preview: true });
+  if (!r.ok) { console.log('telegram', r); return json({ error: 'telegram' }, 502); }
+  return json({ ok: true });
+}
+
 export default {
   async fetch(req, env) {
     try {
       if (new URL(req.url).pathname === '/telegram') return new Response('ok');   // ancien webhook : on l'ignore
+      if (new URL(req.url).pathname === '/crypto') return await handleCrypto(req, env);
+      if (new URL(req.url).pathname === '/contact') return await handleContact(req, env);
       return await handleOrder(req, env);
     } catch (e) {
       console.log('erreur', e);
