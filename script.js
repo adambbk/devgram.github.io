@@ -20,7 +20,7 @@ const PLATFORMS = {
 
 // Données des partenaires et exemples
 // Pour chaque projet : category (id ci-dessus), platforms (['telegram'], ['discord'] ou les deux),
-// telegramUrl / discordUrl (lien public ou d'invitation). Un lien vide = bouton « bientôt disponible ».
+// telegramUrl / discordUrl (lien public ou d'invitation). Un lien vide = le bouton renvoie vers la page de création (devgram.html / devcord.html).
 const CLIENTS_DATA = [
   {
     id: 'boomerang',
@@ -200,7 +200,7 @@ function renderCatalogue() {
       const inner = `<i class="fa-brands ${pf.icon}"></i><span>${pf.view}</span>`;
       return url
         ? `<a class="dl-btn" href="${escHtml(url)}" target="_blank" rel="noopener noreferrer" style="${style}">${inner}</a>`
-        : `<span class="dl-btn is-off" aria-disabled="true" title="Lien bientôt disponible" style="${style}">${inner}</span>`;
+        : `<a class="dl-btn" href="${p === 'telegram' ? 'devgram.html' : 'devcord.html'}" title="Le lien de ce partenaire n'est pas encore publié : créez le vôtre" style="${style}"><i class="fa-brands ${pf.icon}"></i><span>Créer le mien</span></a>`;
     }).join('');
     return `
     <div class="dl-card">
@@ -606,6 +606,9 @@ function toggleMobileMenu() {
   if (!canvas) return;
 
   const ctx = canvas.getContext('2d');
+  // false : les étoiles se dessinent par-dessus le fond néon du thème (halos de couleur).
+  // true  : fond noir uni comme avant le thème néon.
+  const FOND_NOIR_UNI = false;
   let width, height;
   let particles = [];
   const mouse = { x: null, y: null, radius: 180 };
@@ -663,11 +666,13 @@ function toggleMobileMenu() {
   function animate() {
     ctx.clearRect(0, 0, width, height);
 
-    const bgGradient = ctx.createLinearGradient(0, 0, width, height);
-    bgGradient.addColorStop(0, '#05060a');
-    bgGradient.addColorStop(1, '#090c15');
-    ctx.fillStyle = bgGradient;
-    ctx.fillRect(0, 0, width, height);
+    if (FOND_NOIR_UNI) {                      // ancien fond noir uni (masque le fond néon de neon.css)
+      const bgGradient = ctx.createLinearGradient(0, 0, width, height);
+      bgGradient.addColorStop(0, '#05060a');
+      bgGradient.addColorStop(1, '#090c15');
+      ctx.fillStyle = bgGradient;
+      ctx.fillRect(0, 0, width, height);
+    }
 
     for (let a = 0; a < particles.length; a++) {
       particles[a].update();
