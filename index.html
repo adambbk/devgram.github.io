@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-neon="devlab">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DEVLAB — Studio &amp; Écosystème Web</title>
   <meta name="description" content="DEVLAB : studio web spécialisé dans la création et la configuration de canaux Telegram et de serveurs Discord, personnalisés et livrés en quelques minutes.">
-  <meta name="theme-color" content="#05060a">
+  <meta name="theme-color" content="#05060f">
   <link rel="canonical" href="https://adambbk.github.io/devgram.github.io/">
 
   <!-- Favicon -->
@@ -43,14 +43,29 @@
   <link rel="stylesheet" href="catalogue.css">
   <!-- Tailwind CSS compilé : npm run build:css -->
   <link rel="stylesheet" href="tailwind-home.css">
+  <link rel="stylesheet" href="neon.css">
 
 <style>
-/* Hero : 3 boutons alignés sur la largeur du paragraphe */
-.hero-cta{display:grid;grid-template-columns:1fr;gap:12px;width:100%;max-width:672px;padding-top:8px}
-.hero-cta>*{width:100%;min-height:56px;box-sizing:border-box;text-align:center;line-height:1.2}
+/* ===== Hero centré et aéré ===== */
+.hero-block{min-height:clamp(560px,72vh,700px)!important}
+.hero-veil{background:radial-gradient(ellipse at 50% 50%,rgba(5,6,10,.80) 0%,rgba(5,6,10,.58) 55%,rgba(5,6,10,.36) 100%)!important}
+.hero-content{max-width:68rem!important;margin-inline:auto;text-align:center;padding:clamp(32px,6vw,80px)!important;display:flex;flex-direction:column;align-items:center}
+.hero-content>*{margin:0!important}
+.hero-content>*+*{margin-top:clamp(20px,2.6vw,28px)!important}
+.hero-content>.hero-lead{max-width:40rem;font-size:clamp(.95rem,.6rem + .9vw,1.1rem)!important;line-height:1.75!important;color:#d3dbe8!important}
+.hero-content>.hero-cta{margin-top:clamp(30px,4vw,44px)!important}
+.hero-content>.hero-points{margin-top:clamp(28px,3.6vw,38px)!important;padding-top:22px!important;width:100%;max-width:46rem;border-top:1px solid rgba(255,255,255,.12);justify-content:center;gap:12px 28px!important}
+.hero-points li{justify-content:center}
+.hero-cta{display:grid;grid-template-columns:1fr;gap:14px;width:100%;max-width:26rem}
+.hero-cta>*{width:100%;min-height:56px;box-sizing:border-box;text-align:center;line-height:1.2;justify-content:center}
 @media (min-width:640px){
-  .hero-cta{grid-template-columns:1fr 1fr}
-  .hero-cta>:nth-child(3){grid-column:1 / -1;min-height:50px}
+  .hero-cta{grid-template-columns:1fr 1fr;max-width:44rem}
+  .hero-cta>:nth-child(3){grid-column:1 / -1;min-height:52px;max-width:22rem;justify-self:center}
+}
+@media (min-width:1280px){
+  .hero-cta{grid-template-columns:repeat(3,minmax(0,1fr));max-width:60rem}
+  .hero-cta>:nth-child(3){grid-column:auto;max-width:none;min-height:56px}
+  .hero-cta>*{font-size:.8rem!important;letter-spacing:.04em!important;padding-inline:14px!important}
 }
 /* Pourquoi choisir DEVLAB : appel à l'action vers le test */
 .why-cta{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:center;margin-top:30px;color:#9aa6b8;font-size:.92rem}
@@ -140,9 +155,9 @@
           <span>Catalogue</span>
         </button>
 
-        <button onclick="switchView('dashboard')" id="nav-dashboard" class="nav-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white/80 bg-transparent border border-white/10 hover:border-emerald-500/60 hover:text-emerald-400 hover:bg-emerald-500/10 hover:backdrop-blur-md transition-all flex items-center gap-2">
-          <i class="fa-solid fa-chart-line"></i>
-          <span>Espace Client</span>
+        <button onclick="location.href='espace-crypto.html'" id="nav-crypto" class="nav-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white/80 bg-transparent border border-white/10 hover:border-emerald-500/60 hover:text-emerald-400 hover:bg-emerald-500/10 hover:backdrop-blur-md transition-all flex items-center gap-2">
+          <i class="fa-solid fa-gem"></i>
+          <span>Espace Crypto</span>
         </button>
 
         <button onclick="location.href='lancer-projet.html'" id="nav-onboarding" class="nav-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white/80 bg-transparent border border-white/10 hover:border-emerald-500/60 hover:text-emerald-400 hover:bg-emerald-500/10 hover:backdrop-blur-md transition-all flex items-center gap-2">
@@ -177,8 +192,8 @@
       <button type="button" onclick="switchView('catalogue'); toggleMobileMenu();" class="w-full px-4 py-3 rounded-xl text-left text-white/90 hover:text-emerald-400 hover:bg-emerald-500/10 border border-transparent hover:border-emerald-500/30 flex items-center gap-3 transition-all">
         <i class="fa-solid fa-border-all w-5 text-center"></i> Catalogue
       </button>
-      <button type="button" onclick="switchView('dashboard'); toggleMobileMenu();" class="w-full px-4 py-3 rounded-xl text-left text-white/90 hover:text-emerald-400 hover:bg-emerald-500/10 border border-transparent hover:border-emerald-500/30 flex items-center gap-3 transition-all">
-        <i class="fa-solid fa-chart-line w-5 text-center"></i> Espace Client
+      <button type="button" onclick="location.href='espace-crypto.html'; toggleMobileMenu();" class="w-full px-4 py-3 rounded-xl text-left text-white/90 hover:text-emerald-400 hover:bg-emerald-500/10 border border-transparent hover:border-emerald-500/30 flex items-center gap-3 transition-all">
+        <i class="fa-solid fa-gem w-5 text-center"></i> Espace Crypto
       </button>
       <button type="button" onclick="location.href='lancer-projet.html'; toggleMobileMenu();" class="w-full px-4 py-3 rounded-xl text-left font-bold text-white bg-emerald-500 hover:bg-emerald-600 flex items-center gap-3 transition-all shadow-[0_0_15px_rgba(16,185,129,0.35)]">
         <i class="fa-solid fa-rocket w-5 text-center"></i> Lancer Projet
@@ -195,10 +210,10 @@
       <section id="view-landing" class="space-y-14 sm:space-y-20 fade-in">
 
         <!-- HERO -->
-        <div class="relative rounded-[20px] sm:rounded-[23px] hero-bg-custom overflow-hidden border border-emerald-500/30 min-h-[460px] sm:min-h-[520px] flex items-center shadow-[0_0_30px_rgba(0,0,0,0.6)]">
-          <div class="absolute inset-0 bg-gradient-to-b sm:bg-gradient-to-r from-[#05060a]/95 via-[#05060a]/85 to-[#05060a]/50 sm:to-transparent"></div>
+        <div class="relative rounded-[20px] sm:rounded-[23px] hero-bg-custom hero-block overflow-hidden border border-emerald-500/30 min-h-[460px] sm:min-h-[520px] flex items-center shadow-[0_0_30px_rgba(0,0,0,0.6)]">
+          <div class="absolute inset-0 bg-gradient-to-b sm:bg-gradient-to-r from-[#05060a]/95 via-[#05060a]/85 to-[#05060a]/50 sm:to-transparent hero-veil"></div>
 
-          <div class="relative z-10 p-6 sm:p-12 lg:p-16 w-full max-w-4xl space-y-6">
+          <div class="relative z-10 p-6 sm:p-12 lg:p-16 w-full max-w-4xl space-y-6 hero-content">
             <span class="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full text-[10px] sm:text-xs font-bold tracking-widest uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.3)]">
               <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               Discord &amp; Telegram • Actifs maintenant
@@ -208,7 +223,7 @@
               BOOSTEZ VOTRE ACTIVITÉ AVEC DEVLAB
             </h1>
 
-            <p class="text-gray-300 text-sm sm:text-base font-light leading-relaxed max-w-2xl">
+            <p class="text-gray-300 text-sm sm:text-base font-light leading-relaxed max-w-2xl hero-lead">
               Votre <strong class="text-[#24A1DE] font-semibold">canal Telegram</strong> ou votre <strong class="text-[#8b95ff] font-semibold">serveur Discord</strong>, configuré, personnalisé et livré en quelques minutes. Vous choisissez, vous voyez l'aperçu en direct, vous devenez administrateur dès le paiement.
             </p>
 
@@ -228,7 +243,7 @@
             </div>
 
             <!-- Points forts -->
-            <ul class="grid grid-cols-2 sm:flex sm:flex-wrap gap-x-5 gap-y-2 pt-3 text-xs sm:text-sm text-gray-200 font-medium">
+            <ul class="grid grid-cols-2 sm:flex sm:flex-wrap gap-x-5 gap-y-2 pt-3 text-xs sm:text-sm text-gray-200 font-medium hero-points">
               <li class="flex items-center gap-2"><i class="fa-solid fa-bolt text-emerald-400"></i> Livré en quelques minutes</li>
               <li class="flex items-center gap-2"><i class="fa-solid fa-user-shield text-emerald-400"></i> Accès admin garanti</li>
               <li class="flex items-center gap-2"><i class="fa-solid fa-eye text-emerald-400"></i> Aperçu en direct</li>
@@ -621,7 +636,7 @@
           <ul class="space-y-2">
             <li><button onclick="switchView('landing')" class="hover:text-emerald-400 transition-colors">Accueil</button></li>
             <li><button onclick="switchView('catalogue')" class="hover:text-emerald-400 transition-colors">Catalogue Partenaires</button></li>
-            <li><button onclick="switchView('dashboard')" class="hover:text-emerald-400 transition-colors">Espace Client</button></li>
+            <li><button onclick="location.href='espace-crypto.html'" class="hover:text-emerald-400 transition-colors">Espace Crypto</button></li>
             <li><button onclick="location.href='lancer-projet.html'" class="hover:text-emerald-400 transition-colors">Lancer un projet</button></li>
             <li><a href="devgram.html" class="hover:text-[#24A1DE] transition-colors">DEVGRAM · Telegram</a></li>
             <li><a href="devcord.html" class="hover:text-[#8b95ff] transition-colors">DEVCORD · Discord</a></li>
@@ -632,10 +647,10 @@
         <div class="space-y-3">
           <h4 class="text-white font-bold uppercase tracking-wider text-xs">Informations</h4>
           <ul class="space-y-2">
-            <li><a href="#" class="hover:text-emerald-400 transition-colors">Mentions Légales</a></li>
-            <li><a href="#" class="hover:text-emerald-400 transition-colors">Politique de Confidentialité</a></li>
-            <li><a href="#" class="hover:text-emerald-400 transition-colors">Conditions Générales de Vente</a></li>
-            <li><a href="#" class="hover:text-emerald-400 transition-colors">FAQ & Support</a></li>
+            <li><a href="mentions-legales.html" class="hover:text-emerald-400 transition-colors">Mentions Légales</a></li>
+            <li><a href="confidentialite.html" class="hover:text-emerald-400 transition-colors">Politique de Confidentialité</a></li>
+            <li><a href="cgv.html" class="hover:text-emerald-400 transition-colors">Conditions Générales de Vente</a></li>
+            <li><a href="faq-support.html" class="hover:text-emerald-400 transition-colors">FAQ & Support</a></li>
           </ul>
         </div>
 
@@ -701,5 +716,11 @@
   </div>
 
   <script src="script.js"></script>
+  <script>
+    // Arrivée depuis une autre page (ex. index.html#catalogue) : on ouvre directement la bonne vue
+    window.addEventListener('load', function () {
+      if (location.hash === '#catalogue' && typeof switchView === 'function') switchView('catalogue');
+    });
+  </script>
 </body>
 </html>
